@@ -79,6 +79,19 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                             break
                     if len(scn_lst) > 0:
                         sen2_rcd_obj.add_sen2_scns(scn_lst)
+            else:
+                #GET SCENES WHICH HAVE NOT DOWNLOADED AND ADD to JOB LIST.
+                scns = sen2_rcd_obj.get_scns_download(granule)
+                for scn in scns:
+                    c_dict = dict()
+                    c_dict['product_id'] = scn.product_id
+                    c_dict['scn_url'] = scn.scn_url
+                    c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], scn.product_id)
+                    c_dict['scn_db_file'] = kwargs['scn_db_file']
+                    c_dict['goog_key_json'] = kwargs['goog_key_json']
+                    if not os.path.exists(c_dict['downpath']):
+                        os.mkdir(c_dict['downpath'])
+                    self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_db_20200701.db',
