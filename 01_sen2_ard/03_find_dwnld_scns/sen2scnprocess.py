@@ -118,6 +118,7 @@ class RecordSen2Process(object):
         if query_result is not None:
             query_result.download = True
             query_result.download_path = download_path
+            ses.commit()
         ses.close()
         logger.debug("Closed the database session.")
 
@@ -172,6 +173,7 @@ class RecordSen2Process(object):
         if query_result is not None:
             query_result.download = True
             query_result.ard_path = ard_path
+            ses.commit()
         ses.close()
         logger.debug("Closed the database session.")
 
