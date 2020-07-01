@@ -18,7 +18,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
         query = """SELECT PRODUCT_ID, BASE_URL FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                    AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?) 
                    AND GEOMETRIC_QUALITY_FLAG = 0 AND CAST(TOTAL_SIZE as decimal) > ? 
-                   ORDER BY CLOUD_COVER ASC date(GENERATION_TIME) DESC LIMIT {}""".format(kwargs['n_scns'] + kwargs['n_scns_xt'])
+                   ORDER BY CLOUD_COVER ASC, date(GENERATION_TIME) DESC LIMIT {}""".format(kwargs['n_scns'] + kwargs['n_scns_xt'])
 
         query_total_size = """SELECT TOTAL_SIZE FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                               AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?)"""
