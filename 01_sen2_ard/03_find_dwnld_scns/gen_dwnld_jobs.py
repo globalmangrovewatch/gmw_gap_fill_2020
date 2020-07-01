@@ -55,7 +55,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                         c_dict = dict()
                         c_dict['product_id'] = row[0]
                         c_dict['scn_url'] = row[1]
-                        c_dict['downpath'] = os.path.join(kwargs['cloud_thres_ts'], row[0])
+                        c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
                         c_dict['scn_db_file'] = kwargs['scn_db_file']
                         c_dict['goog_key_json'] = kwargs['goog_key_json']
                         if not os.path.exists(c_dict['downpath']):
