@@ -36,7 +36,8 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                 query_ts_vars = [granule, kwargs['cloud_thres_ts'], kwargs['start_date'], kwargs['end_date']]
                 total_size_lst = list()
                 for row in gg_sen2_db_cursor.execute(query_total_size, query_ts_vars):
-                    total_size_lst.append(float(row[0]))
+                    if rsgis_utils.isNumber(row[0]):
+                        total_size_lst.append(float(row[0]))
                 ts_mean = statistics.mean(total_size_lst)
                 ts_stdev = statistics.stdev(total_size_lst)
                 ts_thres = ts_mean - ts_stdev
