@@ -65,6 +65,16 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                             self.params.append(c_dict)
                             scn_ids.append(row[0])
                             n_scns += 1
+                        elif not sen2_rcd_obj.is_scn_downloaded(row[0]):
+                            c_dict = dict()
+                            c_dict['product_id'] = row[0]
+                            c_dict['scn_url'] = row[1]
+                            c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
+                            c_dict['scn_db_file'] = kwargs['scn_db_file']
+                            c_dict['goog_key_json'] = kwargs['goog_key_json']
+                            if not os.path.exists(c_dict['downpath']):
+                                os.mkdir(c_dict['downpath'])
+                            self.params.append(c_dict)
                         if n_scns >= kwargs['n_scns']:
                             break
                     if len(scn_lst) > 0:
