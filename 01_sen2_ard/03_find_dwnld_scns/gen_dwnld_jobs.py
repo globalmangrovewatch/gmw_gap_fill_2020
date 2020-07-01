@@ -18,7 +18,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
         query = """SELECT PRODUCT_ID, BASE_URL FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                    AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?) 
                    AND GEOMETRIC_QUALITY_FLAG = 0 AND CAST(TOTAL_SIZE as decimal) > ? 
-                   ORDER BY CLOUD_COVER ASC LIMIT {}""".format(kwargs['n_scns'])
+                   ORDER BY CLOUD_COVER ASC LIMIT {}""".format(kwargs['n_scns'] + kwargs['n_scns_xt'])
 
         query_total_size = """SELECT TOTAL_SIZE FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                               AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?)"""
@@ -31,7 +31,6 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
             logger.info("Processing: {}".format(granule))
             n_scns = sen2_rcd_obj.n_granule_scns(granule)
             if n_scns < kwargs['n_scns']:
-                n_xt_scns = kwargs['n_scns'] - n_scns
                 gg_sen2_db_cursor = gg_sen2_db_conn.cursor()
                 query_ts_vars = [granule, kwargs['cloud_thres_ts'], kwargs['start_date'], kwargs['end_date']]
                 total_size_lst = list()
@@ -46,7 +45,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                 scn_lst = list()
                 for row in gg_sen2_db_cursor.execute(query, query_vars):
                     print(row[0])
-                    if not sen2_rcd_obj.is_scn_in_db(row[0]):
+                    if not sen2_rcd_obj.is_scn_in_db(row[0]) and ("OPER_PRD" not in row[0]):
                         scn = dict()
                         scn['product_id'] = row[0]
                         scn['scn_url'] = row[1]
@@ -76,6 +75,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                               start_date='2016-01-01',
                               end_date='2020-07-01',
                               n_scns=10,
+                              n_scns_xt=20,
                               scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
                               goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
