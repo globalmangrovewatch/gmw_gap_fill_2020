@@ -14,10 +14,10 @@ class PerformScnDownload(PBPTQProcessTool):
         sen2_rcd_obj = RecordSen2Process(self.params['scn_db_file'])
         downloaded = sen2_rcd_obj.is_scn_downloaded(self.params['product_id'])
         if not downloaded:
-            auth_cmd = "gcloud auth activate-service-account --key-file={}".format(self.params['goog_key_json'])
+            #auth_cmd = "gcloud auth activate-service-account --key-file={}".format(self.params['goog_key_json'])
             cmd = "gsutil -m cp -r {} {}".format(self.params['scn_url'], self.params['downpath'])
-            logger.debug("Running command: '{}'".format(auth_cmd))
-            subprocess.call(auth_cmd, shell=True)
+            #logger.debug("Running command: '{}'".format(auth_cmd))
+            #subprocess.call(auth_cmd, shell=True)
             logger.debug("Running command: '{}'".format(cmd))
             subprocess.call(cmd, shell=True)
             sen2_rcd_obj.set_scn_downloaded(self.params['product_id'], self.params['downpath'])
