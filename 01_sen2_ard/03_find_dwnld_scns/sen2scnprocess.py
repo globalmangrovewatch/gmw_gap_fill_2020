@@ -121,7 +121,7 @@ class RecordSen2Process(object):
         ses.close()
         logger.debug("Closed the database session.")
 
-    def get_scns_download(self, granule):
+    def get_scns_download(self, granule=None):
         logger.debug("Creating Database Engine.")
         db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
         logger.debug("Creating Database Session.")
@@ -130,8 +130,11 @@ class RecordSen2Process(object):
         logger.debug("Created Database Engine and Session.")
 
         logger.debug("Perform query to find scene.")
-        query_result = ses.query(Sen2Process).filter(Sen2Process.granule == granule,
-                                                     Sen2Process.download == False).all()
+        if granule is None:
+            query_result = ses.query(Sen2Process).filter(Sen2Process.download == False).all()
+        else:
+            query_result = ses.query(Sen2Process).filter(Sen2Process.granule == granule,
+                                                         Sen2Process.download == False).all()
         scns = list()
         for scn in query_result:
             scns.append(scn)
@@ -171,6 +174,29 @@ class RecordSen2Process(object):
             query_result.ard_path = ard_path
         ses.close()
         logger.debug("Closed the database session.")
+
+    def get_scns_ard(self, granule=None):
+        logger.debug("Creating Database Engine.")
+        db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
+        logger.debug("Creating Database Session.")
+        session_sqlalc = sqlalchemy.orm.sessionmaker(bind=db_engine)
+        ses = session_sqlalc()
+        logger.debug("Created Database Engine and Session.")
+
+        logger.debug("Perform query to find scene.")
+        if granule is None:
+            query_result = ses.query(Sen2Process).filter(Sen2Process.download == True,
+                                                         Sen2Process.ard == False).all()
+        else:
+            query_result = ses.query(Sen2Process).filter(Sen2Process.granule == granule,
+                                                         Sen2Process.download == True,
+                                                         Sen2Process.ard == False).all()
+        scns = list()
+        for scn in query_result:
+            scns.append(scn)
+        ses.close()
+        logger.debug("Closed the database session.")
+        return scns
 
     def is_scn_ard(self, product_id):
         logger.debug("Creating Database Engine.")

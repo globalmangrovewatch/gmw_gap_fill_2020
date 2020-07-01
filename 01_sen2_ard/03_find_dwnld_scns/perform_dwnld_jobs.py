@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class PerformScnDownload(PBPTQProcessTool):
 
     def __init__(self):
-        super().__init__(cmd_name='exe_scn_processing.py', descript=None)
+        super().__init__(cmd_name='perform_dwnld_jobs.py', descript=None)
 
     def do_processing(self, **kwargs):
         sen2_rcd_obj = RecordSen2Process(self.params['scn_db_file'])

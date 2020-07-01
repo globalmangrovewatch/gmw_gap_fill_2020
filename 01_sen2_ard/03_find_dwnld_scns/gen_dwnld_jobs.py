@@ -114,8 +114,8 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
         #                         module_load='module load parallel singularity\n\nexport http_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\nexport https_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\n')
 
     def run_check_outputs(self):
-        process_tools_mod = 'exe_scn_processing'
-        process_tools_cls = 'ProcessEODDScn'
+        process_tools_mod = 'perform_dwnld_jobs'
+        process_tools_cls = 'PerformScnDownload'
         time_sample_str = self.generate_readable_timestamp_str()
         out_err_file = 'processing_errs_{}.txt'.format(time_sample_str)
         out_non_comp_file = 'non_complete_errs_{}.txt'.format(time_sample_str)
