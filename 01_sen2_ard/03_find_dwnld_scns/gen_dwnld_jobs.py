@@ -60,6 +60,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                             c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
                             c_dict['scn_db_file'] = kwargs['scn_db_file']
                             c_dict['goog_key_json'] = kwargs['goog_key_json']
+                            c_dict['goog_proj'] = kwargs['goog_proj']
                             if not os.path.exists(c_dict['downpath']):
                                 os.mkdir(c_dict['downpath'])
                             self.params.append(c_dict)
@@ -72,6 +73,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                             c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
                             c_dict['scn_db_file'] = kwargs['scn_db_file']
                             c_dict['goog_key_json'] = kwargs['goog_key_json']
+                            c_dict['goog_proj'] = kwargs['goog_proj']
                             if not os.path.exists(c_dict['downpath']):
                                 os.mkdir(c_dict['downpath'])
                             self.params.append(c_dict)
@@ -89,6 +91,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                     c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], scn.product_id)
                     c_dict['scn_db_file'] = kwargs['scn_db_file']
                     c_dict['goog_key_json'] = kwargs['goog_key_json']
+                    c_dict['goog_proj'] = kwargs['goog_proj']
                     if not os.path.exists(c_dict['downpath']):
                         os.mkdir(c_dict['downpath'])
                     self.params.append(c_dict)
@@ -104,7 +107,8 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                               n_scns_xt=20,
                               scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
-                              goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
+                              goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json',
+                              goog_proj='globalmangrovewatch-164501')
         self.pop_params_db()
         self.create_slurm_sub_sh("dwnld_sen2_scns", 8224, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
