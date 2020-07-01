@@ -28,7 +28,7 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
             sen2_rcd_obj.init_db()
 
         for granule in granule_lst:
-            logger.info("Processing: {}".format(granule))
+            logger.info("Processing Granule: {}".format(granule))
             n_scns = sen2_rcd_obj.n_granule_scns(granule)
             if n_scns < kwargs['n_scns']:
                 gg_sen2_db_cursor = gg_sen2_db_conn.cursor()
@@ -37,35 +37,36 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                 for row in gg_sen2_db_cursor.execute(query_total_size, query_ts_vars):
                     if rsgis_utils.isNumber(row[0]):
                         total_size_lst.append(float(row[0]))
-                ts_mean = statistics.mean(total_size_lst)
-                ts_stdev = statistics.stdev(total_size_lst)
-                ts_thres = ts_mean - ts_stdev
-                logger.debug("Total Size Threshold: {}".format(ts_thres))
-                query_vars = [granule, kwargs['cloud_thres'], kwargs['start_date'], kwargs['end_date'], ts_thres]
-                scn_lst = list()
-                for row in gg_sen2_db_cursor.execute(query, query_vars):
-                    print(row[0])
-                    if not sen2_rcd_obj.is_scn_in_db(row[0]) and ("OPER_PRD" not in row[0]):
-                        scn = dict()
-                        scn['product_id'] = row[0]
-                        scn['scn_url'] = row[1]
-                        scn['granule'] = granule
-                        scn_lst.append(scn)
+                if len(total_size_lst) > 0:
+                    ts_mean = statistics.mean(total_size_lst)
+                    ts_stdev = statistics.stdev(total_size_lst)
+                    ts_thres = ts_mean - ts_stdev
+                    logger.debug("Total Size Threshold: {}".format(ts_thres))
+                    query_vars = [granule, kwargs['cloud_thres'], kwargs['start_date'], kwargs['end_date'], ts_thres]
+                    scn_lst = list()
+                    for row in gg_sen2_db_cursor.execute(query, query_vars):
+                        if not sen2_rcd_obj.is_scn_in_db(row[0]) and ("OPER_PRD" not in row[0]):
+                            logger.info("Adding to processing: {}".format(row[0]))
+                            scn = dict()
+                            scn['product_id'] = row[0]
+                            scn['scn_url'] = row[1]
+                            scn['granule'] = granule
+                            scn_lst.append(scn)
 
-                        c_dict = dict()
-                        c_dict['product_id'] = row[0]
-                        c_dict['scn_url'] = row[1]
-                        c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
-                        c_dict['scn_db_file'] = kwargs['scn_db_file']
-                        c_dict['goog_key_json'] = kwargs['goog_key_json']
-                        if not os.path.exists(c_dict['downpath']):
-                            os.mkdir(c_dict['downpath'])
-                        self.params.append(c_dict)
-                        n_scns += 1
-                    if n_scns >= kwargs['n_scns']:
-                        break
-                if len(scn_lst) > 0:
-                    sen2_rcd_obj.add_sen2_scns(scn_lst)
+                            c_dict = dict()
+                            c_dict['product_id'] = row[0]
+                            c_dict['scn_url'] = row[1]
+                            c_dict['downpath'] = os.path.join(kwargs['dwnld_path'], row[0])
+                            c_dict['scn_db_file'] = kwargs['scn_db_file']
+                            c_dict['goog_key_json'] = kwargs['goog_key_json']
+                            if not os.path.exists(c_dict['downpath']):
+                                os.mkdir(c_dict['downpath'])
+                            self.params.append(c_dict)
+                            n_scns += 1
+                        if n_scns >= kwargs['n_scns']:
+                            break
+                    if len(scn_lst) > 0:
+                        sen2_rcd_obj.add_sen2_scns(scn_lst)
 
     def run_gen_commands(self):
         self.gen_command_info(db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_db_20200701.db',
