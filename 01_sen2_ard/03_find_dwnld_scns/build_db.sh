@@ -1,0 +1,1 @@
+singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif arcsisetupsen2db.py -f sen2_db_20200701.db
