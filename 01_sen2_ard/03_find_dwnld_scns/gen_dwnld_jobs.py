@@ -106,11 +106,12 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                               dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
                               goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
         self.pop_params_db()
-        self.create_slurm_sub_sh("dwnld_sen2_scns", 8224, '/scratch/a.pfb/gmw_v2_gapfill/logs',
-                                 run_script='run_exe_analysis.sh', job_dir="job_scripts",
-                                 db_info_file=None, account_name='scw1376', n_cores_per_job=5, n_jobs=2,
-                                 job_time_limit='2-23:59',
-                                 module_load='module load parallel singularity\n\nexport http_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\nexport https_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\n')
+        self.create_shell_exe("run_dwnld_cmds.sh", "dwnld_cmds.sh", 4, db_info_file=None)
+        #self.create_slurm_sub_sh("dwnld_sen2_scns", 8224, '/scratch/a.pfb/gmw_v2_gapfill/logs',
+        #                         run_script='run_exe_analysis.sh', job_dir="job_scripts",
+        #                         db_info_file=None, account_name='scw1376', n_cores_per_job=5, n_jobs=2,
+        #                         job_time_limit='2-23:59',
+        #                         module_load='module load parallel singularity\n\nexport http_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\nexport https_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\n')
 
     def run_check_outputs(self):
         process_tools_mod = 'exe_scn_processing'
