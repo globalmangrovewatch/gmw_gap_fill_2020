@@ -14,11 +14,11 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
     def gen_command_info(self, **kwargs):
         rsgis_utils = rsgislib.RSGISPyUtils()
         granule_lst = rsgis_utils.readTextFile2List(kwargs['granule_lst'])
-        gg_sen2_db_conn = sqlite3.connect(kwargs['goog_db_file'])
+        gg_sen2_db_conn = sqlite3.connect(kwargs['db_file'])
         query = """SELECT PRODUCT_ID, BASE_URL FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                    AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?) 
                    AND GEOMETRIC_QUALITY_FLAG = 0 AND CAST(TOTAL_SIZE as decimal) > ? 
-                   ORDER BY CLOUD_COVER ASC LIMIT {}""".format(kwargs['n_scns'] + kwargs['n_scns_xts'])
+                   ORDER BY CLOUD_COVER ASC LIMIT {}""".format(kwargs['n_scns'])
 
         query_total_size = """SELECT TOTAL_SIZE FROM SEN2 WHERE MGRS_TILE = ? AND CLOUD_COVER < ? 
                               AND date(SENSING_TIME) > date(?) AND date(SENSING_TIME) < date(?)"""
@@ -71,9 +71,11 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
         self.gen_command_info(db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_db_20200701.db',
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               cloud_thres=20,
+                              cloud_thres_ts=50,
                               start_date='2016-01-01',
                               end_date='2020-07-01',
                               n_scns=10,
+                              scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
                               goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
         self.pop_params_db()
