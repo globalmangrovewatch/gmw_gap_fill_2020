@@ -171,7 +171,7 @@ class RecordSen2Process(object):
         logger.debug("Perform query to find scene.")
         query_result = ses.query(Sen2Process).filter(Sen2Process.product_id == product_id).one_or_none()
         if query_result is not None:
-            query_result.download = True
+            query_result.ard = True
             query_result.ard_path = ard_path
             ses.commit()
         ses.close()
@@ -214,6 +214,9 @@ class RecordSen2Process(object):
         logger.debug("Closed the database session.")
         arded = False
         if query_result is not None:
-            arded = query_result.ard
+            if query_result.ard_path is not None:
+                arded = True
+            else:
+                arded = query_result.ard
         return arded
 
