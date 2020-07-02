@@ -1,7 +1,7 @@
 from pbprocesstools.pbpt_q_process import PBPTGenQProcessToolCmds
 import logging
 import os
-from ../03_find_dwnld_scns/sen2scnprocess import RecordSen2Process
+from ..03_find_dwnld_scns.sen2scnprocess import RecordSen2Process
 
 logger = logging.getLogger(__name__)
 

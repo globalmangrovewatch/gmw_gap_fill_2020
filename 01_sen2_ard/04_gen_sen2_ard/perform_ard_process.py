@@ -1,5 +1,5 @@
 from pbprocesstools.pbpt_q_process import PBPTQProcessTool
-from ../03_find_dwnld_scns/sen2scnprocess import RecordSen2Process
+from ..03_find_dwnld_scns.sen2scnprocess import RecordSen2Process
 import logging
 import arcsilib
 import arcsilib.arcsirun
