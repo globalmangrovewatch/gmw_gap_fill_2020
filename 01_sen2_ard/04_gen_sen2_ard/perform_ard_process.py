@@ -1,10 +1,13 @@
 from pbprocesstools.pbpt_q_process import PBPTQProcessTool
-from ..03_find_dwnld_scns.sen2scnprocess import RecordSen2Process
 import logging
 import arcsilib
 import arcsilib.arcsirun
 import os
 import shutil
+import sys
+
+sys.path.insert(0, "../03_find_dwnld_scns")
+from sen2scnprocess import RecordSen2Process
 
 logger = logging.getLogger(__name__)
 
