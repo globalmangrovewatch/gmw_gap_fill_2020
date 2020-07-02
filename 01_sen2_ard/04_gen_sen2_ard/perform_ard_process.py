@@ -53,6 +53,8 @@ class PerformScnARD(PBPTQProcessTool):
                                        None, None, True, 20, False, False, 1000, "cubic", "near", 3000, 3000, 1000, 21,
                                        True, False, False, None, None, True, None, 'S2LESSFMSK')
             sen2_rcd_obj.set_scn_ard(self.params['product_id'], self.params['ard_path'])
+        elif ard_processed:
+            sen2_rcd_obj.set_scn_ard(self.params['product_id'], self.params['ard_path'])
 
         if os.path.exists(self.params['tmp_dir']):
             shutil.rmtree(self.params['tmp_dir'])
