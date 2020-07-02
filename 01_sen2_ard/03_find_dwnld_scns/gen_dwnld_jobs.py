@@ -38,9 +38,12 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                     if rsgis_utils.isNumber(row[0]):
                         total_size_lst.append(float(row[0]))
                 if len(total_size_lst) > 0:
-                    ts_mean = statistics.mean(total_size_lst)
-                    ts_stdev = statistics.stdev(total_size_lst)
-                    ts_thres = ts_mean - ts_stdev
+                    if len(total_size_lst) > 1:
+                        ts_mean = statistics.mean(total_size_lst)
+                        ts_stdev = statistics.stdev(total_size_lst)
+                        ts_thres = ts_mean - ts_stdev
+                    else:
+                        ts_thres = 0.0
                     logger.debug("Total Size Threshold: {}".format(ts_thres))
                     query_vars = [granule, kwargs['cloud_thres'], kwargs['start_date'], kwargs['end_date'], ts_thres]
                     scn_ids = list()
