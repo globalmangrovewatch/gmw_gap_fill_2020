@@ -21,12 +21,13 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
         :return:
         """
         import glob
+        files = None
         for root, dirs, files in os.walk(dirPath):
             files = glob.glob(os.path.join(root, fileSearch))
             if len(files) > 0:
                 break
         out_file = None
-        if len(files) == 1:
+        if (files is not None) and (len(files) == 1):
             out_file = files[0]
         elif rtn_except:
             raise Exception("Could not find a single file ({0}) in {1}; found {2} files.".format(fileSearch, dirPath, len(files)))
