@@ -59,7 +59,8 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
             self.params.append(c_dict)
 
     def run_gen_commands(self):
-        self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
+        self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
+                              granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               comp_path='/scratch/a.pfb/gmw_v2_gapfill/data/comps',
                               comp_tif_path='/scratch/a.pfb/gmw_v2_gapfill/data/comps_tif',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
