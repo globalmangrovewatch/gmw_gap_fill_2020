@@ -48,9 +48,9 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
             for scn in scns:
                 print("\t{}".format(scn.product_id))
                 if scn.ard:
-                    img = self.find_first_file(scn.ard_path, "*vmsk_mclds_clearsky_topshad_rad_srefdem_stdsref.kea")
+                    img = self.find_first_file(scn.ard_path, "*vmsk_mclds_clearsky_topshad_rad_srefdem_stdsref.kea", rtn_except=False)
                     if img is None:
-                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky.kea")
+                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky.kea", rtn_except=False)
                         if clrsky_img is None:
                             raise Exception("Could not find image for scene: {}".format(scn.ard_path))
                     else:
