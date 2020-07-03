@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class GenGranuleComposites(PBPTGenQProcessToolCmds):
 
-    def find_first_file(self, dirPath, fileSearch):
+    def find_first_file(self, dirPath, fileSearch, rtn_except=True):
         """
         Search for a single file with a path using glob. Therefore, the file
         path returned is a true path. Within the fileSearch provide the file
@@ -25,10 +25,13 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
             files = glob.glob(os.path.join(root, fileSearch))
             if len(files) > 0:
                 break
-
-        if len(files) != 1:
+        out_file = None
+        if len(files) == 1:
+            out_file = files[0]
+        elif rtn_except:
             raise Exception("Could not find a single file ({0}) in {1}; found {2} files.".format(fileSearch, dirPath, len(files)))
-        return files[0]
+
+        return out_file
 
     def gen_command_info(self, **kwargs):
         if not os.path.exists(kwargs['scn_db_file']):
@@ -46,8 +49,13 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
                 print("\t{}".format(scn.product_id))
                 if scn.ard:
                     img = self.find_first_file(scn.ard_path, "*vmsk_mclds_clearsky_topshad_rad_srefdem_stdsref.kea")
-                    print("\t\t{}".format(img))
-                    imgs.append(img)
+                    if img is None:
+                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky.kea")
+                        if clrsky_img is None:
+                            raise Exception("Could not find image for scene: {}".format(scn.ard_path))
+                    else:
+                        print("\t\t{}".format(img))
+                        imgs.append(img)
             c_dict = dict()
             c_dict['granule'] = granule
             c_dict['imgs'] = imgs
