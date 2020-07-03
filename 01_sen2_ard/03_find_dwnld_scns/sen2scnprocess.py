@@ -5,6 +5,8 @@ import sqlalchemy
 from sqlalchemy.orm.attributes import flag_modified
 from sqlite3 import Connection as SQLite3Connection
 import logging
+import os
+import shutil
 
 logger = logging.getLogger(__name__)
 
@@ -258,7 +260,7 @@ class RecordSen2Process(object):
         ses.close()
         logger.debug("Closed the database session.")
 
-    def reset_ard_scn(self, product_id):
+    def reset_ard_scn(self, product_id, delpath=False):
         logger.debug("Creating Database Engine.")
         db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
         logger.debug("Creating Database Session.")
@@ -271,13 +273,15 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting ARD fields for {}.".format(product_id))
             query_result.ard = False
+            if delpath and os.path.exists(query_result.ard_path):
+                shutil.rmtree(query_result.ard_path)
             query_result.ard_path = None
             ses.commit()
             logger.debug("Reset ARD fields for {}.".format(product_id))
         ses.close()
         logger.debug("Closed the database session.")
 
-    def reset_dwnld_scn(self, product_id):
+    def reset_dwnld_scn(self, product_id, delpath=False):
         logger.debug("Creating Database Engine.")
         db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
         logger.debug("Creating Database Session.")
@@ -290,6 +294,8 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting Download fields for {}.".format(product_id))
             query_result.download = False
+            if delpath and os.path.exists(query_result.download_path):
+                shutil.rmtree(query_result.download_path)
             query_result.download_path = None
             ses.commit()
             logger.debug("Reset Download fields for {}.".format(product_id))
