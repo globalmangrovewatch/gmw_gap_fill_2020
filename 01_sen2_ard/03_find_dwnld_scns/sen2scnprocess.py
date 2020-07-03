@@ -239,7 +239,7 @@ class RecordSen2Process(object):
                 arded = query_result.ard
         return arded
 
-    def reset_all_scn(self, product_id):
+    def reset_all_scn(self, product_id, delpath=False):
         logger.debug("Creating Database Engine.")
         db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
         logger.debug("Creating Database Session.")
@@ -252,11 +252,17 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting ARD and Download fields for {}.".format(product_id))
             query_result.ard = False
+            if delpath and os.path.exists(query_result.ard_path):
+                shutil.rmtree(query_result.ard_path)
             query_result.ard_path = None
+            if delpath and os.path.exists(query_result.download_path):
+                shutil.rmtree(query_result.download_path)
             query_result.download = False
             query_result.download_path = None
             ses.commit()
             logger.debug("Reset ARD and Download fields for {}.".format(product_id))
+        else:
+            logger.info("Failed to reset {} was not found.".format(product_id))
         ses.close()
         logger.debug("Closed the database session.")
 
@@ -278,6 +284,8 @@ class RecordSen2Process(object):
             query_result.ard_path = None
             ses.commit()
             logger.debug("Reset ARD fields for {}.".format(product_id))
+        else:
+            logger.info("Failed to reset {} was not found.".format(product_id))
         ses.close()
         logger.debug("Closed the database session.")
 
@@ -299,6 +307,8 @@ class RecordSen2Process(object):
             query_result.download_path = None
             ses.commit()
             logger.debug("Reset Download fields for {}.".format(product_id))
+        else:
+            logger.info("Failed to reset {} was not found.".format(product_id))
         ses.close()
         logger.debug("Closed the database session.")
 
