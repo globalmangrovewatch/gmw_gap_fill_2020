@@ -1,3 +1,4 @@
+import sys
 sys.path.insert(0, "../03_find_dwnld_scns")
 from sen2scnprocess import RecordSen2Process
 
