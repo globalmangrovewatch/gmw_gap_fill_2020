@@ -220,3 +220,65 @@ class RecordSen2Process(object):
                 arded = query_result.ard
         return arded
 
+    def reset_all_scn(self, product_id):
+        logger.debug("Creating Database Engine.")
+        db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
+        logger.debug("Creating Database Session.")
+        session_sqlalc = sqlalchemy.orm.sessionmaker(bind=db_engine)
+        ses = session_sqlalc()
+        logger.debug("Created Database Engine and Session.")
+
+        logger.debug("Perform query to find scene.")
+        query_result = ses.query(Sen2Process).filter(Sen2Process.product_id == product_id).one_or_none()
+        if query_result is not None:
+            logger.debug("Resetting ARD and Download fields for {}.".format(product_id))
+            query_result.ard = False
+            query_result.ard_path = None
+            query_result.download = False
+            query_result.download_path = None
+            ses.commit()
+            logger.debug("Reset ARD and Download fields for {}.".format(product_id))
+        ses.close()
+        logger.debug("Closed the database session.")
+
+    def reset_ard_scn(self, product_id):
+        logger.debug("Creating Database Engine.")
+        db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
+        logger.debug("Creating Database Session.")
+        session_sqlalc = sqlalchemy.orm.sessionmaker(bind=db_engine)
+        ses = session_sqlalc()
+        logger.debug("Created Database Engine and Session.")
+
+        logger.debug("Perform query to find scene.")
+        query_result = ses.query(Sen2Process).filter(Sen2Process.product_id == product_id).one_or_none()
+        if query_result is not None:
+            logger.debug("Resetting ARD fields for {}.".format(product_id))
+            query_result.ard = False
+            query_result.ard_path = None
+            ses.commit()
+            logger.debug("Reset ARD fields for {}.".format(product_id))
+        ses.close()
+        logger.debug("Closed the database session.")
+
+    def reset_dwnld_scn(self, product_id):
+        logger.debug("Creating Database Engine.")
+        db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
+        logger.debug("Creating Database Session.")
+        session_sqlalc = sqlalchemy.orm.sessionmaker(bind=db_engine)
+        ses = session_sqlalc()
+        logger.debug("Created Database Engine and Session.")
+
+        logger.debug("Perform query to find scene.")
+        query_result = ses.query(Sen2Process).filter(Sen2Process.product_id == product_id).one_or_none()
+        if query_result is not None:
+            logger.debug("Resetting Download fields for {}.".format(product_id))
+            query_result.download = False
+            query_result.download_path = None
+            ses.commit()
+            logger.debug("Reset Download fields for {}.".format(product_id))
+        ses.close()
+        logger.debug("Closed the database session.")
+
+
+
+
