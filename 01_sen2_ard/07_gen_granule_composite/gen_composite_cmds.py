@@ -52,7 +52,8 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
                     if img is None:
                         clrsky_img = self.find_first_file(scn.ard_path, "*clearsky.kea", rtn_except=False)
                         if clrsky_img is None:
-                            raise Exception("Could not find image for scene: {}".format(scn.ard_path))
+                            #raise Exception("Could not find image for scene: {}".format(scn.ard_path))
+                            print("***ERROR***: {}".format(scn.ard_path))
                     else:
                         print("\t\t{}".format(img))
                         imgs.append(img)
