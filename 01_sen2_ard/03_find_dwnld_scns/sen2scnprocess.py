@@ -105,6 +105,23 @@ class RecordSen2Process(object):
         logger.debug("Closed the database session.")     
         return n_scns
 
+    def granule_scns(self, granule):
+        logger.debug("Creating Database Engine.")
+        db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
+        logger.debug("Creating Database Session.")
+        session_sqlalc = sqlalchemy.orm.sessionmaker(bind=db_engine)
+        ses = session_sqlalc()
+        logger.debug("Created Database Engine and Session.")
+
+        logger.debug("Perform query to find scene.")
+        query_result = ses.query(Sen2Process).filter(Sen2Process.granule == granule).all()
+        scns = list()
+        for scn in query_result:
+            scns.append(scn)
+        ses.close()
+        logger.debug("Closed the database session.")
+        return scns
+
     def set_scn_downloaded(self, product_id, download_path):
         logger.debug("Creating Database Engine.")
         db_engine = sqlalchemy.create_engine(self.sqlite_db_conn, pool_pre_ping=True)
