@@ -58,7 +58,7 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
                     else:
                         print("\t\t{}".format(img))
                         imgs.append(img)
-            if imgs > 0:
+            if len(imgs) > 0:
                 c_dict = dict()
                 c_dict['granule'] = granule
                 c_dict['imgs'] = imgs
