@@ -55,6 +55,7 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
                         if clrsky_img is None:
                             #raise Exception("Could not find image for scene: {}".format(scn.ard_path))
                             print("***ERROR***: {}".format(scn.ard_path))
+                            err_scns.append(scn.ard_path)
                     else:
                         print("\t\t{}".format(img))
                         imgs.append(img)
