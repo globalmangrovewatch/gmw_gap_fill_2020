@@ -252,10 +252,10 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting ARD and Download fields for {}.".format(product_id))
             query_result.ard = False
-            if delpath and os.path.exists(query_result.ard_path):
+            if delpath and query_result.ard_path is not None and os.path.exists(query_result.ard_path):
                 shutil.rmtree(query_result.ard_path)
             query_result.ard_path = None
-            if delpath and os.path.exists(query_result.download_path):
+            if delpath and query_result.download_path is not None and os.path.exists(query_result.download_path):
                 shutil.rmtree(query_result.download_path)
             query_result.download = False
             query_result.download_path = None
@@ -279,7 +279,7 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting ARD fields for {}.".format(product_id))
             query_result.ard = False
-            if delpath and os.path.exists(query_result.ard_path):
+            if delpath and query_result.ard_path is not None and os.path.exists(query_result.ard_path):
                 shutil.rmtree(query_result.ard_path)
             query_result.ard_path = None
             ses.commit()
@@ -302,7 +302,7 @@ class RecordSen2Process(object):
         if query_result is not None:
             logger.debug("Resetting Download fields for {}.".format(product_id))
             query_result.download = False
-            if delpath and os.path.exists(query_result.download_path):
+            if delpath and query_result.download_path is not None and os.path.exists(query_result.download_path):
                 shutil.rmtree(query_result.download_path)
             query_result.download_path = None
             ses.commit()
