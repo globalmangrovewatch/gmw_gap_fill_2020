@@ -2,14 +2,33 @@ from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
 import shutil
-import sys
-import rsgislib.imageutils
 import rsgislib.imageutils.imagecomp
 
-sys.path.insert(0, "../03_find_dwnld_scns")
-from sen2scnprocess import RecordSen2Process
-
 logger = logging.getLogger(__name__)
+
+def gdal_translate_gtiff(input_img, output_img):
+    """
+    Using GDAL translate to convert input image to a different format, if GTIFF selected
+    and no options are provided then a cloud optimised GeoTIFF will be outputted.
+
+    :param input_img: Input image which is GDAL readable.
+    :param output_img: The output image file.
+    :param gdal_format: The output image file format
+    :param options: options for the output driver (e.g., "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=YES")
+    """
+    import osgeo.gdal as gdal
+    options = "-co TILED=YES -co INTERLEAVE=PIXEL -co BLOCKXSIZE=256 -co BLOCKYSIZE=256 -co COMPRESS=LZW -co BIGTIFF=YES -co COPY_SRC_OVERVIEWS=YES"
+
+    try:
+        import tqdm
+        pbar = tqdm.tqdm(total=100)
+        callback = lambda *args, **kw: pbar.update()
+    except:
+        callback = gdal.TermProgress
+
+    trans_opt = gdal.TranslateOptions(format='GTIFF', options=options, callback=callback)
+    gdal.Translate(output_img, input_img, options=trans_opt)
+
 
 class ComputeSen2GranuleComposite(PBPTQProcessTool):
 
@@ -34,10 +53,10 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
                                                                      gdalformat='KEA', dataType=None, calcStats=True,
                                                                      reprojmethod='cubic', use_mode=True)
             outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
-            rsgislib.imageutils.gdal_translate(outCompImg, outCompTIFImg, gdal_format='GTIFF')
+            gdal_translate_gtiff(outCompImg, outCompTIFImg)
         elif n_imgs == 1:
             outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
-            rsgislib.imageutils.gdal_translate(self.params['imgs'][0], outCompTIFImg, gdal_format='GTIFF')
+            gdal_translate_gtiff(self.params['imgs'][0], outCompTIFImg)
 
 
         if os.path.exists(self.params['tmp_dir']):
