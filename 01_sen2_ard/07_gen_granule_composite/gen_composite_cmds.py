@@ -41,6 +41,7 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
         granule_lst = rsgis_utils.readTextFile2List(kwargs['granule_lst'])
 
         sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
+        err_scns = []
         for granule in granule_lst:
             print(granule)
             scns = sen2_rcd_obj.granule_scns(granule)
@@ -57,15 +58,19 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
                     else:
                         print("\t\t{}".format(img))
                         imgs.append(img)
-            c_dict = dict()
-            c_dict['granule'] = granule
-            c_dict['imgs'] = imgs
-            c_dict['comp_dir'] = kwargs['comp_path']
-            c_dict['comp_tif_dir'] = kwargs['comp_tif_path']
-            c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], granule)
-            if not os.path.exists(c_dict['tmp_dir']):
-                os.mkdir(c_dict['tmp_dir'])
-            self.params.append(c_dict)
+            if imgs > 0:
+                c_dict = dict()
+                c_dict['granule'] = granule
+                c_dict['imgs'] = imgs
+                c_dict['comp_dir'] = kwargs['comp_path']
+                c_dict['comp_tif_dir'] = kwargs['comp_tif_path']
+                c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], granule)
+                if not os.path.exists(c_dict['tmp_dir']):
+                    os.mkdir(c_dict['tmp_dir'])
+                self.params.append(c_dict)
+        print("ERRORS:")
+        for err_scn in err_scns:
+            print(err_scn)
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
