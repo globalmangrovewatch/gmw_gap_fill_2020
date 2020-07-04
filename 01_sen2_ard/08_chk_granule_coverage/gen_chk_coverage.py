@@ -82,8 +82,8 @@ class GenGranuleChkCoverage(PBPTGenQProcessToolCmds):
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
-                              roi_vec_file='/scratch/a.pfb/gmw_v2_gapfill/data/granule_cover',
-                              roi_vec_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_cover',
+                              roi_vec_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/00_define_rois/gmw_missing_regions.geojson',
+                              roi_vec_lyr='gmw_missing_regions',
                               granule_out_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_cover',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
