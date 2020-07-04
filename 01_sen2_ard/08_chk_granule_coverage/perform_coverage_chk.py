@@ -24,7 +24,7 @@ class PerformCoverageCheck(PBPTQProcessTool):
         # Re-project vector layer
         granule_vec_file = os.path.join(self.params['tmp_dir'], "{}_roi_lcl_prj.geojson".format(self.params['granule']))
         rsgislib.vectorutils.vector_translate(self.params['roi_vec_file'], self.params['roi_vec_lyr'], granule_vec_file, self.params['roi_vec_lyr'], out_vec_drv='GEOJSON',
-                         drv_create_opts=[], lyr_create_opts=[], access_mode='overwrite', src_srs="EPSG:4326",
+                         drv_create_opts=['-skipfailures'], lyr_create_opts=['-skipfailures'], access_mode='overwrite', src_srs="EPSG:4326",
                          dst_srs="EPSG:{}".format(granule_epsg), force=True)
 
         # Rasterise
