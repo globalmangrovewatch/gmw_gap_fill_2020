@@ -45,7 +45,7 @@ class GenGranuleChkCoverage(PBPTGenQProcessToolCmds):
         err_scns = []
         for granule in granule_lst:
             print(granule)
-            granule_out_file = os.path.join(kwargs['granule_out_file'], "{}.json".format(granule))
+            granule_out_file = os.path.join(kwargs['granule_out_path'], "{}.json".format(granule))
             if not os.path.exists(granule_out_file):
                 scns = sen2_rcd_obj.granule_scns(granule)
                 vld_imgs = list()
