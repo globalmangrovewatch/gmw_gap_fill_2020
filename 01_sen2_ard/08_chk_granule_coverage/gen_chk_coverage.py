@@ -106,5 +106,5 @@ if __name__ == "__main__":
     py_script = os.path.abspath("perform_coverage_chk.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenGranuleChkCoverage(cmd=script_cmd, sqlite_db_file="sen2_granule_composites.db")
+    create_tools = GenGranuleChkCoverage(cmd=script_cmd, sqlite_db_file="sen2_granule_chk_cover.db")
     create_tools.parse_cmds()
