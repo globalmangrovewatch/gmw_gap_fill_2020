@@ -116,12 +116,12 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
             self.gen_command_info(
                 db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_db_20200701.db',
                 granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/granule_xtra_scns_g90.txt',
-                cloud_thres=20,
+                cloud_thres=30,
                 cloud_thres_ts=50,
                 start_date='2016-01-01',
                 end_date='2020-07-01',
-                n_scns=20,
-                n_scns_xt=30,
+                n_scns=30,
+                n_scns_xt=50,
                 scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                 dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
                 goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
@@ -136,8 +136,8 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
                     cloud_thres_ts=50,
                     start_date='2016-01-01',
                     end_date='2020-07-01',
-                    n_scns=30,
-                    n_scns_xt=50,
+                    n_scns=40,
+                    n_scns_xt=60,
                     scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                     dwnld_path='/scratch/a.pfb/gmw_v2_gapfill/data/dwnlds',
                     goog_key_json='/home/a.pfb/eodd_gmw_info/GlobalMangroveWatch-74b58b05fd73.json')
