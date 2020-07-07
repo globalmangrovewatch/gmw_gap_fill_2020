@@ -35,6 +35,7 @@ class PerformCoverageCheck(PBPTQProcessTool):
         rsgislib.imagecalc.calcMultiImgBandStats(self.params['vld_imgs'], granule_vld_img, rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
 
         granule_clearsky_img = os.path.join(self.params['tmp_dir'], "{}_clearsky_img.kea".format(self.params['granule']))
+        #print(self.params['clrsky_imgs'])
         rsgislib.imagecalc.calcMultiImgBandStats(self.params['clrsky_imgs'], granule_clearsky_img, rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
 
         band_defns = []
