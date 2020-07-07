@@ -31,7 +31,7 @@ def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GP
                 if out_epsg is not None:
                     tmp_data_gdf = tmp_data_gdf.to_crs(epsg=out_epsg)
 
-                data_gdf.append(tmp_data_gdf)
+                data_gdf = data_gdf.append(tmp_data_gdf)
 
     if out_format == "GPKG":
         if output_lyr is None:
