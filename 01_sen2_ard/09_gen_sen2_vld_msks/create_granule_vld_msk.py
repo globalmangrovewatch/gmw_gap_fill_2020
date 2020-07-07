@@ -6,7 +6,7 @@ import rsgislib
 import rsgislib.imagecalc
 import rsgislib.vectorutils
 import rsgislib.rastergis
-import rsgislib.rastergis.ratutils
+import osgeo.ogr as ogr
 
 logger = logging.getLogger(__name__)
 
