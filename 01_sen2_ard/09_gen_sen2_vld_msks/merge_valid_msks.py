@@ -33,12 +33,13 @@ def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GP
 
                 data_gdf = data_gdf.append(tmp_data_gdf)
 
-    if out_format == "GPKG":
-        if output_lyr is None:
-            raise Exception("If output format is GPKG then an output layer is required.")
-        data_gdf.to_file(output_file, layer=output_lyr, driver=out_format)
-    else:
-        data_gdf.to_file(output_file, driver=out_format)
+    if not first:
+        if out_format == "GPKG":
+            if output_lyr is None:
+                raise Exception("If output format is GPKG then an output layer is required.")
+            data_gdf.to_file(output_file, layer=output_lyr, driver=out_format)
+        else:
+            data_gdf.to_file(output_file, driver=out_format)
 
 
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks/*.gpkg")
