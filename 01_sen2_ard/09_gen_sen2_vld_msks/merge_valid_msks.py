@@ -22,12 +22,12 @@ def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GP
             if first:
                 data_gdf = geopandas.read_file(vec_file, layer=lyr)
                 if out_epsg is not None:
-                    data_gdf = data_gdf.set_crs(epsg=out_epsg)
+                    data_gdf = data_gdf.to_crs(epsg=out_epsg)
                 first = False
             else:
                 tmp_data_gdf = geopandas.read_file(vec_file, layer=lyr)
                 if out_epsg is not None:
-                    tmp_data_gdf = tmp_data_gdf.set_crs(epsg=out_epsg)
+                    tmp_data_gdf = tmp_data_gdf.to_crs(epsg=out_epsg)
 
                 data_gdf.append(tmp_data_gdf)
 
