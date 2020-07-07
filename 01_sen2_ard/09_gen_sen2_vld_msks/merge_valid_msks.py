@@ -1,6 +1,6 @@
 import glob
 import rsgislib.vectorutils
-import geopandas
+
 
 def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GPKG', out_epsg=None):
     """
@@ -15,8 +15,10 @@ def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GP
                      projection.
 
     """
+    import tqdm
+    import geopandas
     first = True
-    for vec_file in input_files:
+    for vec_file in tqdm.tqdm(input_files):
         lyrs = rsgislib.vectorutils.getVecLyrsLst(vec_file)
         for lyr in lyrs:
             if first:
