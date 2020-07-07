@@ -42,6 +42,6 @@ def merge_vector_files(input_files, output_file, output_lyr=None, out_format='GP
 
 
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks/*.gpkg")
-merge_vector_files(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks.gpkg', 'GPKG', out_epsg=4326)
+merge_vector_files(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks.gpkg', 'granule_vld_msks', 'GPKG', out_epsg=4326)
 
 
