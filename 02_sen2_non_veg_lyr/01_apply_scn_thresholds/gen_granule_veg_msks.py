@@ -66,11 +66,11 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               dem_file='/scratch/a.pfb/srtm_global_mosaic_1arc_v3.kea',
-                              granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_nonveg_imgs',
-                              granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_nonveg_vecs',
+                              granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
-        self.create_slurm_sub_sh("sen2_granule_nonveg", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
+        self.create_slurm_sub_sh("sen2_granule_veg", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
                                  db_info_file=None, account_name='scw1376', n_cores_per_job=10, n_jobs=10,
                                  job_time_limit='2-23:59',
@@ -89,5 +89,5 @@ if __name__ == "__main__":
     py_script = os.path.abspath("create_granule_veg_msk.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenVegGranuleMsk(cmd=script_cmd, sqlite_db_file="sen2_granule_chk_cover.db")
+    create_tools = GenVegGranuleMsk(cmd=script_cmd, sqlite_db_file="sen2_granule_veg_msks.db")
     create_tools.parse_cmds()
