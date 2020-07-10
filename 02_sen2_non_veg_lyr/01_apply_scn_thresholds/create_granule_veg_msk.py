@@ -22,7 +22,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
         if (len(self.params['vld_imgs']) != len(self.params['clrsky_imgs'])) and (len(self.params['vld_imgs']) != len(self.params['sref_imgs'])):
             raise Exception("There are different numbers of valid masks, clear sky masks and SREF images.")
         rsgis_utils = rsgislib.RSGISPyUtils()
-
+        
         if len(self.params['vld_imgs']) > 0:
             granule_vld_img = os.path.join(self.params['tmp_dir'], "{}_vld_img.kea".format(self.params['granule']))
             rsgislib.imagecalc.calcMultiImgBandStats(self.params['vld_imgs'], granule_vld_img, rsgislib.SUMTYPE_MAX,
