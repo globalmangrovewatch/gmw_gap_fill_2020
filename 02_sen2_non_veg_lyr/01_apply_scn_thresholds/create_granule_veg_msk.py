@@ -33,7 +33,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
 
-            scn_nonveg_msks = list()
+            scn_veg_msks = list()
             for sref_img in self.params['sref_imgs']:
                 print(sref_img)
                 basename = rsgis_utils.get_file_basename(sref_img)
@@ -43,23 +43,23 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
                 nBand = 7
                 rsgislib.imagecalc.calcindices.calcNDVI(sref_img, rBand, nBand, scn_ndvi_img, stats=False, gdalformat='KEA')
 
-                scn_nonveg_img = os.path.join(self.params['tmp_dir'], "{}_nonveg.kea".format(basename))
+                scn_veg_img = os.path.join(self.params['tmp_dir'], "{}_veg.kea".format(basename))
                 band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
                              rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1)]
-                exp = '(dem>80) || (ndvi<0.2)?1:0'
-                rsgislib.imagecalc.bandMath(scn_nonveg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
-                rsgislib.rastergis.populateStats(scn_nonveg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
-                scn_nonveg_msks.append(scn_nonveg_img)
+                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2)?1:0'
+                rsgislib.imagecalc.bandMath(scn_veg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
+                rsgislib.rastergis.populateStats(scn_veg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
+                scn_veg_msks.append(scn_veg_img)
 
-            granule_nonveg_img = os.path.join(self.params['tmp_dir'], "{}_nonveg_img.kea".format(self.params['granule']))
-            rsgislib.imagecalc.calcMultiImgBandStats(scn_nonveg_msks, granule_nonveg_img, rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
-            rsgislib.rastergis.populateStats(granule_nonveg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
-
-            band_defs = [rsgislib.imagecalc.BandDefn('nveg', granule_nonveg_img, 1),
-                         rsgislib.imagecalc.BandDefn('vld', granule_clearsky_img, 1)]
-            exp = '(vld==1) && (nveg==0)?1:0'
-            rsgislib.imagecalc.bandMath(self.params['granule_out_img_file'], exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
+            #granule_veg_img = os.path.join(self.params['tmp_dir'], "{}_nonveg_img.kea".format(self.params['granule']))
+            rsgislib.imagecalc.calcMultiImgBandStats(scn_veg_msks, self.params['granule_out_img_file'], rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
             rsgislib.rastergis.populateStats(self.params['granule_out_img_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
+
+            #band_defs = [rsgislib.imagecalc.BandDefn('nveg', granule_veg_img, 1),
+            #             rsgislib.imagecalc.BandDefn('vld', granule_clearsky_img, 1)]
+            #exp = '(vld==1) && (nveg==0)?1:0'
+            #rsgislib.imagecalc.bandMath(self.params['granule_out_img_file'], exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
+            #rsgislib.rastergis.populateStats(self.params['granule_out_img_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
 
 
             rsgislib.vectorutils.polygoniseRaster2VecLyr(self.params['granule_out_vec_file'], self.params['granule_out_lyr'], 'GPKG', self.params['granule_out_img_file'], imgBandNo=1, maskImg=self.params['granule_out_img_file'], imgMaskBandNo=1, replace_file=True, replace_lyr=True, pxl_val_fieldname='PXLVAL')
