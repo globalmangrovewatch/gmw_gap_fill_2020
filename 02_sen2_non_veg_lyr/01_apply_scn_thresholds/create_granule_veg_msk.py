@@ -25,8 +25,10 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
 
         if len(self.params['vld_imgs']) > 0:
             granule_vld_img = os.path.join(self.params['tmp_dir'], "{}_vld_img.kea".format(self.params['granule']))
-            rsgislib.imagecalc.calcMultiImgBandStats(self.params['vld_imgs'], granule_vld_img, rsgislib.SUMTYPE_MAX,
-                                                     "KEA", rsgislib.TYPE_8UINT, 0, False)
+            rsgislib.imagecalc.calcMultiImgBandStats(self.params['vld_imgs'], granule_vld_img, rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
+
+            granule_clearsky_img = os.path.join(self.params['tmp_dir'], "{}_clearsky_img.kea".format(self.params['granule']))
+            rsgislib.imagecalc.calcMultiImgBandStats(self.params['clrsky_imgs'], granule_clearsky_img, rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
 
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
@@ -54,7 +56,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             rsgislib.rastergis.populateStats(granule_nonveg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
 
             band_defs = [rsgislib.imagecalc.BandDefn('nveg', granule_nonveg_img, 1),
-                         rsgislib.imagecalc.BandDefn('vld', granule_vld_img, 1)]
+                         rsgislib.imagecalc.BandDefn('vld', granule_clearsky_img, 1)]
             exp = '(vld==1) && (nveg==0)?1:0'
             rsgislib.imagecalc.bandMath(self.params['granule_out_img_file'], exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
             rsgislib.rastergis.populateStats(self.params['granule_out_img_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
