@@ -67,7 +67,7 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               dem_file='/scratch/a.pfb/srtm_global_mosaic_1arc_v3.kea',
-                              water_file='/scratch/a.pfb/water_occurence/water_occurence.vrt',
+                              water_file='/scratch/a.pfb/water_occurence/water_occurence.kea',
                               granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
                               granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
