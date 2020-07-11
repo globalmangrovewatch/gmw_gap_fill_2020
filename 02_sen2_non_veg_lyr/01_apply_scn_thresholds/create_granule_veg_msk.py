@@ -33,6 +33,9 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
 
+            granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
+            rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255,  multicore=False)
+
             scn_veg_msks = list()
             for sref_img in self.params['sref_imgs']:
                 print(sref_img)
@@ -45,8 +48,9 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
 
                 scn_veg_img = os.path.join(self.params['tmp_dir'], "{}_veg.kea".format(basename))
                 band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
-                             rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1)]
-                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2)?1:0'
+                             rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
+                             rsgislib.imagecalc.BandDefn('water', granule_water_img, 1)]
+                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (water < 90)?1:0'
                 rsgislib.imagecalc.bandMath(scn_veg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
                 rsgislib.rastergis.populateStats(scn_veg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
                 scn_veg_msks.append(scn_veg_img)
@@ -74,7 +78,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             shutil.rmtree(self.params['tmp_dir'])
 
     def required_fields(self, **kwargs):
-        return ["granule", "dem_file", "vld_imgs", "clrsky_imgs", "sref_imgs", "granule_out_lyr", "granule_out_vec_file", "granule_out_img_file", "tmp_dir"]
+        return ["granule", "dem_file", "water_file", "vld_imgs", "clrsky_imgs", "sref_imgs", "granule_out_lyr", "granule_out_vec_file", "granule_out_img_file", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
         return os.path.exists(self.params['granule_out_file']), dict()
