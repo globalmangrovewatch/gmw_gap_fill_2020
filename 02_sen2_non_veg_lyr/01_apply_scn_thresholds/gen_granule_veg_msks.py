@@ -48,6 +48,7 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
                     c_dict = dict()
                     c_dict['granule'] = granule
                     c_dict['dem_file'] = kwargs['dem_file']
+                    c_dict['water_file'] = kwargs['water_file']
                     c_dict['vld_imgs'] = vld_imgs
                     c_dict['clrsky_imgs'] = clrsky_imgs
                     c_dict['sref_imgs'] = sref_imgs
