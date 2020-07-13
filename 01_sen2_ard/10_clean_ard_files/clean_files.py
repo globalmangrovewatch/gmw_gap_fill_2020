@@ -33,7 +33,7 @@ def clean_files():
             if scn.ard:
                 for f in os.listdir(scn.ard_path):
                     file_path = os.path.join(scn.ard_path, f)
-                    if os.isfile(file_path):
+                    if os.path.isfile(file_path):
                         print("Found: {}".format(file_path))
                         if not keep_file(f):
                             print("\tDelete {}".format(file_path))
