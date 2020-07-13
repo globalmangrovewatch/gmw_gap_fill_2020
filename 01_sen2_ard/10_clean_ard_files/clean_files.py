@@ -39,3 +39,5 @@ def clean_files():
                             print("\tDelete {}".format(file_path))
 
 
+clean_files()
+
