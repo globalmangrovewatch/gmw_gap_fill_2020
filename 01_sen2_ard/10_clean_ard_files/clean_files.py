@@ -37,7 +37,7 @@ def clean_files():
                         print("Found: {}".format(file_path))
                         if not keep_file(f):
                             print("\tDelete {}".format(file_path))
-
+                            os.remove(file_path)
 
 clean_files()
 
