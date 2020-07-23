@@ -66,9 +66,21 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
         return ["granule", "imgs", "comp_dir", "comp_tif_dir", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
-        #outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
+        outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
+        files_dict = dict()
+        files_dict[outCompTIFImg] = 'gdal_image'
+        return self.check_files(files_dict)
 
-        return True, dict()
+    def remove_outputs(self, **kwargs):
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
+
+        # Remove the output file.
+        outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
+        if os.path.exists(outCompTIFImg):
+            os.remove(outCompTIFImg)
 
 if __name__ == "__main__":
     ComputeSen2GranuleComposite().std_run()

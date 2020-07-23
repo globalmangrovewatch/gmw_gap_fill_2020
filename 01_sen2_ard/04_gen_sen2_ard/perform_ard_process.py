@@ -67,6 +67,19 @@ class PerformScnARD(PBPTQProcessTool):
         ard_processed = sen2_rcd_obj.is_scn_ard(self.params['product_id'])
         return ard_processed, dict()
 
+    def remove_outputs(self, **kwargs):
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
+
+        # Remove the output files.
+        sen2_rcd_obj = RecordSen2Process(self.params['scn_db_file'])
+        sen2_rcd_obj.reset_ard_scn(self.params['product_id'], delpath=True)
+        if not os.path.exists(self.params['ard_path']):
+            os.mkdir(self.params['ard_path'])
+
+
 if __name__ == "__main__":
     PerformScnARD().std_run()
 

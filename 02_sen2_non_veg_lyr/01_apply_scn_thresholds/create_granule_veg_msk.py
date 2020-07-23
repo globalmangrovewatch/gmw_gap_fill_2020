@@ -81,7 +81,22 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
         return ["granule", "dem_file", "water_file", "vld_imgs", "clrsky_imgs", "sref_imgs", "granule_out_lyr", "granule_out_vec_file", "granule_out_img_file", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
-        return os.path.exists(self.params['granule_out_file']), dict()
+        files_dict = dict()
+        files_dict[self.params['granule_out_img_file']] = 'gdal_image'
+        files_dict[self.params['granule_out_vec_file']] = 'gdal_vector'
+        return self.check_files(files_dict)
+
+    def remove_outputs(self, **kwargs):
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
+
+        # Remove the output file.
+        if os.path.exists(self.params['granule_out_vec_file']):
+            os.remove(self.params['granule_out_vec_file'])
+        if os.path.exists(self.params['granule_out_img_file']):
+            os.remove(self.params['granule_out_img_file'])
 
 if __name__ == "__main__":
     CreateGranuleVegMsk().std_run()

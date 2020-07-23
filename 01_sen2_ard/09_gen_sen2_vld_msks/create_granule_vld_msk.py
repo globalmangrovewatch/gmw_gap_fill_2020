@@ -49,6 +49,16 @@ class CreateGranuleValidMsk(PBPTQProcessTool):
     def outputs_present(self, **kwargs):
         return os.path.exists(self.params['granule_out_file']), dict()
 
+    def remove_outputs(self, **kwargs):
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
+
+        # Remove the output file.
+        if os.path.exists(self.params['granule_out_file']):
+            os.remove(self.params['granule_out_file'])
+
 if __name__ == "__main__":
     CreateGranuleValidMsk().std_run()
 
