@@ -158,7 +158,6 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
 
     polys = []
     for index, row in data_gdf.iterrows():
-        print(index)
         n_east = 0
         n_west = 0
         row_bbox = row['geometry'].bounds
@@ -251,17 +250,17 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
 
                 data_inter_gdf = geopandas.overlay(data_gdf, utm_gdf, how='intersection')
                 data_diff_gdf = geopandas.overlay(data_gdf, utm_gdf, how='difference')
-                print(len(data_diff_gdf))
-                if (len(data_split_gdf) > 0) and (len(data_diff_gdf) > 0):
+                if (len(data_inter_gdf) > 0) and (len(data_diff_gdf) > 0):
                     data_split_gdf = pandas.concat([data_inter_gdf, data_diff_gdf])
                 elif len(data_diff_gdf) > 0:
                     data_split_gdf = data_diff_gdf
                 else:
                     data_split_gdf = data_inter_gdf
 
-                if len(data_gdf) > 0:
+                if len(data_split_gdf) > 0:
                     data_gdf = data_split_gdf.to_crs("EPSG:4326")
             else:
+                data_gdf = geopandas.read_file(file, layer=lyr)
                 if len(data_gdf) > 0:
                     data_gdf = data_gdf.to_crs("EPSG:4326")
 
@@ -280,3 +279,14 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
             out_gdf.to_file(output_file, layer=output_lyr, driver=out_format)
         else:
             out_gdf.to_file(output_file, driver=out_format)
+
+
+
+
+import glob
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks/*.gpkg")
+
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks.gpkg', 'granule_vld_msks', 'GPKG', n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg', s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+
+
