@@ -13,6 +13,19 @@ import osgeo.ogr as ogr
 
 logger = logging.getLogger(__name__)
 
+def unwrap_wgs84_bbox(bbox):
+    #(MinX, MaxX, MinY, MaxY)
+    bboxes = []
+    if bbox[1] < bbox[0]:
+        bbox1 = [-180.0, bbox[1], bbox[2], bbox[3]]
+        bboxes.append(bbox1)
+        bbox2 = [bbox[0], 180.0, bbox[2], bbox[3]]
+        bboxes.append(bbox2)
+    else:
+        bboxes.append(bbox)
+    return bboxes
+
+
 class CreateGranuleVegMsk(PBPTQProcessTool):
 
     def __init__(self):
@@ -33,9 +46,11 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
 
-            granule_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
-
-            water_stats = rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3])
+            granule_img_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
+            granule_bboxes = unwrap_wgs84_bbox(granule_img_bbox)
+            water_stats = list()
+            for granule_bbox in granule_bboxes:
+                water_stats.append(rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3]))
 
             print(water_stats)
 
