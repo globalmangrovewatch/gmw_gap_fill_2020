@@ -37,7 +37,10 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255,  multicore=False)
 
             scn_veg_msks = list()
-            for sref_img in self.params['sref_imgs']:
+            n_imgs = len(self.params['sref_imgs'])
+            for n in range(n_imgs):
+                sref_img = self.params['sref_imgs'][n]
+                clrsky_img = self.params['clrsky_imgs'][n]
                 print(sref_img)
                 basename = rsgis_utils.get_file_basename(sref_img)
                 scn_ndvi_img = os.path.join(self.params['tmp_dir'], "{}_ndvi.kea".format(basename))
@@ -49,22 +52,15 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
                 scn_veg_img = os.path.join(self.params['tmp_dir'], "{}_veg.kea".format(basename))
                 band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
                              rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
-                             rsgislib.imagecalc.BandDefn('water', granule_water_img, 1)]
-                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (water < 90)?1:0'
+                             rsgislib.imagecalc.BandDefn('water', granule_water_img, 1),
+                             rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1)]
+                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (water < 90) && (vld == 1)?1:0'
                 rsgislib.imagecalc.bandMath(scn_veg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
                 rsgislib.rastergis.populateStats(scn_veg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
                 scn_veg_msks.append(scn_veg_img)
 
-            #granule_veg_img = os.path.join(self.params['tmp_dir'], "{}_nonveg_img.kea".format(self.params['granule']))
             rsgislib.imagecalc.calcMultiImgBandStats(scn_veg_msks, self.params['granule_out_img_file'], rsgislib.SUMTYPE_MAX, "KEA", rsgislib.TYPE_8UINT, 0, False)
             rsgislib.rastergis.populateStats(self.params['granule_out_img_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
-
-            #band_defs = [rsgislib.imagecalc.BandDefn('nveg', granule_veg_img, 1),
-            #             rsgislib.imagecalc.BandDefn('vld', granule_clearsky_img, 1)]
-            #exp = '(vld==1) && (nveg==0)?1:0'
-            #rsgislib.imagecalc.bandMath(self.params['granule_out_img_file'], exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
-            #rsgislib.rastergis.populateStats(self.params['granule_out_img_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
-
 
             rsgislib.vectorutils.polygoniseRaster2VecLyr(self.params['granule_out_vec_file'], self.params['granule_out_lyr'], 'GPKG', self.params['granule_out_img_file'], imgBandNo=1, maskImg=self.params['granule_out_img_file'], imgMaskBandNo=1, replace_file=True, replace_lyr=True, pxl_val_fieldname='PXLVAL')
 
