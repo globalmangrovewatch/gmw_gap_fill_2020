@@ -45,7 +45,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
             clearsky_msk_img = self.find_first_file(base_dir, "*clearsky_refine.kea", False)
             valid_msk_img = self.find_first_file(base_dir, "*valid.kea", False)
             if clearsky_msk_img is not None:
-                prop_useful = rsgislib.imagecalc.calcPropTrueExp("b1==1?1:0", [rsgislib.imagecalc.BandDefn('msk', clearsky_msk_img, 1)], valid_msk_img)
+                prop_useful = rsgislib.imagecalc.calcPropTrueExp("msk==1?1:0", [rsgislib.imagecalc.BandDefn('msk', clearsky_msk_img, 1)], valid_msk_img)
                 if prop_useful > 0.05:
                     clrsky_mskd_img = os.path.join(self.params['tmp_dir'], "{}_clrsky_mskd.kea".format(basename))
                     rsgislib.imageutils.maskImage(img, clearsky_msk_img, clrsky_mskd_img, 'KEA', rsgislib.TYPE_16UINT, 0.0, 0)
