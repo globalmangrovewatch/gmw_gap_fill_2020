@@ -31,7 +31,7 @@ class GenGranuleValidMsks(PBPTGenQProcessToolCmds):
                     print("\t{}".format(scn.product_id))
                     if scn.ard:
                         vld_img = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
-                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky.kea", rtn_except=False)
+                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
                         if (vld_img is None) or (clrsky_img is None):
                             clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
                             if clouds_img is None:
