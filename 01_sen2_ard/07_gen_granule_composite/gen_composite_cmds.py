@@ -45,31 +45,34 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
         err_scns = []
         for granule in granule_lst:
             print(granule)
-            scns = sen2_rcd_obj.granule_scns(granule)
-            imgs = list()
-            for scn in scns:
-                print("\t{}".format(scn.product_id))
-                if scn.ard:
-                    img = self.find_first_file(scn.ard_path, "*vmsk_rad_srefdem_stdsref.kea", rtn_except=False)
-                    if img is None:
-                        clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
-                        if clouds_img is None:
-                            #raise Exception("Could not find image for scene: {}".format(scn.ard_path))
-                            print("***ERROR***: {}".format(scn.ard_path))
-                            err_scns.append(scn.ard_path)
-                    else:
-                        print("\t\t{}".format(img))
-                        imgs.append(img)
-            if len(imgs) > 0:
-                c_dict = dict()
-                c_dict['granule'] = granule
-                c_dict['imgs'] = imgs
-                c_dict['comp_dir'] = kwargs['comp_path']
-                c_dict['comp_tif_dir'] = kwargs['comp_tif_path']
-                c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], granule)
-                if not os.path.exists(c_dict['tmp_dir']):
-                    os.mkdir(c_dict['tmp_dir'])
-                self.params.append(c_dict)
+            out_tif_img = os.path.join(kwargs['comp_tif_path'], "sen2_comp_{}_refl.tif".format(granule))
+            if not os.path.exists(out_tif_img):
+                scns = sen2_rcd_obj.granule_scns(granule)
+                imgs = list()
+                for scn in scns:
+                    print("\t{}".format(scn.product_id))
+                    if scn.ard:
+                        img = self.find_first_file(scn.ard_path, "*vmsk_rad_srefdem_stdsref.kea", rtn_except=False)
+                        if img is None:
+                            clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
+                            if clouds_img is None:
+                                print("***ERROR***: {}".format(scn.ard_path))
+                                err_scns.append(scn.ard_path)
+                        else:
+                            print("\t\t{}".format(img))
+                            imgs.append(img)
+                if len(imgs) > 0:
+                    c_dict = dict()
+                    c_dict['granule'] = granule
+                    c_dict['imgs'] = imgs
+                    c_dict['comp_out_ref_img'] = os.path.join(kwargs['comp_path'], "sen2_comp_{}_pxlref.kea".format(granule))
+                    c_dict['comp_out_refl_img'] = os.path.join(kwargs['comp_path'], "sen2_comp_{}_refl.kea".format(granule))
+                    c_dict['comp_out_msk_img'] = os.path.join(kwargs['comp_path'], "sen2_comp_{}_msk.kea".format(granule))
+                    c_dict['comp_out_tif'] = out_tif_img
+                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], granule)
+                    if not os.path.exists(c_dict['tmp_dir']):
+                        os.mkdir(c_dict['tmp_dir'])
+                    self.params.append(c_dict)
         print("ERRORS:")
         for err_scn in err_scns:
             print(err_scn)

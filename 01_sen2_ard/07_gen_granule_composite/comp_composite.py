@@ -58,32 +58,30 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
             nBand = 7
             sBand = 9
 
-            outRefImg = os.path.join(self.params['comp_dir'], "sen2_comp_{}_refimg.kea".format(self.params['granule']))
-            outCompImg = os.path.join(self.params['comp_dir'], "sen2_comp_{}_refl.kea".format(self.params['granule']))
-            outMskImg = os.path.join(self.params['comp_dir'], "sen2_comp_{}_mskimg.kea".format(self.params['granule']))
-
             rsgislib.imageutils.imagecomp.createMaxNDVINDWIComposite(mskd_imgs[0], mskd_imgs,
-                                                                     rBand, nBand, sBand, outRefImg,
-                                                                     outCompImg, outMskImg, tmpPath=self.params['tmp_dir'],
+                                                                     rBand, nBand, sBand,
+                                                                     self.params['comp_out_ref_img'],
+                                                                     self.params['comp_out_refl_img'],
+                                                                     self.params['comp_out_msk_img'],
+                                                                     tmpPath=self.params['tmp_dir'],
                                                                      gdalformat='KEA', dataType=None, calcStats=True,
                                                                      reprojmethod='cubic', use_mode=True)
             outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
-            gdal_translate_gtiff(outCompImg, outCompTIFImg)
+            gdal_translate_gtiff(self.params['comp_out_refl_img'], outCompTIFImg)
         elif n_imgs == 1:
             outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
             gdal_translate_gtiff(mskd_imgs[0], outCompTIFImg)
-
 
         if os.path.exists(self.params['tmp_dir']):
             shutil.rmtree(self.params['tmp_dir'])
 
     def required_fields(self, **kwargs):
-        return ["granule", "imgs", "comp_dir", "comp_tif_dir", "tmp_dir"]
+        return ["granule", "imgs", "comp_out_ref_img", "comp_out_refl_img", "comp_out_msk_img",
+                "comp_out_tif", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
-        outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
         files_dict = dict()
-        files_dict[outCompTIFImg] = 'gdal_image'
+        files_dict[self.params['comp_out_tif']] = 'gdal_image'
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):
@@ -93,9 +91,15 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
         os.mkdir(self.params['tmp_dir'])
 
         # Remove the output file.
-        outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
-        if os.path.exists(outCompTIFImg):
-            os.remove(outCompTIFImg)
+        if os.path.exists(self.params['comp_out_tif']):
+            os.remove(self.params['comp_out_tif'])
+
+        if os.path.exists(self.params['comp_out_refl_img']):
+            os.remove(self.params['comp_out_refl_img'])
+        if os.path.exists(self.params['comp_out_ref_img']):
+            os.remove(self.params['comp_out_ref_img'])
+        if os.path.exists(self.params['comp_out_msk_img']):
+            os.remove(self.params['comp_out_msk_img'])
 
 if __name__ == "__main__":
     ComputeSen2GranuleComposite().std_run()
