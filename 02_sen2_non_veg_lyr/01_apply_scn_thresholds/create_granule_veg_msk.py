@@ -146,12 +146,25 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             """
 
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
+            granule_countries_img = os.path.join(self.params['tmp_dir'], "{}_countries.kea".format(self.params['granule']))
+            granule_countries_dist_img = os.path.join(self.params['tmp_dir'], "{}_countries_dist.kea".format(self.params['granule']))
+            granule_countries_buf_img = os.path.join(self.params['tmp_dir'], "{}_countries_buf.kea".format(self.params['granule']))
             water_layer_avail = False
             try:
                 resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255.0,  multicore=False)
                 water_layer_avail = True
             except:
                 water_layer_avail = False
+                rsgislib.vectorutils.rasteriseVecLyr(self.params['countries_file'], 'level0', granule_vld_img,
+                                                     granule_countries_img, gdalformat="KEA", burnVal=1,
+                                                     datatype=rsgislib.TYPE_8UINT, vecAtt=None, vecExt=False,
+                                                     thematic=True, nodata=0)
+                rsgislib.imagecalc.calcDist2ImgVals(granule_countries_img, granule_countries_dist_img,
+                                                    [1], valsImgBand=1, gdalformat='KEA', maxDist=3000,
+                                                    noDataVal=None, unitGEO=True)
+                rsgislib.imagecalc.imageMath(granule_countries_dist_img, granule_countries_buf_img, 'b1<3000?1:0',
+                                             'KEA', rsgislib.TYPE_8UINT)
+
 
             scn_veg_msks = list()
             n_imgs = len(self.params['sref_imgs'])
@@ -176,8 +189,9 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
                 else:
                     band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
                                  rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
-                                 rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1)]
-                    exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (vld == 1)?1:0'
+                                 rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1),
+                                 rsgislib.imagecalc.BandDefn('ctry', granule_countries_buf_img, 1)]
+                    exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (vld == 1) && (ctry == 1)?1:0'
                 rsgislib.imagecalc.bandMath(scn_veg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
                 rsgislib.rastergis.populateStats(scn_veg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
                 scn_veg_msks.append(scn_veg_img)

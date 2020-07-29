@@ -49,6 +49,7 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
                     c_dict['granule'] = granule
                     c_dict['dem_file'] = kwargs['dem_file']
                     c_dict['water_file'] = kwargs['water_file']
+                    c_dict['countries_file'] = kwargs['countries_file']
                     c_dict['vld_imgs'] = vld_imgs
                     c_dict['clrsky_imgs'] = clrsky_imgs
                     c_dict['sref_imgs'] = sref_imgs
@@ -68,6 +69,7 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               dem_file='/scratch/a.pfb/srtm_global_mosaic_1arc_v3.kea',
                               water_file='/scratch/a.pfb/water_occurence/water_occurence.kea',
+                              countries_file='/scratch/a.pfb/gmw_v2_gapfill/data/gadm36_levels.gpkg',
                               granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
                               granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
