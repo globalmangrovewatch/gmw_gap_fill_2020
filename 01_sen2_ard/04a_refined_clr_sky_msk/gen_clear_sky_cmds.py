@@ -23,7 +23,7 @@ class GenClearSkyCmds(PBPTGenQProcessToolCmds):
                 cloud_msk = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
                 valid_msk = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
 
-                if (cloud_msk is None) or (valid_msk is None):
+                if (cloud_msk is not None) and (valid_msk is not None):
                     basename = self.get_file_basename(cloud_msk).replace("_clouds", "")
 
                     out_dir = os.path.dirname(cloud_msk)
