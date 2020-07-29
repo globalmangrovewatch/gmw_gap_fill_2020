@@ -50,6 +50,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_bboxes = unwrap_wgs84_bbox(granule_img_bbox)
             water_stats = list()
             for granule_bbox in granule_bboxes:
+                print(granule_bbox)
                 water_stats.append(rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3]))
 
             print(water_stats)
