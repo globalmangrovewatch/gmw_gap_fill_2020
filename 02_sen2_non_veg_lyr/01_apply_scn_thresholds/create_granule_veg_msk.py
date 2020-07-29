@@ -26,6 +26,89 @@ def unwrap_wgs84_bbox(bbox):
     return bboxes
 
 
+def resampleImage2Match(inRefImg, inProcessImg, outImg, gdalformat, interpMethod, datatype=None, noDataVal=None,
+                        multicore=False):
+    """
+A utility function to resample an existing image to the projection and/or pixel size of another image.
+
+Where:
+
+:param inRefImg: is the input reference image to which the processing image is to resampled to.
+:param inProcessImg: is the image which is to be resampled.
+:param outImg: is the output image file.
+:param gdalformat: is the gdal format for the output image.
+:param interpMethod: is the interpolation method used to resample the image [bilinear, lanczos, cubicspline, nearestneighbour, cubic, average, mode]
+:param datatype: is the rsgislib datatype of the output image (if none then it will be the same as the input file).
+:param multicore: use multiple processing cores (Default = False)
+
+"""
+    import osgeo.gdal as gdal
+
+    rsgisUtils = rsgislib.RSGISPyUtils()
+    numBands = rsgisUtils.getImageBandCount(inProcessImg)
+    if noDataVal == None:
+        noDataVal = rsgisUtils.getImageNoDataValue(inProcessImg)
+
+    if datatype == None:
+        datatype = rsgisUtils.getRSGISLibDataTypeFromImg(inProcessImg)
+
+    interpolationMethod = gdal.GRA_NearestNeighbour
+    if interpMethod == 'bilinear':
+        interpolationMethod = gdal.GRA_Bilinear
+    elif interpMethod == 'lanczos':
+        interpolationMethod = gdal.GRA_Lanczos
+    elif interpMethod == 'cubicspline':
+        interpolationMethod = gdal.GRA_CubicSpline
+    elif interpMethod == 'nearestneighbour':
+        interpolationMethod = gdal.GRA_NearestNeighbour
+    elif interpMethod == 'cubic':
+        interpolationMethod = gdal.GRA_Cubic
+    elif interpMethod == 'average':
+        interpolationMethod = gdal.GRA_Average
+    elif interpMethod == 'mode':
+        interpolationMethod = gdal.GRA_Mode
+    else:
+        raise Exception("Interpolation method was not recognised or known.")
+
+    backVal = 0.0
+    haveNoData = False
+    if noDataVal != None:
+        backVal = float(noDataVal)
+        haveNoData = True
+
+    rsgislib.imageutils.createCopyImage(inRefImg, outImg, numBands, backVal, gdalformat, datatype)
+
+    inFile = gdal.Open(inProcessImg, gdal.GA_ReadOnly)
+    outFile = gdal.Open(outImg, gdal.GA_Update)
+
+    try:
+        import tqdm
+        pbar = tqdm.tqdm(total=100)
+        callback = lambda *args, **kw: pbar.update()
+    except:
+        callback = gdal.TermProgress
+
+    wrpOpts = []
+    if multicore:
+        if haveNoData:
+            wrpOpts = gdal.WarpOptions(resampleAlg=interpolationMethod, srcNodata=noDataVal, dstNodata=noDataVal,
+                                       multithread=True, callback=callback)
+        else:
+            wrpOpts = gdal.WarpOptions(resampleAlg=interpolationMethod, multithread=True, callback=callback)
+    else:
+        if haveNoData:
+            wrpOpts = gdal.WarpOptions(resampleAlg=interpolationMethod, srcNodata=noDataVal, dstNodata=noDataVal,
+                                       multithread=False, callback=callback)
+        else:
+            wrpOpts = gdal.WarpOptions(resampleAlg=interpolationMethod, multithread=False, callback=callback)
+
+    gdal.Warp(outFile, inFile, options=wrpOpts)
+
+    inFile = None
+    outFile = None
+
+
+
 class CreateGranuleVegMsk(PBPTQProcessTool):
 
     def __init__(self):
@@ -56,7 +139,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             print(water_stats)
 
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
-            rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=255.0,  multicore=False)
+            resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT)#, noDataVal=255.0,  multicore=False)
 
             scn_veg_msks = list()
             n_imgs = len(self.params['sref_imgs'])
