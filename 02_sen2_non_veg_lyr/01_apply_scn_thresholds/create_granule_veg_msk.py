@@ -128,7 +128,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
 
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
-
+            """
             granule_img_wgs84_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
             granule_bboxes = unwrap_wgs84_bbox(granule_img_wgs84_bbox)
             water_stats = list()
@@ -143,9 +143,15 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_water_test_img = os.path.join(self.params['tmp_dir'], "{}_water_gdalwarp.kea".format(self.params['granule']))
             gdal_warp_cmd = "gdalwarp -of KEA -t_srs EPSG:{} -te {} {} {} {} -tr 20 -20 -ot Byte -srcnodata 255 -dstnodata 255 -r bilinear {} {}".format(granule_epsg_code, granule_img_bbox[0], granule_img_bbox[2], granule_img_bbox[1], granule_img_bbox[3], self.params['water_file'], granule_water_test_img)
             print(gdal_warp_cmd)
+            """
 
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
-            resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT)#, noDataVal=255.0,  multicore=False)
+            water_layer_avail = False
+            try:
+                resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255.0,  multicore=False)
+                water_layer_avail = True
+            except:
+                water_layer_avail = False
 
             scn_veg_msks = list()
             n_imgs = len(self.params['sref_imgs'])
@@ -161,11 +167,17 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
                 rsgislib.imagecalc.calcindices.calcNDVI(sref_img, rBand, nBand, scn_ndvi_img, stats=False, gdalformat='KEA')
 
                 scn_veg_img = os.path.join(self.params['tmp_dir'], "{}_veg.kea".format(basename))
-                band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
-                             rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
-                             rsgislib.imagecalc.BandDefn('water', granule_water_img, 1),
-                             rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1)]
-                exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (water < 90) && (vld == 1)?1:0'
+                if water_layer_avail:
+                    band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
+                                 rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
+                                 rsgislib.imagecalc.BandDefn('water', granule_water_img, 1),
+                                 rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1)]
+                    exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (water < 90) && (vld == 1)?1:0'
+                else:
+                    band_defs = [rsgislib.imagecalc.BandDefn('ndvi', scn_ndvi_img, 1),
+                                 rsgislib.imagecalc.BandDefn('dem', granule_dem_img, 1),
+                                 rsgislib.imagecalc.BandDefn('vld', clrsky_img, 1)]
+                    exp = '(dem>-20) && (dem < 80) && (ndvi>0.2) && (vld == 1)?1:0'
                 rsgislib.imagecalc.bandMath(scn_veg_img, exp, 'KEA', rsgislib.TYPE_8UINT, band_defs)
                 rsgislib.rastergis.populateStats(scn_veg_img, addclrtab=True, calcpyramids=True, ignorezero=True)
                 scn_veg_msks.append(scn_veg_img)
