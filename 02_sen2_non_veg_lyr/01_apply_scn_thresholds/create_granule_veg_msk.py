@@ -51,12 +51,12 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             water_stats = list()
             for granule_bbox in granule_bboxes:
                 print(granule_bbox)
-                water_stats.append(rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3]))
+                water_stats.append(rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255.0, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3]))
 
             print(water_stats)
 
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
-            rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255,  multicore=False)
+            rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=255.0,  multicore=False)
 
             scn_veg_msks = list()
             n_imgs = len(self.params['sref_imgs'])
