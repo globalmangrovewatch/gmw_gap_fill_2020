@@ -33,6 +33,12 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
 
+            granule_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
+
+            water_stats = rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3])
+
+            print(water_stats)
+
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT, noDataVal=255,  multicore=False)
 
