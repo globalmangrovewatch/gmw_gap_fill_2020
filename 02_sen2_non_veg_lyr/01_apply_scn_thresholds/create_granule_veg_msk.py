@@ -129,14 +129,20 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             granule_dem_img = os.path.join(self.params['tmp_dir'], "{}_dem.kea".format(self.params['granule']))
             rsgislib.imageutils.resampleImage2Match(granule_vld_img, self.params['dem_file'], granule_dem_img, 'KEA', 'cubicspline', rsgislib.TYPE_32FLOAT, noDataVal=None, multicore=False)
 
-            granule_img_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
-            granule_bboxes = unwrap_wgs84_bbox(granule_img_bbox)
+            granule_img_wgs84_bbox = rsgis_utils.getImageBBOXInProj(granule_vld_img, 4326)
+            granule_bboxes = unwrap_wgs84_bbox(granule_img_wgs84_bbox)
             water_stats = list()
             for granule_bbox in granule_bboxes:
                 print(granule_bbox)
                 water_stats.append(rsgislib.imagecalc.getImageStatsInEnv(self.params['water_file'], 1, 255.0, granule_bbox[0], granule_bbox[1], granule_bbox[2], granule_bbox[3]))
 
             print(water_stats)
+
+            granule_img_bbox = rsgis_utils.getImageBBOX(granule_vld_img)
+            granule_epsg_code = rsgis_utils.getEPSGCode(granule_vld_img)
+            granule_water_test_img = os.path.join(self.params['tmp_dir'], "{}_water_gdalwarp.kea".format(self.params['granule']))
+            gdal_warp_cmd = "gdalwarp -of KEA -t_srs EPSG:{} -te {} {} {} {} -tr 20 -20 -ot Byte -srcnodata 255 -dstnodata 255 -r bilinear {} {}".format(granule_epsg_code, granule_img_bbox[0], granule_img_bbox[2], granule_img_bbox[1], granule_img_bbox[3], self.params['water_file'], granule_water_test_img)
+            print(gdal_warp_cmd)
 
             granule_water_img = os.path.join(self.params['tmp_dir'], "{}_water.kea".format(self.params['granule']))
             resampleImage2Match(granule_vld_img, self.params['water_file'], granule_water_img, 'KEA', 'bilinear', rsgislib.TYPE_8UINT)#, noDataVal=255.0,  multicore=False)
