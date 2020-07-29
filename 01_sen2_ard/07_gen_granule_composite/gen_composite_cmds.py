@@ -50,7 +50,7 @@ class GenGranuleComposites(PBPTGenQProcessToolCmds):
             for scn in scns:
                 print("\t{}".format(scn.product_id))
                 if scn.ard:
-                    img = self.find_first_file(scn.ard_path, "*vmsk_mclds_clearsky_topshad_rad_srefdem_stdsref.kea", rtn_except=False)
+                    img = self.find_first_file(scn.ard_path, "*vmsk_rad_srefdem_stdsref.kea", rtn_except=False)
                     if img is None:
                         clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
                         if clouds_img is None:

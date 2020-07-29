@@ -3,6 +3,8 @@ import logging
 import os
 import shutil
 import rsgislib.imageutils.imagecomp
+import rsgislib.imageutils
+import rsgislib.imagecalc
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +38,21 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
         super().__init__(cmd_name='comp_composite.py', descript=None)
 
     def do_processing(self, **kwargs):
-        n_imgs = len(self.params['imgs'])
+        mskd_imgs = []
+        for img in self.params['imgs']:
+            base_dir = os.path.dirname(img)
+            basename = self.get_file_basename(img)
+            clearsky_msk_img = self.find_first_file(base_dir, "*clearsky_refine.kea", False)
+            valid_msk_img = self.find_first_file(base_dir, "*valid.kea", False)
+            if clearsky_msk_img is not None:
+                prop_useful = rsgislib.imagecalc.calcPropTrueExp("b1==1?1:0", [rsgislib.imagecalc.BandDefn('msk', clearsky_msk_img, 1)], valid_msk_img)
+                if prop_useful > 0.05:
+                    clrsky_mskd_img = os.path.join(self.params['tmp_dir'], "{}_clrsky_mskd.kea".format(basename))
+                    rsgislib.imageutils.maskImage(img, clearsky_msk_img, clrsky_mskd_img, 'KEA', rsgislib.TYPE_16UINT, 0.0, 0)
+                    mskd_imgs.append(clrsky_mskd_img)
 
+
+        n_imgs = len(mskd_imgs)
         if n_imgs > 1:
             rBand = 3
             nBand = 7
@@ -47,7 +62,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
             outCompImg = os.path.join(self.params['comp_dir'], "sen2_comp_{}_refl.kea".format(self.params['granule']))
             outMskImg = os.path.join(self.params['comp_dir'], "sen2_comp_{}_mskimg.kea".format(self.params['granule']))
 
-            rsgislib.imageutils.imagecomp.createMaxNDVINDWIComposite(self.params['imgs'][0], self.params['imgs'],
+            rsgislib.imageutils.imagecomp.createMaxNDVINDWIComposite(mskd_imgs[0], mskd_imgs,
                                                                      rBand, nBand, sBand, outRefImg,
                                                                      outCompImg, outMskImg, tmpPath=self.params['tmp_dir'],
                                                                      gdalformat='KEA', dataType=None, calcStats=True,
@@ -56,7 +71,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
             gdal_translate_gtiff(outCompImg, outCompTIFImg)
         elif n_imgs == 1:
             outCompTIFImg = os.path.join(self.params['comp_tif_dir'], "sen2_comp_{}_refl.tif".format(self.params['granule']))
-            gdal_translate_gtiff(self.params['imgs'][0], outCompTIFImg)
+            gdal_translate_gtiff(mskd_imgs[0], outCompTIFImg)
 
 
         if os.path.exists(self.params['tmp_dir']):
