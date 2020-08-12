@@ -234,47 +234,48 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
     rsgis_utils = rsgislib.RSGISPyUtils()
     first = True
     for file in tqdm.tqdm(input_files):
-        lyr = os.path.splitext(os.path.basename(file))[0]
-        bbox = rsgis_utils.getVecLayerExtent(file, layerName=lyr)
-        bbox_area = calc_bbox_area(bbox)
-        if bbox_area > 0:
-            vec_epsg = rsgis_utils.getProjEPSGFromVec(file, vecLyr=lyr)
-            zone, hemi = utm_from_epsg(int(vec_epsg))
-            zone_str = zero_pad_num_str(zone, str_len=2, round_num=False, round_n_digts=0, integerise=True)
+        lyrs = rsgislib.vectorutils.getVecLyrsLst(file)
+        for lyr in lyrs:
+            bbox = rsgis_utils.getVecLayerExtent(file, layerName=lyr)
+            bbox_area = calc_bbox_area(bbox)
+            if bbox_area > 0:
+                vec_epsg = rsgis_utils.getProjEPSGFromVec(file, vecLyr=lyr)
+                zone, hemi = utm_from_epsg(int(vec_epsg))
+                zone_str = zero_pad_num_str(zone, str_len=2, round_num=False, round_n_digts=0, integerise=True)
 
-            if hemi.upper() == 'S':
-                utm_zones_file = s_hemi_utm_file
-            else:
-                utm_zones_file = n_hemi_utm_file
-
-            contained = vec_within_vec(utm_zones_file, zone_str, file, lyr)
-            if not contained:
-                data_gdf = geopandas.read_file(file, layer=lyr)
-                utm_gdf = geopandas.read_file(utm_zones_file, layer=zone_str)
-
-                data_inter_gdf = geopandas.overlay(data_gdf, utm_gdf, how='intersection')
-                data_diff_gdf = geopandas.overlay(data_gdf, utm_gdf, how='difference')
-                if (len(data_inter_gdf) > 0) and (len(data_diff_gdf) > 0):
-                    data_split_gdf = pandas.concat([data_inter_gdf, data_diff_gdf])
-                elif len(data_diff_gdf) > 0:
-                    data_split_gdf = data_diff_gdf
+                if hemi.upper() == 'S':
+                    utm_zones_file = s_hemi_utm_file
                 else:
-                    data_split_gdf = data_inter_gdf
+                    utm_zones_file = n_hemi_utm_file
 
-                if len(data_split_gdf) > 0:
-                    data_gdf = data_split_gdf.to_crs("EPSG:4326")
-            else:
-                data_gdf = geopandas.read_file(file, layer=lyr)
+                contained = vec_within_vec(utm_zones_file, zone_str, file, lyr)
+                if not contained:
+                    data_gdf = geopandas.read_file(file, layer=lyr)
+                    utm_gdf = geopandas.read_file(utm_zones_file, layer=zone_str)
+
+                    data_inter_gdf = geopandas.overlay(data_gdf, utm_gdf, how='intersection')
+                    data_diff_gdf = geopandas.overlay(data_gdf, utm_gdf, how='difference')
+                    if (len(data_inter_gdf) > 0) and (len(data_diff_gdf) > 0):
+                        data_split_gdf = pandas.concat([data_inter_gdf, data_diff_gdf])
+                    elif len(data_diff_gdf) > 0:
+                        data_split_gdf = data_diff_gdf
+                    else:
+                        data_split_gdf = data_inter_gdf
+
+                    if len(data_split_gdf) > 0:
+                        data_gdf = data_split_gdf.to_crs("EPSG:4326")
+                else:
+                    data_gdf = geopandas.read_file(file, layer=lyr)
+                    if len(data_gdf) > 0:
+                        data_gdf = data_gdf.to_crs("EPSG:4326")
+
                 if len(data_gdf) > 0:
-                    data_gdf = data_gdf.to_crs("EPSG:4326")
-
-            if len(data_gdf) > 0:
-                data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350)
-                if first:
-                    out_gdf = data_gdf
-                    first = False
-                else:
-                    out_gdf = out_gdf.append(data_gdf)
+                    data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350)
+                    if first:
+                        out_gdf = data_gdf
+                        first = False
+                    else:
+                        out_gdf = out_gdf.append(data_gdf)
 
     if not first:
         if out_format == "GPKG":
