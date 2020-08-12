@@ -22,9 +22,10 @@ class GenGranuleTrainSamples(PBPTGenQProcessToolCmds):
         err_scns = []
         for granule in granule_lst:
             print(granule)
-            granule_out_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_veg.kea".format(granule))
-            granule_out_vec_file = os.path.join(kwargs['granule_out_vec_path'], "{}_veg.gpkg".format(granule))
-            if not os.path.exists(granule_out_img_file):
+            granule_out_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_train_smpls.kea".format(granule))
+            granule_out_vec_file = os.path.join(kwargs['granule_out_vec_path'], "{}_train_smpls.gpkg".format(granule))
+            granule_veg_img_file = os.path.join(kwargs['granule_veg_msks_dir'], "{}_veg.kea".format(granule))
+            if not os.path.exists(granule_out_vec_file):
                 scns = sen2_rcd_obj.granule_scns(granule)
                 vld_imgs = list()
                 clrsky_imgs = list()
@@ -66,13 +67,16 @@ class GenGranuleTrainSamples(PBPTGenQProcessToolCmds):
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
-                              dem_file='/scratch/a.pfb/srtm_global_mosaic_1arc_v3.kea',
-                              water_file='/scratch/a.pfb/water_occurence/water_occurence.kea',
-                              granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
-                              granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs',
+                              granule_veg_msks_dir='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              gmw_hab_msk_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              gmw_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              gmw_msk_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_imgs',
+                              granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_vecs',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
-        self.create_slurm_sub_sh("sen2_granule_veg", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
+        self.create_slurm_sub_sh("sen2_granule_mngtrain", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
                                  db_info_file=None, account_name='scw1376', n_cores_per_job=10, n_jobs=10,
                                  job_time_limit='2-23:59',
