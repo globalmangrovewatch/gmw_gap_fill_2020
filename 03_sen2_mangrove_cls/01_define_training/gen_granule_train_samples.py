@@ -4,69 +4,38 @@ import logging
 import os
 import sys
 
-sys.path.insert(0, "../../01_sen2_ard/03_find_dwnld_scns")
-from sen2scnprocess import RecordSen2Process
-
 logger = logging.getLogger(__name__)
 
 class GenGranuleTrainSamples(PBPTGenQProcessToolCmds):
 
     def gen_command_info(self, **kwargs):
-        if not os.path.exists(kwargs['scn_db_file']):
-            raise Exception("Sentinel-2 scene database does not exist...")
-
         rsgis_utils = rsgislib.RSGISPyUtils()
         granule_lst = rsgis_utils.readTextFile2List(kwargs['granule_lst'])
 
-        sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
-        err_scns = []
         for granule in granule_lst:
             print(granule)
-            granule_out_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_train_smpls.kea".format(granule))
+            granule_out_mng_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_mng_train_smpls.kea".format(granule))
+            granule_out_oth_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_oth_train_smpls.kea".format(granule))
             granule_out_vec_file = os.path.join(kwargs['granule_out_vec_path'], "{}_train_smpls.gpkg".format(granule))
             granule_veg_img_file = os.path.join(kwargs['granule_veg_msks_dir'], "{}_veg.kea".format(granule))
-            if not os.path.exists(granule_out_vec_file):
-                scns = sen2_rcd_obj.granule_scns(granule)
-                vld_imgs = list()
-                clrsky_imgs = list()
-                sref_imgs = list()
-                for scn in scns:
-                    print("\t{}".format(scn.product_id))
-                    if scn.ard:
-                        vld_img = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
-                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
-                        sref_img = self.find_first_file(scn.ard_path, "*vmsk_rad_srefdem_stdsref.kea", rtn_except=False)
-                        if (vld_img is None) or (clrsky_img is None) or (sref_img is None):
-                            clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
-                            if clouds_img is None:
-                                print("***ERROR***: {}".format(scn.ard_path))
-                                err_scns.append(scn.ard_path)
-                        else:
-                            vld_imgs.append(vld_img)
-                            clrsky_imgs.append(clrsky_img)
-                            sref_imgs.append(sref_img)
-                if (len(vld_imgs) > 0) and (len(clrsky_imgs) > 0) and (len(sref_imgs) > 0):
-                    c_dict = dict()
-                    c_dict['granule'] = granule
-                    c_dict['dem_file'] = kwargs['dem_file']
-                    c_dict['water_file'] = kwargs['water_file']
-                    c_dict['vld_imgs'] = vld_imgs
-                    c_dict['clrsky_imgs'] = clrsky_imgs
-                    c_dict['sref_imgs'] = sref_imgs
-                    c_dict['granule_out_lyr'] = granule
-                    c_dict['granule_out_vec_file'] = granule_out_vec_file
-                    c_dict['granule_out_img_file'] = granule_out_img_file
-                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_granule_veg_msk".format(granule))
-                    if not os.path.exists(c_dict['tmp_dir']):
-                        os.mkdir(c_dict['tmp_dir'])
-                    self.params.append(c_dict)
-        print("ERRORS:")
-        for err_scn in err_scns:
-            print(err_scn)
+            if (not os.path.exists(granule_out_vec_file)) and os.path.exists(granule_veg_img_file):
+                c_dict = dict()
+                c_dict['granule'] = granule
+                c_dict['gmw_msk_vec'] = kwargs['gmw_msk_vec']
+                c_dict['gmw_msk_lyr'] = kwargs['gmw_msk_lyr']
+                c_dict['gmw_hab_msk_vec'] = kwargs['gmw_hab_msk_vec']
+                c_dict['gmw_hab_msk_lyr'] = kwargs['gmw_hab_msk_lyr']
+                c_dict['granule_veg_msk'] = granule_veg_img_file
+                c_dict['granule_out_vec_file'] = granule_out_vec_file
+                c_dict['granule_out_mng_img_file'] = granule_out_mng_img_file
+                c_dict['granule_out_oth_img_file'] = granule_out_oth_img_file
+                c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_granule_gen_train".format(granule))
+                if not os.path.exists(c_dict['tmp_dir']):
+                    os.mkdir(c_dict['tmp_dir'])
+                self.params.append(c_dict)
 
     def run_gen_commands(self):
-        self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
-                              granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
+        self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               granule_veg_msks_dir='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
                               gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
                               gmw_hab_msk_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
