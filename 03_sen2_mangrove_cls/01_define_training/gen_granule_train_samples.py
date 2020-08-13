@@ -37,10 +37,10 @@ class GenGranuleTrainSamples(PBPTGenQProcessToolCmds):
     def run_gen_commands(self):
         self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
                               granule_veg_msks_dir='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
-                              gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
-                              gmw_hab_msk_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
-                              gmw_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
-                              gmw_msk_lyr='/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_imgs',
+                              gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/GMW_Mangrove_Habitat_v3.gpkg',
+                              gmw_hab_msk_lyr='gmw_hab_v3',
+                              gmw_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/GMW_MangroveExtent_WGS84_v2.0.gpkg',
+                              gmw_msk_lyr='gmw2010v2.0',
                               granule_out_img_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_imgs',
                               granule_out_vec_path='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_vecs',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
