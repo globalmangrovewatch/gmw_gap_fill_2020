@@ -113,7 +113,7 @@ class CreateGranuleTrainSamples(PBPTQProcessTool):
                 other_train_pts_vec = os.path.join(self.params['tmp_dir'],
                                                       "{}_other_train_pts.geojson".format(self.params['granule']))
                 other_train_pts_lyr = '{}_other_train_pts'.format(self.params['granule'])
-                rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_mng_img_file'], other_train_pts_vec, 1,
+                rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_oth_img_file'], other_train_pts_vec, 1,
                                                     False, other_train_pts_lyr, 'GEOJSON')
 
                 n_other_feats = rsgislib.vectorutils.getVecFeatCount(other_train_pts_vec, other_train_pts_lyr)
