@@ -43,8 +43,8 @@ class CreateGranuleTrainSamples(PBPTQProcessTool):
             # Perform buffer.
             non_mng_dist_img = os.path.join(self.params['tmp_dir'], "{}_non_mng_dist.kea".format(self.params['granule']))
             rsgislib.imagecalc.calcDist2ImgVals(mangrove_msk_img, non_mng_dist_img, [0], valsImgBand=1, gdalformat='KEA',
-                                                maxDist=5, noDataVal=None, unitGEO=True)
-            mang_smpl_msk_img = os.path.join(self.params['tmp_dir'], "{}_non_mng_dist.kea".format(self.params['granule']))
+                                                maxDist=5, noDataVal=None, unitGEO=False)
+            mang_smpl_msk_img = os.path.join(self.params['tmp_dir'], "{}_mng_smpl_msk.kea".format(self.params['granule']))
             rsgislib.imagecalc.imageMath(non_mng_dist_img, mang_smpl_msk_img, 'b1>2', 'KEA', rsgislib.TYPE_8UINT)
 
             # Define non-mangrove regions
@@ -52,7 +52,7 @@ class CreateGranuleTrainSamples(PBPTQProcessTool):
             bandDefns = []
             bandDefns.append(rsgislib.imagecalc.BandDefn('hab', mangrove_hab_img, 1))
             bandDefns.append(rsgislib.imagecalc.BandDefn('veg', self.params['granule_veg_msk'], 1))
-            rsgislib.imagecalc.bandMath(non_mangrove_img, '(veg == 1) && (hab == 0)?0:1', 'KEA',
+            rsgislib.imagecalc.bandMath(non_mangrove_img, '(veg == 1) && (hab == 0)?1:0', 'KEA',
                                         rsgislib.TYPE_8UINT, bandDefns)
 
             # Define the training samples.
@@ -88,44 +88,57 @@ class CreateGranuleTrainSamples(PBPTQProcessTool):
 
 
             # Vectorise Mangrove Training Points
-            mangrove_train_pts_vec = os.path.join(self.params['tmp_dir'],
-                                            "{}_mangrove_train_pts.geojson".format(self.params['granule']))
-            mangrove_train_pts_lyr = '{}_mangrove_train_pts'.format(self.params['granule'])
-            rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_mng_img_file'], mangrove_train_pts_vec, 1,
-                                                False, mangrove_train_pts_lyr, 'GEOJSON')
+            mang_smpl_pxl_count = rsgislib.imagecalc.countPxlsOfVal(self.params['granule_out_mng_img_file'], vals=[1])[0]
+            if mang_smpl_pxl_count > 0:
+                mangrove_train_pts_vec = os.path.join(self.params['tmp_dir'],
+                                                "{}_mangrove_train_pts.geojson".format(self.params['granule']))
+                mangrove_train_pts_lyr = '{}_mangrove_train_pts'.format(self.params['granule'])
+                rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_mng_img_file'], mangrove_train_pts_vec, 1,
+                                                    False, mangrove_train_pts_lyr, 'GEOJSON')
 
-            n_mang_feats = rsgislib.vectorutils.getVecFeatCount(mangrove_train_pts_vec, mangrove_train_pts_lyr)
-            granule_names = list()
-            class_name = list()
-            for i in range(n_mang_feats):
-                granule_names.append(self.params['granule'])
-                class_name.append('mangrove')
-            rsgislib.vectorutils.writeVecColumn(mangrove_train_pts_vec, mangrove_train_pts_lyr, 'Granule',
-                                                ogr.OFTString, granule_names)
-            rsgislib.vectorutils.writeVecColumn(mangrove_train_pts_vec, mangrove_train_pts_lyr, 'Class',
-                                                ogr.OFTString, class_name)
+                n_mang_feats = rsgislib.vectorutils.getVecFeatCount(mangrove_train_pts_vec, mangrove_train_pts_lyr)
+                granule_names = list()
+                class_name = list()
+                for i in range(n_mang_feats):
+                    granule_names.append(self.params['granule'])
+                    class_name.append('mangrove')
+                rsgislib.vectorutils.writeVecColumn(mangrove_train_pts_vec, mangrove_train_pts_lyr, 'Granule',
+                                                    ogr.OFTString, granule_names)
+                rsgislib.vectorutils.writeVecColumn(mangrove_train_pts_vec, mangrove_train_pts_lyr, 'Class',
+                                                    ogr.OFTString, class_name)
 
             # Vectorise Other Training Points
-            other_train_pts_vec = os.path.join(self.params['tmp_dir'],
-                                                  "{}_other_train_pts.geojson".format(self.params['granule']))
-            other_train_pts_lyr = '{}_other_train_pts'.format(self.params['granule'])
-            rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_mng_img_file'], other_train_pts_vec, 1,
-                                                False, other_train_pts_lyr, 'GEOJSON')
+            other_smpl_pxl_count = rsgislib.imagecalc.countPxlsOfVal(self.params['granule_out_oth_img_file'], vals=[1])[0]
+            if other_smpl_pxl_count > 0:
+                other_train_pts_vec = os.path.join(self.params['tmp_dir'],
+                                                      "{}_other_train_pts.geojson".format(self.params['granule']))
+                other_train_pts_lyr = '{}_other_train_pts'.format(self.params['granule'])
+                rsgislib.vectorutils.exportPxls2Pts(self.params['granule_out_mng_img_file'], other_train_pts_vec, 1,
+                                                    False, other_train_pts_lyr, 'GEOJSON')
 
-            n_other_feats = rsgislib.vectorutils.getVecFeatCount(other_train_pts_vec, other_train_pts_lyr)
-            granule_names = list()
-            class_name = list()
-            for i in range(n_other_feats):
-                granule_names.append(self.params['granule'])
-                class_name.append('other')
-            rsgislib.vectorutils.writeVecColumn(other_train_pts_vec, other_train_pts_lyr, 'Granule',
-                                                ogr.OFTString, granule_names)
-            rsgislib.vectorutils.writeVecColumn(other_train_pts_vec, other_train_pts_lyr, 'Class',
-                                                ogr.OFTString, class_name)
+                n_other_feats = rsgislib.vectorutils.getVecFeatCount(other_train_pts_vec, other_train_pts_lyr)
+                granule_names = list()
+                class_name = list()
+                for i in range(n_other_feats):
+                    granule_names.append(self.params['granule'])
+                    class_name.append('other')
+                rsgislib.vectorutils.writeVecColumn(other_train_pts_vec, other_train_pts_lyr, 'Granule',
+                                                    ogr.OFTString, granule_names)
+                rsgislib.vectorutils.writeVecColumn(other_train_pts_vec, other_train_pts_lyr, 'Class',
+                                                    ogr.OFTString, class_name)
 
-            rsgislib.vectorutils.merge_vector_files([mangrove_train_pts_vec, other_train_pts_vec],
-                                                    self.params['granule_out_vec_file'],
-                                                    output_lyr='samples', out_format='GPKG', out_epsg=None)
+            if (mang_smpl_pxl_count > 0) and (other_smpl_pxl_count > 0):
+                rsgislib.vectorutils.merge_vector_files([mangrove_train_pts_vec, other_train_pts_vec],
+                                                        self.params['granule_out_vec_file'],
+                                                        output_lyr='samples', out_format='GPKG', out_epsg=None)
+            elif mang_smpl_pxl_count > 0:
+                rsgislib.vectorutils.merge_vector_files([mangrove_train_pts_vec],
+                                                        self.params['granule_out_vec_file'],
+                                                        output_lyr='samples', out_format='GPKG', out_epsg=None)
+            elif other_smpl_pxl_count > 0:
+                rsgislib.vectorutils.merge_vector_files([other_train_pts_vec],
+                                                        self.params['granule_out_vec_file'],
+                                                        output_lyr='samples', out_format='GPKG', out_epsg=None)
 
         #if os.path.exists(self.params['tmp_dir']):
         #    shutil.rmtree(self.params['tmp_dir'])
