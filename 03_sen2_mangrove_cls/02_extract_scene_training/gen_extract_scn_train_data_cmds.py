@@ -77,8 +77,8 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
 
 if __name__ == "__main__":
-    py_script = os.path.abspath("create_granule_veg_msk.py")
+    py_script = os.path.abspath("extract_scn_train_data.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_granule_veg_msks.db")
+    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_extract_vals.db")
     create_tools.parse_cmds()
