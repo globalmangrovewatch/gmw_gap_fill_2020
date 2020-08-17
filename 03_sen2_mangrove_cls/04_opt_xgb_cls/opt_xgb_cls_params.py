@@ -1,7 +1,6 @@
 from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
-import shutil
 import rsgislib
 import rsgislib.classification
 import rsgislib.classification.classxgboost
