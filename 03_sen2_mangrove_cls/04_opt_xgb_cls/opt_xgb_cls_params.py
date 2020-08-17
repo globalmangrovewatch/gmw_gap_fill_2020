@@ -148,7 +148,7 @@ class OptmiseXGBParams(PBPTQProcessTool):
         super().__init__(cmd_name='opt_xgb_cls_params.py', descript=None)
 
     def do_processing(self, **kwargs):
-        """
+        
         rsgislib.classification.classxgboost.optimise_xgboost_binary_classifer(self.params['out_cls_file'],
                                                                                self.params['mng_train_smps_file'],
                                                                                self.params['mng_valid_smps_file'],
@@ -164,6 +164,7 @@ class OptmiseXGBParams(PBPTQProcessTool):
                                           self.params['oth_valid_smps_file'],
                                           nthread=1, scale_pos_weight=None,
                                           mdl_cls_obj=None)
+        """
 
     def required_fields(self, **kwargs):
         return ["mng_train_smps_file", "mng_valid_smps_file", "oth_train_smps_file",
