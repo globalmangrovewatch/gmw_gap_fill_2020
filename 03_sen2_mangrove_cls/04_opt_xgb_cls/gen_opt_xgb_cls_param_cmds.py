@@ -9,11 +9,9 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
     def gen_command_info(self, **kwargs):
         for i in range(kwargs['n_sample_sets']):
             mng_train_smps_file = os.path.join(kwargs['samples_dir'], "mng_train_samples_{}_opt.h5".format(i + 1))
-            #mng_test_smps_file = os.path.join(kwargs['samples_dir'], "mng_test_samples_{}.h5".format(i + 1))
             mng_valid_smps_file = os.path.join(kwargs['samples_dir'], "mng_valid_samples_{}.h5".format(i + 1))
 
             oth_train_smps_file = os.path.join(kwargs['samples_dir'], "oth_train_samples_{}_opt.h5".format(i + 1))
-            #oth_test_smps_file = os.path.join(kwargs['samples_dir'], "oth_test_samples_{}.h5".format(i + 1))
             oth_valid_smps_file = os.path.join(kwargs['samples_dir'], "oth_valid_samples_{}.h5".format(i + 1))
 
             out_cls_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
@@ -31,7 +29,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                               n_sample_sets=100,
                               out_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files')
         self.pop_params_db()
-        self.create_slurm_sub_sh("extract_sen2_samples", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
+        self.create_slurm_sub_sh("find_cls_params_xgb", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
                                  db_info_file=None, account_name='scw1376', n_cores_per_job=10, n_jobs=10,
                                  job_time_limit='2-23:59',
@@ -55,5 +53,5 @@ if __name__ == "__main__":
     py_script = os.path.abspath("opt_xgb_cls_params.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="opt_xgb_cls_params.db")
+    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_opt_xgb_cls_params.db")
     create_tools.parse_cmds()
