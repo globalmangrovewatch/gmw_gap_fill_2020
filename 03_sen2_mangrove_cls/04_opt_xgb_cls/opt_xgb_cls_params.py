@@ -4,6 +4,7 @@ import os
 import shutil
 import rsgislib
 import rsgislib.classification
+import rsgislib.classification.classxgboost
 
 logger = logging.getLogger(__name__)
 
