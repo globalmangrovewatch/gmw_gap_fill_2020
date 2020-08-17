@@ -1,5 +1,6 @@
 import glob
 import os
+import tqdm
 import rsgislib.imageutils
 import rsgislib.classification
 
@@ -19,7 +20,7 @@ n_valid_smpls = 250
 n_train_smpls = 500
 n_sets = 100
 
-for i in range(n_sets):
+for i in tqdm.tqdm(range(n_sets)):
     mng_smps_file = os.path.join(samples_dir, "mng_samples_{}.h5".format(i+1))
     rsgislib.imageutils.randomSampleHDF5File(mng_all_samples, mng_smps_file, n_samples, i)
 
