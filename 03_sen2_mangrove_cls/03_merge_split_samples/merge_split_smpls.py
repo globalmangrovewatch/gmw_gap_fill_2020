@@ -3,7 +3,7 @@ import os
 import tqdm
 import rsgislib.imageutils
 import rsgislib.classification
-
+import shutil
 
 def msk_to_finite_values(input_h5, output_h5, datatype=None, lower_limit=None, upper_limit=None):
     import h5py
@@ -57,7 +57,7 @@ n_test_smpls = 250
 n_valid_smpls = 250
 n_train_smpls = 500
 n_sets = 100
-n_opt_smpl = 20 # 20% sample used for optimisation.
+n_opt_smpl = 1 # 20% sample used for optimisation.
 
 for i in tqdm.tqdm(range(n_sets)):
     mng_smps_file = os.path.join(samples_dir, "mng_samples_{}.h5".format(i+1))
@@ -71,8 +71,11 @@ for i in tqdm.tqdm(range(n_sets)):
                                                           n_train_smpls, rand_seed=42, datatype=rsgislib.TYPE_16UINT)
 
     mng_train_smps_opt_file = os.path.join(samples_dir, "mng_train_samples_{}_opt.h5".format(i + 1))
-    rsgislib.imageutils.randomSampleHDF5File(mng_train_smps_file, mng_train_smps_opt_file,
-                                             int(n_train_smpls / n_opt_smpl), 42)
+    if n_opt_smpl < 1:
+        rsgislib.imageutils.randomSampleHDF5File(mng_train_smps_file, mng_train_smps_opt_file,
+                                                 int(n_train_smpls * n_opt_smpl), 42)
+    else:
+        shutil.copyfile(mng_train_smps_file, mng_train_smps_opt_file)
 
     oth_smps_file = os.path.join(samples_dir, "oth_samples_{}.h5".format(i + 1))
     rsgislib.imageutils.randomSampleHDF5File(oth_all_mskd_samples, oth_smps_file, n_samples, i)
@@ -85,5 +88,8 @@ for i in tqdm.tqdm(range(n_sets)):
                                                           n_train_smpls, rand_seed=42, datatype=rsgislib.TYPE_16UINT)
 
     oth_train_smps_opt_file = os.path.join(samples_dir, "oth_train_samples_{}_opt.h5".format(i + 1))
-    rsgislib.imageutils.randomSampleHDF5File(oth_train_smps_file, oth_train_smps_opt_file,
-                                             int(n_train_smpls / n_opt_smpl), 42)
+    if n_opt_smpl < 1:
+        rsgislib.imageutils.randomSampleHDF5File(oth_train_smps_file, oth_train_smps_opt_file,
+                                                 int(n_train_smpls * n_opt_smpl), 42)
+    else:
+        shutil.copyfile(oth_train_smps_file, oth_train_smps_opt_file)
