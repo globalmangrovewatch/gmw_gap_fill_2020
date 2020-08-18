@@ -30,6 +30,8 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     err_scns.append(scn.ard_path)
             else:
                 out_scn_dir = os.path.join(kwargs['out_cls_scn_dir'], scn.product_id)
+                if not os.path.exists(out_scn_dir):
+                    os.mkdir(out_scn_dir)
                 for i in range(kwargs['n_sample_sets']):
                     cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
 
