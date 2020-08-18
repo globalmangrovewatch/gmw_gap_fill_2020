@@ -50,7 +50,8 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                               samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5',
                               n_sample_sets=100,
                               cls_files_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
-                              out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files')
+                              out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
+                              tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
         self.create_slurm_sub_sh("train_xgb_cls", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
