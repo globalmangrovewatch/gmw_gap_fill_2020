@@ -34,18 +34,19 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     os.mkdir(out_scn_dir)
                 for i in range(kwargs['n_sample_sets']):
                     cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
-
-                    c_dict = dict()
-                    c_dict['scn_id'] = scn.product_id
-                    c_dict['vld_img'] = vld_img
-                    c_dict['clrsky_img'] = clrsky_img
-                    c_dict['sref_img'] = sref_img
-                    c_dict['cls_mdl_file'] = cls_mdl_file
-                    c_dict['out_cls_file'] = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
-                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
-                    if not os.path.exists(c_dict['tmp_dir']):
-                        os.mkdir(c_dict['tmp_dir'])
-                    self.params.append(c_dict)
+                    out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
+                    if not os.path.exists(out_cls_file):
+                        c_dict = dict()
+                        c_dict['scn_id'] = scn.product_id
+                        c_dict['vld_img'] = vld_img
+                        c_dict['clrsky_img'] = clrsky_img
+                        c_dict['sref_img'] = sref_img
+                        c_dict['cls_mdl_file'] = cls_mdl_file
+                        c_dict['out_cls_file'] = out_cls_file
+                        c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
+                        if not os.path.exists(c_dict['tmp_dir']):
+                            os.mkdir(c_dict['tmp_dir'])
+                        self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
