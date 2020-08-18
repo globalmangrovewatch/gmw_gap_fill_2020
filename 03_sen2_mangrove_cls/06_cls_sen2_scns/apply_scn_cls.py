@@ -1,37 +1,30 @@
 from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
+import shutil
 import rsgislib
-import rsgislib.classification
+import rsgislib.imageutils
 import rsgislib.classification.classxgboost
 
 logger = logging.getLogger(__name__)
 
 
-class TrainXGBParams(PBPTQProcessTool):
+class ApplyXGBClass(PBPTQProcessTool):
 
     def __init__(self):
-        super().__init__(cmd_name='train_xgb_cls.py', descript=None)
+        super().__init__(cmd_name='apply_scn_cls.py', descript=None)
 
     def do_processing(self, **kwargs):
-        rsgislib.classification.classxgboost.apply_xgboost_binary_classifier(model_file, imgMask, imgMaskVal, imgFileInfo, outProbImg, gdalformat,
-                                        outClassImg=None, class_thres=5000, nthread=1)
-
-
-        rsgislib.classification.classxgboost.train_xgboost_binary_classifer(self.params['out_cls_file'],
-                                                                            self.params['cls_params_file'],
-                                                                            self.params['mng_train_smps_file'],
-                                                                            self.params['mng_valid_smps_file'],
-                                                                            self.params['mng_test_smps_file'],
-                                                                            self.params['oth_train_smps_file'],
-                                                                            self.params['oth_valid_smps_file'],
-                                                                            self.params['oth_test_smps_file'],
-                                                                            nthread=1, mdl_cls_obj=None)
+        fileInfo = [rsgislib.imageutils.ImageBandInfo(self.params['sref_img'], 'sen2', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
+        outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.kea")
+        rsgislib.classification.classxgboost.apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
+                                                                             self.params['clrsky_img'], 1,
+                                                                             fileInfo, outProbImg, 'KEA',
+                                                                             outClassImg=self.params['out_cls_file'],
+                                                                             class_thres=5000, nthread=1)
 
     def required_fields(self, **kwargs):
-        return ["mng_train_smps_file", "mng_valid_smps_file", "mng_test_smps_file",
-                "oth_train_smps_file", "oth_valid_smps_file", "oth_test_smps_file",
-                "cls_params_file", "out_cls_file"]
+        return ["scn_id", "vld_img", "clrsky_img", "sref_img", "cls_mdl_file", "out_cls_file", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
@@ -39,11 +32,16 @@ class TrainXGBParams(PBPTQProcessTool):
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
+
         # Remove the output file.
         if os.path.exists(self.params['out_cls_file']):
             os.remove(self.params['out_cls_file'])
 
 if __name__ == "__main__":
-    TrainXGBParams().std_run()
+    ApplyXGBClass().std_run()
 
 

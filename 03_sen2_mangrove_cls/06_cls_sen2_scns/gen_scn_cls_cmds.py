@@ -60,7 +60,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
     def run_check_outputs(self):
         process_tools_mod = 'apply_scn_cls'
-        process_tools_cls = 'TrainXGBParams'
+        process_tools_cls = 'ApplyXGBClass'
         time_sample_str = self.generate_readable_timestamp_str()
         out_err_file = 'processing_errs_{}.txt'.format(time_sample_str)
         out_non_comp_file = 'non_complete_errs_{}.txt'.format(time_sample_str)
@@ -68,7 +68,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
     def run_remove_outputs(self, all_jobs=False, error_jobs=False):
         process_tools_mod = 'apply_scn_cls'
-        process_tools_cls = 'TrainXGBParams'
+        process_tools_cls = 'ApplyXGBClass'
         self.remove_job_outputs(process_tools_mod, process_tools_cls, all_jobs, error_jobs)
 
 
