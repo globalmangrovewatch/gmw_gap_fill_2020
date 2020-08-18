@@ -97,7 +97,7 @@ image and threshold can be applied to this image.
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
 
-    prop = rsgislib.imagecalc.calcPropTrueExp([rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)], 'b1>0?1:0')
+    prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
     if prop > 0:
         rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
 
