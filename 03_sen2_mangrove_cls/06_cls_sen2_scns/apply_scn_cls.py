@@ -98,10 +98,11 @@ image and threshold can be applied to this image.
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
 
-    print("Calc Proportion of 1 value.")
-    prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
-    print("Prop: {}".format(prop))
-    if prop > 0:
+    print("Calc min/max prob values.")
+    #prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
+    min_max_prob_vals = rsgislib.imagecalc.getImageBandMinMax(outProbImg, 1, False, -1)
+    print("Min: {}, Max: {}".format(min_max_prob_vals[0], min_max_prob_vals[1]))
+    if min_max_prob_vals[1] > 0:
         print("Calc stats.")
         rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
 
