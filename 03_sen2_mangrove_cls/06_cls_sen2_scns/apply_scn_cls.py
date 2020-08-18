@@ -2,6 +2,7 @@ from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
 import shutil
+import time
 import rsgislib
 import rsgislib.imageutils
 import rsgislib.classification.classxgboost
@@ -120,9 +121,14 @@ class ApplyXGBClass(PBPTQProcessTool):
     def do_processing(self, **kwargs):
         if not os.path.exists(self.params['tmp_dir']):
             os.mkdir(self.params['tmp_dir'])
+            time.sleep(1)
 
         fileInfo = [rsgislib.imageutils.ImageBandInfo(self.params['sref_img'], 'sen2', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
         outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.kea")
+        if os.path.exists(outProbImg):
+            os.remove(outProbImg)
+            time.sleep(1)
+
         apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
                                         self.params['clrsky_img'], 1,
                                         fileInfo, outProbImg, 'KEA',
