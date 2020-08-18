@@ -97,7 +97,7 @@ image and threshold can be applied to this image.
     print("Applying the Classifier")
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
-
+    time.sleep(1)
     print("Calc min/max prob values.")
     #prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
     min_max_prob_vals = rsgislib.imagecalc.getImageBandMinMax(outProbImg, 1, False, -1)
