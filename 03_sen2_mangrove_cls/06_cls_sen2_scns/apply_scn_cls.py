@@ -15,6 +15,9 @@ class ApplyXGBClass(PBPTQProcessTool):
         super().__init__(cmd_name='apply_scn_cls.py', descript=None)
 
     def do_processing(self, **kwargs):
+        if not os.path.exists(self.params['tmp_dir']):
+            os.mkdir(self.params['tmp_dir'])
+
         fileInfo = [rsgislib.imageutils.ImageBandInfo(self.params['sref_img'], 'sen2', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
         outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.kea")
         rsgislib.classification.classxgboost.apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
@@ -22,6 +25,8 @@ class ApplyXGBClass(PBPTQProcessTool):
                                                                              fileInfo, outProbImg, 'KEA',
                                                                              outClassImg=self.params['out_cls_file'],
                                                                              class_thres=5000, nthread=1)
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
 
     def required_fields(self, **kwargs):
         return ["scn_id", "vld_img", "clrsky_img", "sref_img", "cls_mdl_file", "out_cls_file", "tmp_dir"]
