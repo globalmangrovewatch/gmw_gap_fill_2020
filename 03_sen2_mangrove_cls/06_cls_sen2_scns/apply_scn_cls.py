@@ -98,18 +98,28 @@ image and threshold can be applied to this image.
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
 
+    print("Calc Proportion of 1 value.")
     prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
+    print("Prop: {}".format(prop))
     if prop > 0:
+        print("Calc stats.")
         rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
 
         if outClassImg is not None:
+            print("Create hard class")
             rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), gdalformat,
                                          rsgislib.TYPE_8UINT)
-            n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])
+            print("Calc num of value = 1")
+            n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])[0]
+            print("Calc num of value = 1: {}".format(n_one_vals))
             if n_one_vals > 0:
+                print("calc stats")
                 rsgislib.rastergis.populateStats(outClassImg, addclrtab=True, calcpyramids=True, ignorezero=True)
+                print("Finished")
     elif outClassImg is not None:
+        print("Create empty out image")
         rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, gdalformat, rsgislib.TYPE_8UINT)
+        print("Created empty image.")
 
 
 
