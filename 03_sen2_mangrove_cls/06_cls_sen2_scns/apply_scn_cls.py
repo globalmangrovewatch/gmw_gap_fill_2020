@@ -96,14 +96,17 @@ image and threshold can be applied to this image.
     print("Applying the Classifier")
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
-    rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
 
-    if outClassImg is not None:
-        rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), gdalformat,
-                                     rsgislib.TYPE_8UINT)
-        n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])
-        if n_one_vals > 0:
-            rsgislib.rastergis.populateStats(outClassImg, addclrtab=True, calcpyramids=True, ignorezero=True)
+    prop = rsgislib.imagecalc.calcPropTrueExp([rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)], 'b1>0?1:0')
+    if prop > 0:
+        rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
+
+        if outClassImg is not None:
+            rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), gdalformat,
+                                         rsgislib.TYPE_8UINT)
+            n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])
+            if n_one_vals > 0:
+                rsgislib.rastergis.populateStats(outClassImg, addclrtab=True, calcpyramids=True, ignorezero=True)
 
 
 
