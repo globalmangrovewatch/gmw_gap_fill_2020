@@ -98,17 +98,18 @@ image and threshold can be applied to this image.
     applier.apply(_applyXGBClassifier, infiles, outfiles, otherargs, controls=aControls)
     print("Completed")
     time.sleep(1)
-    print("Calc min/max prob values.")
-    min_max_prob_vals = rsgislib.imagecalc.getImageBandMinMax(outProbImg, 1, False, -1)
-    print("Min: {}, Max: {}".format(min_max_prob_vals[0], min_max_prob_vals[1]))
-    if min_max_prob_vals[1] > 0:
-        print("Create hard class")
-        rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), 'KEA', rsgislib.TYPE_8UINT)
-        print("Finished")
-    else:
-        print("Create empty out image")
-        rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, 'KEA', rsgislib.TYPE_8UINT)
-        print("Created empty image.")
+    if os.path.exists(outProbImg):
+        print("Calc min/max prob values.")
+        min_max_prob_vals = rsgislib.imagecalc.getImageBandMinMax(outProbImg, 1, False, -1)
+        print("Min: {}, Max: {}".format(min_max_prob_vals[0], min_max_prob_vals[1]))
+        if min_max_prob_vals[1] > 0:
+            print("Create hard class")
+            rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), 'KEA', rsgislib.TYPE_8UINT)
+            print("Finished")
+        else:
+            print("Create empty out image")
+            rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, 'KEA', rsgislib.TYPE_8UINT)
+            print("Created empty image.")
 
 
 
