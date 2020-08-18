@@ -99,27 +99,15 @@ image and threshold can be applied to this image.
     print("Completed")
     time.sleep(1)
     print("Calc min/max prob values.")
-    #prop = rsgislib.imagecalc.calcPropTrueExp('b1>0?1:0', [rsgislib.imagecalc.BandDefn('b1', outProbImg, 1)])
     min_max_prob_vals = rsgislib.imagecalc.getImageBandMinMax(outProbImg, 1, False, -1)
     print("Min: {}, Max: {}".format(min_max_prob_vals[0], min_max_prob_vals[1]))
     if min_max_prob_vals[1] > 0:
-        print("Calc stats.")
-        rsgislib.imageutils.popImageStats(outProbImg, usenodataval=True, nodataval=0, calcpyramids=True)
-
-        if outClassImg is not None:
-            print("Create hard class")
-            rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), gdalformat,
-                                         rsgislib.TYPE_8UINT)
-            print("Calc num of value = 1")
-            n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])[0]
-            print("Calc num of value = 1: {}".format(n_one_vals))
-            if n_one_vals > 0:
-                print("calc stats")
-                rsgislib.rastergis.populateStats(outClassImg, addclrtab=True, calcpyramids=True, ignorezero=True)
-                print("Finished")
-    elif outClassImg is not None:
+        print("Create hard class")
+        rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), 'KEA', rsgislib.TYPE_8UINT)
+        print("Finished")
+    else:
         print("Create empty out image")
-        rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, gdalformat, rsgislib.TYPE_8UINT)
+        rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, 'KEA', rsgislib.TYPE_8UINT)
         print("Created empty image.")
 
 
@@ -135,14 +123,14 @@ class ApplyXGBClass(PBPTQProcessTool):
             time.sleep(1)
 
         fileInfo = [rsgislib.imageutils.ImageBandInfo(self.params['sref_img'], 'sen2', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
-        outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.kea")
+        outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.tif")
         if os.path.exists(outProbImg):
             os.remove(outProbImg)
             time.sleep(1)
 
         apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
                                         self.params['clrsky_img'], 1,
-                                        fileInfo, outProbImg, 'KEA',
+                                        fileInfo, outProbImg, 'GTIFF',
                                         outClassImg=self.params['out_cls_file'],
                                         class_thres=5000, nthread=1)
         if os.path.exists(self.params['tmp_dir']):
