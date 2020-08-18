@@ -107,6 +107,8 @@ image and threshold can be applied to this image.
             n_one_vals = rsgislib.imagecalc.countPxlsOfVal(outClassImg, vals=[1])
             if n_one_vals > 0:
                 rsgislib.rastergis.populateStats(outClassImg, addclrtab=True, calcpyramids=True, ignorezero=True)
+    elif outClassImg is not None:
+        rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, gdalformat, rsgislib.TYPE_8UINT)
 
 
 
