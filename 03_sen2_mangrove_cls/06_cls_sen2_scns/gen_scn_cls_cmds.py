@@ -65,7 +65,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                                  db_info_file=None, account_name='scw1376', n_cores_per_job=10, n_jobs=10,
                                  job_time_limit='2-23:59',
                                  module_load='module load parallel singularity\n\nexport http_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\nexport https_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\n')
-
+    """
     def run_check_outputs(self):
         process_tools_mod = 'apply_scn_cls'
         process_tools_cls = 'ApplyXGBClass'
@@ -78,11 +78,14 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         process_tools_mod = 'apply_scn_cls'
         process_tools_cls = 'ApplyXGBClass'
         self.remove_job_outputs(process_tools_mod, process_tools_cls, all_jobs, error_jobs)
-
+    """
 
 if __name__ == "__main__":
     py_script = os.path.abspath("apply_scn_cls.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_apply_xgb_scn_cls.db")
+    process_tools_mod = 'apply_scn_cls'
+    process_tools_cls = 'ApplyXGBClass'
+
+    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_apply_xgb_scn_cls.db", process_tools_mod=process_tools_mod, process_tools_cls=process_tools_cls)
     create_tools.parse_cmds()
