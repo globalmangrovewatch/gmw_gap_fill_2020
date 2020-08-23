@@ -17,9 +17,6 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
         if not os.path.exists(kwargs['scn_db_file']):
             raise Exception("Sentinel-2 scene database does not exist...")
 
-        rsgis_utils = rsgislib.RSGISPyUtils()
-        granule_lst = rsgis_utils.readTextFile2List(kwargs['granule_lst'])
-
         sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
 
         for granule in granule_lst:
