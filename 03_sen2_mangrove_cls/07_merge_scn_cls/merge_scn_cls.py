@@ -33,19 +33,19 @@ class MergeScnCls(PBPTQProcessTool):
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('cld', self.params['clr_sky'], 1))
-        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_cls_scr_scn_file'], 1))
+        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
         rsgislib.imagecalc.bandMath(self.params['out_cls_25_file'], "cld>0?255:scr>0.3?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
         rsgislib.rastergis.populateStats(self.params['out_cls_25_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('cld', self.params['clr_sky'], 1))
-        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_cls_scr_scn_file'], 1))
+        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
         rsgislib.imagecalc.bandMath(self.params['out_cls_50_file'], "cld>0?255:scr>0.5?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
         rsgislib.rastergis.populateStats(self.params['out_cls_50_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('cld', self.params['clr_sky'], 1))
-        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_cls_scr_scn_file'], 1))
+        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
         rsgislib.imagecalc.bandMath(self.params['out_cls_75_file'], "cld>0?255:scr>0.8?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
         rsgislib.rastergis.populateStats(self.params['out_cls_75_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
 
