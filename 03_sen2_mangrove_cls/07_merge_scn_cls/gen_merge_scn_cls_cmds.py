@@ -19,25 +19,23 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
 
         sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
 
-        for granule in granule_lst:
-            print(granule)
-            scns = sen2_rcd_obj.get_processed_scns(granule)
-            for scn in scns:
-                print(scn.product_id)
-                cls_scn_dir = os.path.join(kwargs['cls_scn_dir'], scn.product_id)
-                if os.path.exists(cls_scn_dir):
-                    cls_files = glob.glob(os.path.join(cls_scn_dir, "*.kea"))
-                    if len(cls_files) > 0:
-                        clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
-                        c_dict = dict()
-                        c_dict['scn_id'] = scn.product_id
-                        c_dict['cls_files'] = cls_files
-                        c_dict['clr_sky']  = clrsky_img
-                        c_dict['out_sum_cls_file'] = os.path.join(kwargs['out_scn_dir'], "{}_sum_cls.kea".format(scn.product_id))
-                        c_dict['out_cls_25_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_25.kea".format(scn.product_id))
-                        c_dict['out_cls_50_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_50.kea".format(scn.product_id))
-                        c_dict['out_cls_75_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_75.kea".format(scn.product_id))
-                        self.params.append(c_dict)
+        scns = sen2_rcd_obj.get_processed_scns()
+        for scn in scns:
+            print(scn.product_id)
+            cls_scn_dir = os.path.join(kwargs['cls_scn_dir'], scn.product_id)
+            if os.path.exists(cls_scn_dir):
+                cls_files = glob.glob(os.path.join(cls_scn_dir, "*.kea"))
+                if len(cls_files) > 0:
+                    clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
+                    c_dict = dict()
+                    c_dict['scn_id'] = scn.product_id
+                    c_dict['cls_files'] = cls_files
+                    c_dict['clr_sky']  = clrsky_img
+                    c_dict['out_sum_cls_file'] = os.path.join(kwargs['out_scn_dir'], "{}_sum_cls.kea".format(scn.product_id))
+                    c_dict['out_cls_25_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_25.kea".format(scn.product_id))
+                    c_dict['out_cls_50_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_50.kea".format(scn.product_id))
+                    c_dict['out_cls_75_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_75.kea".format(scn.product_id))
+                    self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
