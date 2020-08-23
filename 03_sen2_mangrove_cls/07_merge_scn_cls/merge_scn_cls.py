@@ -29,7 +29,7 @@ class MergeScnCls(PBPTQProcessTool):
                 print(rsgis_utils.getImageRes(img))
             print(e)
             raise e
-        rsgislib.imageutils.popImageStats(self.params['out_cls_scr_scn_file'], usenodataval=True, nodataval=0, calcpyramids=True)
+        rsgislib.imageutils.popImageStats(self.params['out_sum_cls_file'], usenodataval=True, nodataval=0, calcpyramids=True)
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('cld', self.params['clr_sky'], 1))
