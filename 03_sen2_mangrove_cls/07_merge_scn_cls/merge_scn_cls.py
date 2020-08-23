@@ -20,7 +20,7 @@ class MergeScnCls(PBPTQProcessTool):
         import rsgislib.rastergis
 
         try:
-            rsgislib.imagecalc.calcMultiImgBandStats(self.params['cls_files'], self.params['out_cls_scr_scn_file'],
+            rsgislib.imagecalc.calcMultiImgBandStats(self.params['cls_files'], self.params['out_sum_cls_file'],
                                                      rsgislib.SUMTYPE_MEAN, 'KEA', rsgislib.TYPE_32FLOAT, 0, False)
         except Exception as e:
             rsgis_utils = rsgislib.RSGISPyUtils()
