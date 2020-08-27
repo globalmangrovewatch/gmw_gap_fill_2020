@@ -118,6 +118,33 @@ image and threshold can be applied to this image.
             print("Created empty image.")
 
 
+def countPxlsOfVal(inputImg, vals=[0]):
+    """
+Function which counts the number of pixels of a set of values returning a list in the same order as the list of values provided.
+
+:param inputImg: the input image
+:param vals: is a list of pixel values to be counted
+
+"""
+    import numpy
+
+    if len(vals) == 0:
+        raise Exception('At least 1 value should be provided within the vals input varable.')
+    numVals = len(vals)
+    outVals = numpy.zeros(numVals, dtype=numpy.int64)
+
+    from rios.imagereader import ImageReader
+
+    reader = ImageReader(inputImg)
+    for (info, block) in reader:
+        counts = dict(zip(*numpy.unique(block, return_counts=True)))
+        for idx in range(numVals):
+            outVals[idx] = outVals[idx] + counts[vals[idx]]
+
+    return outVals
+
+
+
 
 class ApplyXGBClass(PBPTQProcessTool):
 
@@ -129,7 +156,7 @@ class ApplyXGBClass(PBPTQProcessTool):
             os.mkdir(self.params['tmp_dir'])
             time.sleep(1)
 
-        n_smpls = rsgislib.imagecalc.countPxlsOfVal(self.params['cls_msk_img'], vals=[1])
+        n_smpls = countPxlsOfVal(self.params['cls_msk_img'], vals=[1])
         print(n_smpls)
 
         if n_smpls[0] > 0:
