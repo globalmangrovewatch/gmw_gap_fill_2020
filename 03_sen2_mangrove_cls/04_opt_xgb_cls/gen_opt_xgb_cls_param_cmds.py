@@ -53,5 +53,10 @@ if __name__ == "__main__":
     py_script = os.path.abspath("opt_xgb_cls_params.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_opt_xgb_cls_params.db")
+    process_tools_mod = 'opt_xgb_cls_params'
+    process_tools_cls = 'OptmiseXGBParams'
+
+    create_tools = GenExtractSamplesCmds(cmd=script_cmd, db_conn_file="/home/a.pfb/gmw_gap_fill_db/pbpt_db_conn.txt",
+                                         lock_file_path="./gmw_gapfill_lock_file.txt",
+                                         process_tools_mod=process_tools_mod, process_tools_cls=process_tools_cls)
     create_tools.parse_cmds()
