@@ -39,6 +39,11 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     c_dict['sref_img'] = sref_img
                     c_dict['samples_vec_file'] = kwargs['samples_vec_file']
                     c_dict['samples_vec_lyr'] = kwargs['samples_vec_lyr']
+                    c_dict['samples_vec_edits'] = kwargs['samples_vec_edits']
+                    c_dict['mangrove_samp_lyrs'] = kwargs['mangrove_samp_lyrs']
+                    c_dict['other_samp_lyrs'] = kwargs['other_samp_lyrs']
+                    c_dict['not_mng_regions'] = kwargs['not_mng_regions']
+                    c_dict['not_oth_regions'] = kwargs['not_oth_regions']
                     c_dict['scn_out_mng_file'] = scn_out_mng_file
                     c_dict['scn_out_oth_file'] = scn_out_oth_file
                     c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_extract_smpls".format(scn.product_id))
@@ -53,6 +58,11 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               samples_vec_file='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_smpls_uid.gpkg',
                               samples_vec_lyr='samples',
+                              samples_vec_edits='/scratch/a.pfb/gmw_v2_gapfill/scripts/03_sen2_mangrove_cls/01_define_training',
+                              mangrove_samp_lyrs='mangrove_pts',
+                              other_samp_lyrs='other_pts',
+                              not_mng_regions='not_mangroves_regions',
+                              not_oth_regions='not_other_regions',
                               granule_out_h5_samples_path='/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
@@ -62,23 +72,15 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                                  job_time_limit='2-23:59',
                                  module_load='module load parallel singularity\n\nexport http_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\nexport https_proxy="http://a.pfb:proxy101019@10.212.63.246:3128"\n')
 
-    def run_check_outputs(self):
-        process_tools_mod = 'extract_scn_train_data'
-        process_tools_cls = 'ExtractSceneTrainSamples'
-        time_sample_str = self.generate_readable_timestamp_str()
-        out_err_file = 'processing_errs_{}.txt'.format(time_sample_str)
-        out_non_comp_file = 'non_complete_errs_{}.txt'.format(time_sample_str)
-        self.check_job_outputs(process_tools_mod, process_tools_cls, out_err_file, out_non_comp_file)
-
-    def run_remove_outputs(self, all_jobs=False, error_jobs=False):
-        process_tools_mod = 'extract_scn_train_data'
-        process_tools_cls = 'ExtractSceneTrainSamples'
-        self.remove_job_outputs(process_tools_mod, process_tools_cls, all_jobs, error_jobs)
-
 
 if __name__ == "__main__":
     py_script = os.path.abspath("extract_scn_train_data.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    create_tools = GenExtractSamplesCmds(cmd=script_cmd, sqlite_db_file="sen2_extract_vals.db")
+    process_tools_mod = 'extract_scn_train_data'
+    process_tools_cls = 'ExtractSceneTrainSamples'
+
+    create_tools = GenExtractSamplesCmds(cmd=script_cmd, db_conn_file="/home/a.pfb/gmw_gap_fill_db/pbpt_db_conn.txt",
+                                          lock_file_path="./gmw_gapfill_lock_file.txt",
+                                          process_tools_mod=process_tools_mod, process_tools_cls=process_tools_cls)
     create_tools.parse_cmds()
