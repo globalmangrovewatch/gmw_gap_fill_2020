@@ -139,7 +139,8 @@ Function which counts the number of pixels of a set of values returning a list i
     for (info, block) in reader:
         counts = dict(zip(*numpy.unique(block, return_counts=True)))
         for idx in range(numVals):
-            outVals[idx] = outVals[idx] + counts[vals[idx]]
+            if vals[idx] in counts:
+                outVals[idx] = outVals[idx] + counts[vals[idx]]
 
     return outVals
 
