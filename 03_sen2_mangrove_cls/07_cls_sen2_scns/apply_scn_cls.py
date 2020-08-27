@@ -69,7 +69,8 @@ image and threshold can be applied to this image.
 
     classifier = xgb.Booster({'nthread': nthread})
     classifier.load_model(model_file)
-
+    
+    print(imgMask)
     infiles = applier.FilenameAssociations()
     infiles.imageMask = imgMask
     numClassVars = 0
@@ -166,7 +167,7 @@ class ApplyXGBClass(PBPTQProcessTool):
             if os.path.exists(outProbImg):
                 os.remove(outProbImg)
                 time.sleep(1)
-
+            print(self.params['cls_msk_img'])
             apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
                                             self.params['cls_msk_img'], 1,
                                             fileInfo, outProbImg, 'GTIFF',

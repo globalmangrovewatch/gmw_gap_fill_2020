@@ -35,6 +35,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     os.mkdir(out_scn_dir)
 
                 cls_msk_file = os.path.join(kwargs['cls_msks_dir'], "{}_cls_msk.kea".format(scn.product_id))
+                print(cls_msk_file)
                 if os.path.exists(cls_msk_file):
                     for i in range(kwargs['n_sample_sets']):
                         cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
@@ -45,7 +46,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                             c_dict['vld_img'] = vld_img
                             c_dict['clrsky_img'] = clrsky_img
                             c_dict['sref_img'] = sref_img
-                            c_dict['cls_msk_img'] = cls_msk_file,
+                            c_dict['cls_msk_img'] = cls_msk_file
                             c_dict['cls_mdl_file'] = cls_mdl_file
                             c_dict['out_cls_file'] = out_cls_file
                             c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
