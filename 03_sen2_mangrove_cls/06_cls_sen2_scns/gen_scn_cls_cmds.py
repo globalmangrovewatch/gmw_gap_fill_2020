@@ -15,7 +15,6 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         if not os.path.exists(kwargs['scn_db_file']):
             raise Exception("Sentinel-2 scene database does not exist...")
 
-        random.seed(42)
         sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
         scns = sen2_rcd_obj.get_processed_scns()
         err_scns = []
@@ -43,6 +42,14 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                         c_dict['vld_img'] = vld_img
                         c_dict['clrsky_img'] = clrsky_img
                         c_dict['sref_img'] = sref_img
+                        c_dict['gmw_veg_msk_vec'] = kwargs['gmw_veg_msk_vec']
+                        c_dict['gmw_veg_msk_lyr'] = kwargs['gmw_veg_msk_lyr']
+                        c_dict['gmw_hab_msk_vec'] = kwargs['gmw_hab_msk_vec']
+                        c_dict['gmw_hab_msk_lyr'] = kwargs['gmw_hab_msk_lyr']
+                        c_dict['gmw_hab_msk_mng_add_vec'] = kwargs['gmw_hab_msk_mng_add_vec']
+                        c_dict['gmw_hab_msk_mng_add_lyr'] = kwargs['gmw_hab_msk_mng_add_lyr']
+                        c_dict['gmw_hab_msk_mng_rm_vec'] = kwargs['gmw_hab_msk_mng_rm_vec']
+                        c_dict['gmw_hab_msk_mng_rm_lyr'] = kwargs['gmw_hab_msk_mng_rm_lyr']
                         c_dict['cls_mdl_file'] = cls_mdl_file
                         c_dict['out_cls_file'] = out_cls_file
                         c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
@@ -54,6 +61,14 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5',
                               n_sample_sets=100,
+                              gmw_veg_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg',
+                              gmw_veg_msk_lyr='granule_veg_msks',
+                              gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/GMW_Mangrove_Habitat_v4.gpkg',
+                              gmw_hab_msk_lyr='gmw_hab_v4',
+                              gmw_hab_msk_mng_add_vec='/scratch/a.pfb/gmw_v2_gapfill/data/habitat_additions_v3_to_v4.gpkg',
+                              gmw_hab_msk_mng_add_lyr='habitat_additions_v3_to_v4',
+                              gmw_hab_msk_mng_rm_vec='/scratch/a.pfb/gmw_v2_gapfill/data/habitat_remove_v3_to_v4.gpkg',
+                              gmw_hab_msk_mng_rm_lyr='habitat_remove_v3_to_v4',
                               cls_files_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
                               out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
