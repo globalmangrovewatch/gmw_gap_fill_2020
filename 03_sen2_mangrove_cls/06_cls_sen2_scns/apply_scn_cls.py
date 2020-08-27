@@ -106,11 +106,15 @@ image and threshold can be applied to this image.
         print("Min: {}, Max: {}".format(min_max_prob_vals[0], min_max_prob_vals[1]))
         if min_max_prob_vals[1] > 0:
             print("Create hard class")
-            rsgislib.imagecalc.imageMath(outProbImg, outClassImg, 'b1>{}?1:0'.format(class_thres), 'KEA', rsgislib.TYPE_8UINT)
+
+            bandDefns = []
+            bandDefns.append(rsgislib.imagecalc.BandDefn('prob', outProbImg, 1))
+            bandDefns.append(rsgislib.imagecalc.BandDefn('msk', imgMask, 1))
+            rsgislib.imagecalc.bandMath(outClassImg, '(msk!={})?-1:(prob>{})?1:0'.format(imgMaskVal, class_thres), 'KEA', rsgislib.TYPE_16INT, bandDefns)
             print("Finished")
         else:
             print("Create empty out image")
-            rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, 0, 'KEA', rsgislib.TYPE_8UINT)
+            rsgislib.imageutils.createCopyImage(imgMask, outClassImg, 1, -1, 'KEA', rsgislib.TYPE_16INT)
             print("Created empty image.")
 
 
@@ -179,8 +183,8 @@ class ApplyXGBClass(PBPTQProcessTool):
                                             outClassImg=self.params['out_cls_file'],
                                             class_thres=5000, nthread=1)
         else:
-            rsgislib.imageutils.createCopyImage(self.params['vld_img'], self.params['out_cls_file'], 1, 0, 'GTIFF', rsgislib.TYPE_8UINT)
-            
+            rsgislib.imageutils.createCopyImage(self.params['vld_img'], self.params['out_cls_file'], 1, -1, 'GTIFF', rsgislib.TYPE_8UINT)
+
         if os.path.exists(self.params['tmp_dir']):
             shutil.rmtree(self.params['tmp_dir'])
 
