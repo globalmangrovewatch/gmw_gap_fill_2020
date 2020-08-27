@@ -45,7 +45,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     c_dict['gmw_hab_msk_mng_rm_vec'] = kwargs['gmw_hab_msk_mng_rm_vec']
                     c_dict['gmw_hab_msk_mng_rm_lyr'] = kwargs['gmw_hab_msk_mng_rm_lyr']
                     c_dict['out_cls_msk_file'] = out_cls_msk_file
-                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
+                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_cls_msk".format(scn.product_id))
                     if not os.path.exists(c_dict['tmp_dir']):
                         os.mkdir(c_dict['tmp_dir'])
                     self.params.append(c_dict)

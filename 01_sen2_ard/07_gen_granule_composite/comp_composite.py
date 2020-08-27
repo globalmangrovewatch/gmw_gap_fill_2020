@@ -48,7 +48,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
                 prop_useful = rsgislib.imagecalc.calcPropTrueExp("msk==1?1:0", [rsgislib.imagecalc.BandDefn('msk', clearsky_msk_img, 1)], valid_msk_img)
                 if prop_useful > 0.05:
                     clrsky_mskd_img = os.path.join(self.params['tmp_dir'], "{}_clrsky_mskd.kea".format(basename))
-                    #rsgislib.imageutils.maskImage(img, clearsky_msk_img, clrsky_mskd_img, 'KEA', rsgislib.TYPE_16UINT, 0.0, 0)
+                    rsgislib.imageutils.maskImage(img, clearsky_msk_img, clrsky_mskd_img, 'KEA', rsgislib.TYPE_16UINT, 0.0, 0)
                     mskd_imgs.append(clrsky_mskd_img)
 
 
@@ -57,7 +57,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
             rBand = 3
             nBand = 7
             sBand = 9
-            """
+            
             rsgislib.imageutils.imagecomp.createMaxNDVINDWIComposite(mskd_imgs[0], mskd_imgs,
                                                                      rBand, nBand, sBand,
                                                                      self.params['comp_out_ref_img'],
@@ -66,7 +66,7 @@ class ComputeSen2GranuleComposite(PBPTQProcessTool):
                                                                      tmpPath=self.params['tmp_dir'],
                                                                      gdalformat='KEA', dataType=None, calcStats=True,
                                                                      reprojmethod='cubic', use_mode=True)
-            """
+            
             gdal_translate_gtiff(self.params['comp_out_refl_img'], self.params['comp_out_tif'])
         elif n_imgs == 1:
             gdal_translate_gtiff(mskd_imgs[0], self.params['comp_out_tif'])
