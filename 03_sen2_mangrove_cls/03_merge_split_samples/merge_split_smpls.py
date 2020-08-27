@@ -52,12 +52,12 @@ msk_to_finite_values(oth_all_samples, oth_all_mskd_samples, datatype=rsgislib.TY
 
 
 samples_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5'
-n_samples = 1000
-n_test_smpls = 250
-n_valid_smpls = 250
-n_train_smpls = 500
+n_samples = 200000
+n_test_smpls = 50000
+n_valid_smpls = 50000
+n_train_smpls = 100000
 n_sets = 100
-n_opt_smpl = 1 # 20% sample used for optimisation.
+n_opt_smpl = 0.2 # 20% sample used for optimisation.
 
 for i in tqdm.tqdm(range(n_sets)):
     mng_smps_file = os.path.join(samples_dir, "mng_samples_{}.h5".format(i+1))
