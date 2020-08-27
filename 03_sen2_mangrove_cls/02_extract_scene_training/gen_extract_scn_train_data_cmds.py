@@ -58,7 +58,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               samples_vec_file='/scratch/a.pfb/gmw_v2_gapfill/data/granule_mang_train_smpls_uid.gpkg',
                               samples_vec_lyr='samples',
-                              samples_vec_edits='/scratch/a.pfb/gmw_v2_gapfill/scripts/03_sen2_mangrove_cls/01_define_training',
+                              samples_vec_edits='/scratch/a.pfb/gmw_v2_gapfill/scripts/03_sen2_mangrove_cls/01_define_training/gmw_gap_fill_train_edits.gpkg',
                               mangrove_samp_lyrs='mangrove_pts',
                               other_samp_lyrs='other_pts',
                               not_mng_regions='not_mangroves_regions',
