@@ -34,8 +34,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                 out_scn_dir = os.path.join(kwargs['out_cls_scn_dir'], scn.product_id)
                 if not os.path.exists(out_scn_dir):
                     os.mkdir(out_scn_dir)
-                n_vals = random.sample(range(kwargs['n_sample_sets']), kwargs['n_select_sets'])
-                for i in n_vals:
+                for i in range(kwargs['n_sample_sets']):
                     cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
                     out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
                     if not os.path.exists(out_cls_file):
@@ -55,7 +54,6 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
                               samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5',
                               n_sample_sets=100,
-                              n_select_sets=10,
                               cls_files_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
                               out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
