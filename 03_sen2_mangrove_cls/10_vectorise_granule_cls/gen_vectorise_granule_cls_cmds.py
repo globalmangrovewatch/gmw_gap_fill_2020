@@ -45,9 +45,7 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
                     c_dict['cls_img_file'] = cls_img_75_file
                     c_dict['cls_vec_file'] = cls_vec_75_file
                     self.params.append(c_dict)
-
-                if not (os.path.exists(c_dict['out_sum_cls_file']) and os.path.exists(c_dict['out_cls_25_file']) and os.path.exists(c_dict['out_cls_50_file']) and os.path.exists(c_dict['out_cls_75_file'])):
-
+    
 
     def run_gen_commands(self):
         self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
