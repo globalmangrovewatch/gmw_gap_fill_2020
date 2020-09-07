@@ -23,6 +23,7 @@ class MergeScnCls(PBPTQProcessTool):
         cls_files = []
         for cls_file in self.params['cls_files']:
             if os.path.exists(cls_file):
+                print(cls_file)
                 n_bands = rsgis_utils.getImageBandCount(cls_file)
                 if n_bands == 1:
                     cls_files.append(cls_file)
