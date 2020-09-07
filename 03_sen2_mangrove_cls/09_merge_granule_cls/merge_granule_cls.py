@@ -60,7 +60,7 @@ class MergeGranuleCls(PBPTQProcessTool):
 
 
     def required_fields(self, **kwargs):
-        return ["scn_id", "cls_files", "clr_sky", "out_sum_cls_file", "out_cls_25_file", "out_cls_50_file", "out_cls_75_file"]
+        return ["granule", "cls_files", "out_sum_cls_file", "out_cls_25_file", "out_cls_50_file", "out_cls_75_file"]
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
