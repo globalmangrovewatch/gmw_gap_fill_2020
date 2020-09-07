@@ -23,10 +23,14 @@ class MergeScnCls(PBPTQProcessTool):
         cls_files = []
         for cls_file in self.params['cls_files']:
             if os.path.exists(cls_file):
-                print(cls_file)
-                n_bands = rsgis_utils.getImageBandCount(cls_file)
-                if n_bands == 1:
-                    cls_files.append(cls_file)
+                try:
+                    print(cls_file)
+                    n_bands = rsgis_utils.getImageBandCount(cls_file)
+                    if n_bands == 1:
+                        cls_files.append(cls_file)
+                except:
+                    print("REMOVING: {}".format(cls_file))
+                    os.remove(cls_file)
 
         try:
             rsgislib.imagecalc.calcMultiImgBandStats(cls_files, self.params['out_sum_cls_file'],
