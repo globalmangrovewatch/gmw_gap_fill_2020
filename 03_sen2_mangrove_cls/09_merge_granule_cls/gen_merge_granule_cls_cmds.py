@@ -18,6 +18,7 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
             for thres in ['cls_25', 'cls_50', 'cls_75']:
                 cls_files = glob.glob(os.path.join(kwargs['cls_scn_dir'], "*{}*{}*.kea".format(granule, thres)))
                 if len(cls_files) > 0:
+                    print("\t n scene classes: {}".format(len(cls_files)))
                     c_dict = dict()
                     c_dict['granule'] = granule
                     c_dict['cls_files'] = cls_files
