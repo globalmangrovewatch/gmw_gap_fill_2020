@@ -10,9 +10,6 @@ logger = logging.getLogger(__name__)
 class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
 
     def gen_command_info(self, **kwargs):
-        if not os.path.exists(kwargs['scn_db_file']):
-            raise Exception("Sentinel-2 scene database does not exist...")
-
         rsgis_utils = rsgislib.RSGISPyUtils()
         granule_lst = rsgis_utils.readTextFile2List(kwargs['granule_lst'])
 
