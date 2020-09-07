@@ -35,7 +35,8 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
                     c_dict['out_cls_25_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_25.kea".format(scn.product_id))
                     c_dict['out_cls_50_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_50.kea".format(scn.product_id))
                     c_dict['out_cls_75_file'] = os.path.join(kwargs['out_scn_dir'], "{}_cls_75.kea".format(scn.product_id))
-                    self.params.append(c_dict)
+                    if not (os.path.exists(c_dict['out_sum_cls_file']) and os.path.exists(c_dict['out_cls_25_file']) and os.path.exists(c_dict['out_cls_50_file']) and os.path.exists(c_dict['out_cls_75_file'])):
+                        self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
