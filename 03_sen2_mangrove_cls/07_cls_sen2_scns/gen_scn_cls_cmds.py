@@ -35,10 +35,13 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     os.mkdir(out_scn_dir)
 
                 cls_msk_file = os.path.join(kwargs['cls_msks_dir'], "{}_cls_msk.kea".format(scn.product_id))
+                scn_mng_smps_file = os.path.join(kwargs['cls_scn_smps_dir'], "{}_mng_smpls.h5".format(scn.product_id))
+                scn_oth_smps_file = os.path.join(kwargs['cls_scn_smps_dir'], "{}_oth_smpls.h5".format(scn.product_id))
                 print(cls_msk_file)
                 if os.path.exists(cls_msk_file):
                     for i in range(kwargs['n_sample_sets']):
                         cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
+                        cls_params_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
                         out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
                         if not os.path.exists(out_cls_file):
                             c_dict = dict()
@@ -48,6 +51,9 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                             c_dict['sref_img'] = sref_img
                             c_dict['cls_msk_img'] = cls_msk_file
                             c_dict['cls_mdl_file'] = cls_mdl_file
+                            c_dict['cls_params_file'] = cls_params_file
+                            c_dict['scn_mng_smps_file'] = scn_mng_smps_file
+                            c_dict['scn_oth_smps_file'] = scn_oth_smps_file
                             c_dict['out_cls_file'] = out_cls_file
                             c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_apl_cls_{}".format(scn.product_id, i + 1))
                             if not os.path.exists(c_dict['tmp_dir']):
@@ -60,6 +66,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                               n_sample_sets=100,
                               cls_msks_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_msk_imgs',
                               cls_files_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
+                              cls_scn_smps_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples',
                               out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()

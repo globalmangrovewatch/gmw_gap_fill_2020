@@ -8,6 +8,8 @@ import rsgislib.vectorutils
 import rsgislib.imagecalc
 import rsgislib.imageutils
 import rsgislib.classification.classxgboost
+import rsgislib.classification
+import xgboost as xgb
 
 logger = logging.getLogger(__name__)
 
@@ -146,6 +148,33 @@ Function which counts the number of pixels of a set of values returning a list i
     return outVals
 
 
+def msk_to_finite_values(input_h5, output_h5, datatype=None, lower_limit=None, upper_limit=None):
+    import h5py
+    import numpy
+
+    rsgis_utils = rsgislib.RSGISPyUtils()
+    if datatype is None:
+        datatype = rsgislib.TYPE_32FLOAT
+    h5_dtype = rsgis_utils.getNumpyCharCodesDataType(datatype)
+
+    fH5 = h5py.File(input_h5, 'r')
+    data_shp = fH5['DATA/DATA'].shape
+    num_vars = data_shp[1]
+    data = numpy.array(fH5['DATA/DATA'])
+    data = data[numpy.isfinite(data).all(axis=1)]
+    if lower_limit is not None:
+        data = data[numpy.any(data > lower_limit, axis=1)]
+    if upper_limit is not None:
+        data = data[numpy.any(data < upper_limit, axis=1)]
+
+    fH5Out = h5py.File(output_h5, 'w')
+    dataGrp = fH5Out.create_group("DATA")
+    metaGrp = fH5Out.create_group("META-DATA")
+    dataGrp.create_dataset('DATA', data=data, chunks=(1000, num_vars), compression="gzip",
+                           shuffle=True, dtype=h5_dtype)
+    describDS = metaGrp.create_dataset("DESCRIPTION", (1,), dtype="S10")
+    describDS[0] = 'finite values'.encode()
+    fH5Out.close()
 
 
 class ApplyXGBClass(PBPTQProcessTool):
@@ -162,13 +191,69 @@ class ApplyXGBClass(PBPTQProcessTool):
         print(n_smpls)
 
         if n_smpls[0] > 0:
+            mng_mskd_samples = os.path.join(self.params['tmp_dir'], 'mng_smpls_mskd.h5')
+            oth_mskd_samples = os.path.join(self.params['tmp_dir'], 'oth_smpls_mskd.h5')
+
+            msk_to_finite_values(self.params['scn_mng_smps_file'], mng_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
+            msk_to_finite_values(self.params['scn_oth_smps_file'], oth_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
+
+            n_mng_smpls = rsgislib.classification.get_num_samples(mng_mskd_samples)
+            n_oth_smpls = rsgislib.classification.get_num_samples(oth_mskd_samples)
+
+            refine_cls = True
+            if (n_mng_smpls > 2000) and (n_oth_smpls > 2000):
+                n_train_smpls = 1250
+                n_test_smpls = 100
+                n_valid_smpls = 500
+            elif (n_mng_smpls > 500) and (n_oth_smpls > 500):
+                n_min_smpls = n_oth_smpls
+                if n_mng_smpls < n_oth_smpls:
+                    n_min_smpls = n_mng_smpls
+                n_train_smpls = int(n_min_smpls*0.7)
+                n_test_smpls = int(n_min_smpls*0.05)
+                n_valid_smpls = int(n_min_smpls*0.2)
+            else:
+                refine_cls = False
+
+            if refine_cls:
+                mng_train_smps_file = os.path.join(self.params['tmp_dir'], "mng_train_samples.h5")
+                mng_valid_smps_file = os.path.join(self.params['tmp_dir'], "mng_valid_samples.h5")
+                mng_test_smps_file = os.path.join(self.params['tmp_dir'], "mng_test_samples.h5")
+                rsgislib.classification.split_sample_train_valid_test(mng_mskd_samples, mng_train_smps_file,
+                                                                      mng_valid_smps_file,
+                                                                      mng_test_smps_file, n_test_smpls, n_valid_smpls,
+                                                                      n_train_smpls, rand_seed=42,
+                                                                      datatype=rsgislib.TYPE_16UINT)
+
+                oth_train_smps_file = os.path.join(self.params['tmp_dir'], "oth_train_samples.h5")
+                oth_valid_smps_file = os.path.join(self.params['tmp_dir'], "oth_valid_samples.h5")
+                oth_test_smps_file = os.path.join(self.params['tmp_dir'], "oth_test_samples.h5")
+                rsgislib.classification.split_sample_train_valid_test(oth_mskd_samples, oth_train_smps_file,
+                                                                      oth_valid_smps_file,
+                                                                      oth_test_smps_file, n_test_smpls, n_valid_smpls,
+                                                                      n_train_smpls, rand_seed=42,
+                                                                      datatype=rsgislib.TYPE_16UINT)
+
+                lcl_mdl_file = os.path.join(self.params['tmp_dir'], "scn_cls_mdl.mdl")
+
+                mdl_cls_obj = xgb.Booster({'nthread': 1})
+                mdl_cls_obj.load_model(self.params['cls_mdl_file'])
+
+                rsgislib.classification.classxgboost.train_xgboost_binary_classifer(lcl_mdl_file, self.params['cls_params_file'],
+                                                                    mng_train_smps_file, mng_valid_smps_file, mng_test_smps_file,
+                                               oth_train_smps_file, oth_valid_smps_file, oth_test_smps_file, nthread=1,
+                                               mdl_cls_obj=mdl_cls_obj)
+                cls_mdl_file = lcl_mdl_file
+            else:
+                cls_mdl_file = self.params['cls_mdl_file']
+
             fileInfo = [rsgislib.imageutils.ImageBandInfo(self.params['sref_img'], 'sen2', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])]
             outProbImg = os.path.join(self.params['tmp_dir'], "prob_cls_img.tif")
             if os.path.exists(outProbImg):
                 os.remove(outProbImg)
                 time.sleep(1)
             print(self.params['cls_msk_img'])
-            apply_xgboost_binary_classifier(self.params['cls_mdl_file'],
+            apply_xgboost_binary_classifier(cls_mdl_file,
                                             self.params['cls_msk_img'], 1,
                                             fileInfo, outProbImg, 'GTIFF',
                                             outClassImg=self.params['out_cls_file'],
@@ -180,7 +265,8 @@ class ApplyXGBClass(PBPTQProcessTool):
             shutil.rmtree(self.params['tmp_dir'])
 
     def required_fields(self, **kwargs):
-        return ["scn_id", "vld_img", "clrsky_img", "sref_img", "cls_msk_img", "cls_mdl_file", "out_cls_file", "tmp_dir"]
+        return ["scn_id", "vld_img", "clrsky_img", "sref_img", "cls_msk_img", "cls_mdl_file", "cls_params_file",
+                "scn_mng_smps_file", "scn_oth_smps_file", "out_cls_file", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
