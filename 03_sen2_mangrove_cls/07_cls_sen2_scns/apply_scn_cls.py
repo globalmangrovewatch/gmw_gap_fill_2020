@@ -167,10 +167,15 @@ def msk_to_finite_values(input_h5, output_h5, datatype=None, lower_limit=None, u
     if upper_limit is not None:
         data = data[numpy.any(data < upper_limit, axis=1)]
 
+    n_samples = data.shape[0]
+    chunk_size = 1000
+    if n_samples < 1000:
+        chunk_size = n_samples
+
     fH5Out = h5py.File(output_h5, 'w')
     dataGrp = fH5Out.create_group("DATA")
     metaGrp = fH5Out.create_group("META-DATA")
-    dataGrp.create_dataset('DATA', data=data, chunks=(1000, num_vars), compression="gzip",
+    dataGrp.create_dataset('DATA', data=data, chunks=(chunk_size, num_vars), compression="gzip",
                            shuffle=True, dtype=h5_dtype)
     describDS = metaGrp.create_dataset("DESCRIPTION", (1,), dtype="S10")
     describDS[0] = 'finite values'.encode()
