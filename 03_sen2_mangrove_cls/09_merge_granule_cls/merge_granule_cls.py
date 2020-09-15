@@ -14,6 +14,8 @@ class MergeGranuleCls(PBPTQProcessTool):
         import rsgislib.imagecalc
         import rsgislib.imageutils
         import rsgislib.rastergis
+        import h5py
+        
         rsgis_utils = rsgislib.RSGISPyUtils()
 
         cls_files = []
@@ -21,6 +23,10 @@ class MergeGranuleCls(PBPTQProcessTool):
             if os.path.exists(cls_file):
                 try:
                     print(cls_file)
+                    test_f = h5py.File(cls_file, 'r')
+                    kea_img_items = list(test_f.keys())
+                    test_f.close()
+
                     n_bands = rsgis_utils.getImageBandCount(cls_file)
                     if n_bands == 1:
                         cls_files.append(cls_file)
