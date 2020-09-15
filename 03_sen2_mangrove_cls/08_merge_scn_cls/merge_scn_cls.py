@@ -1,10 +1,6 @@
 from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
-import shutil
-import time
-import rsgislib
-import rsgislib.imageutils
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +14,8 @@ class MergeScnCls(PBPTQProcessTool):
         import rsgislib.imagecalc
         import rsgislib.imageutils
         import rsgislib.rastergis
+        import h5py
+
         rsgis_utils = rsgislib.RSGISPyUtils()
 
         cls_files = []
@@ -25,6 +23,11 @@ class MergeScnCls(PBPTQProcessTool):
             if os.path.exists(cls_file):
                 try:
                     print(cls_file)
+
+                    test_f = h5py.File(cls_file, 'r')
+                    kea_img_items = list(test_f.keys())
+                    test_f.close()
+
                     n_bands = rsgis_utils.getImageBandCount(cls_file)
                     if n_bands == 1:
                         cls_files.append(cls_file)
