@@ -15,7 +15,7 @@ class MergeGranuleCls(PBPTQProcessTool):
         import rsgislib.imageutils
         import rsgislib.rastergis
         import h5py
-        
+
         rsgis_utils = rsgislib.RSGISPyUtils()
 
         cls_files = []
