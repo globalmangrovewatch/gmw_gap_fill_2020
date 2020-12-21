@@ -28,16 +28,16 @@ class GenClearSkyCmds(PBPTGenQProcessToolCmds):
 
                     out_dir = os.path.dirname(cloud_msk)
                     out_img = os.path.join(out_dir, "{}_clearsky_refine.kea".format(basename))
-
-                    c_dict = dict()
-                    c_dict['product_id'] = scn.product_id
-                    c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], scn.product_id)
-                    c_dict['cloud_msk'] = cloud_msk
-                    c_dict['valid_msk'] = valid_msk
-                    c_dict['out_clrsky_img'] = out_img
-                    if not os.path.exists(c_dict['tmp_dir']):
-                        os.mkdir(c_dict['tmp_dir'])
-                    self.params.append(c_dict)
+                    if not os.path.exists(out_img):
+                        c_dict = dict()
+                        c_dict['product_id'] = scn.product_id
+                        c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], scn.product_id)
+                        c_dict['cloud_msk'] = cloud_msk
+                        c_dict['valid_msk'] = valid_msk
+                        c_dict['out_clrsky_img'] = out_img
+                        if not os.path.exists(c_dict['tmp_dir']):
+                            os.mkdir(c_dict['tmp_dir'])
+                        self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
