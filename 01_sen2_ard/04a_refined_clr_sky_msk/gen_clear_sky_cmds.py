@@ -18,7 +18,7 @@ class GenClearSkyCmds(PBPTGenQProcessToolCmds):
         sen2_rcd_obj = RecordSen2Process(kwargs['scn_db_file'])
         scns = sen2_rcd_obj.get_processed_scns()
         for scn in scns:
-            print("\t{}".format(scn.product_id))
+            #print("\t{}".format(scn.product_id))
             if scn.ard:
                 cloud_msk = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
                 valid_msk = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
