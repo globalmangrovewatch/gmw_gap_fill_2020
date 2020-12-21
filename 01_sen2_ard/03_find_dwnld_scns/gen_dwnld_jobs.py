@@ -177,8 +177,8 @@ class FindSen2ScnsGenDwnlds(PBPTGenQProcessToolCmds):
             self.gen_command_info(
                     db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_db_20200701.db',
                     granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_man_xtr_granules_morescns.txt',
-                    cloud_thres=60,
-                    cloud_thres_ts=80,
+                    cloud_thres=75,
+                    cloud_thres_ts=90,
                     start_date='2016-01-01',
                     end_date='2020-12-31',
                     n_scns=100,
