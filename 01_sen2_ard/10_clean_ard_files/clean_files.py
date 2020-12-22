@@ -10,6 +10,8 @@ def keep_file(input_file):
     known_file_end = False
     if 'clearsky.kea' in input_file:
         known_file_end = True
+    elif 'clearsky_refine.kea' in input_file:
+        known_file_end = True
     elif 'clouds.kea' in input_file:
         known_file_end = True
     elif 'meta.json' in input_file:
