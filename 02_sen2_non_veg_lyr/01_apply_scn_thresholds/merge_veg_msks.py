@@ -159,8 +159,12 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
 
     """
     from shapely.geometry import Polygon, LinearRing
+    import geopandas
 
-    polys = []
+    out_gdf = geopandas.GeoDataFrame()
+    out_gdf['geometry'] = None
+    i_geom = 0
+
     for index, row in data_gdf.iterrows():
         n_east = 0
         n_west = 0
@@ -205,7 +209,9 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
                                 out_coord[0] = -180 - diff
                         hole_coords.append(out_coord)
                     out_holes.append(LinearRing(hole_coords))
-                polys.append(Polygon(out_coords, holes=out_holes))
+                out_gdf.loc[i_geom, 'geometry'] = Polygon(out_coords, holes=out_holes)
+                i_geom += 1
+                #polys.append(Polygon(out_coords, holes=out_holes))
             elif row['geometry'].geom_type == 'MultiPolygon':
                 for poly in row['geometry']:
                     for coord in poly.exterior.coords:
@@ -245,11 +251,15 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
                                     out_coord[0] = -180 - diff
                             hole_coords.append(out_coord)
                         out_holes.append(LinearRing(hole_coords))
-                    polys.append(Polygon(out_coords, holes=out_holes))
+                    out_gdf.loc[i_geom, 'geometry'] = Polygon(out_coords, holes=out_holes)
+                    i_geom += 1
+                    #polys.append(Polygon(out_coords, holes=out_holes))
         else:
-            polys.append(row['geometry'])
-    data_gdf['geometry'] = polys
-    return data_gdf
+            #polys.append(row['geometry'])
+            out_gdf.loc[i_geom, 'geometry'] = row['geometry']
+            i_geom += 1
+    #data_gdf['geometry'] = polys
+    return out_gdf
 
 
 def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='GPKG',
