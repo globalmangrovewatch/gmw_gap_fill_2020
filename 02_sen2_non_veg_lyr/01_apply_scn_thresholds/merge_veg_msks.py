@@ -270,8 +270,8 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                         data_gdf = data_gdf.to_crs("EPSG:4326")
 
                 if len(data_gdf) > 0:
-                    data_gdf = data_gdf.explode()
-                    data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350)
+                    data_tmp_gdf = data_gdf.explode()
+                    data_gdf = geopd_check_polys_wgs84bounds_geometry(data_tmp_gdf, width_thres=350)
                     if first:
                         out_gdf = data_gdf
                         first = False
