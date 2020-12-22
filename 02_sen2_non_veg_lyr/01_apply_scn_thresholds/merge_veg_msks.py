@@ -1,7 +1,6 @@
 import glob
 import rsgislib.vectorutils
 
-
 def vec_within_vec(vec_base_file, vec_base_lyr, vec_comp_file, vec_comp_lyr):
     """
     Function to test whether the comparison vector layer within with the
@@ -284,6 +283,7 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
     import pandas
     import rsgislib.tools.utm
     import tqdm
+    import os
 
     if n_hemi_utm_file is None:
         install_prefix = __file__[:__file__.find('lib')]
@@ -299,7 +299,7 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
     rsgis_utils = rsgislib.RSGISPyUtils()
     first = True
     for file in tqdm.tqdm(input_files):
-        lyrs = getVecLyrsLst(file)
+        lyrs = rsgislib.vectorutils.getVecLyrsLst(file)
         for lyr in lyrs:
             bbox = rsgis_utils.getVecLayerExtent(file, layerName=lyr)
             bbox_area = rsgis_utils.calc_bbox_area(bbox)
