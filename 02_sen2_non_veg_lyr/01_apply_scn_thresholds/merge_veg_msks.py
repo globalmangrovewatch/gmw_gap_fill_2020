@@ -251,6 +251,7 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                 contained = vec_within_vec(utm_zones_file, zone_str, file, lyr)
                 if not contained:
                     data_gdf = geopandas.read_file(file, layer=lyr)
+                    data_gdf = data_gdf.explode()
                     utm_gdf = geopandas.read_file(utm_zones_file, layer=zone_str)
 
                     data_inter_gdf = geopandas.overlay(data_gdf, utm_gdf, how='intersection')
