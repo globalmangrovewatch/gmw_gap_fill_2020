@@ -263,8 +263,10 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
 
 
 def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='GPKG',
-                         n_hemi_utm_file=None, s_hemi_utm_file=None):
+                         n_hemi_utm_file=None, s_hemi_utm_file=None, width_thres=350):
     """
+    A function which merges input files in UTM projections to the WGS84 projection cutting
+    polygons which wrap from one side of the world to other (i.e., 180/-180 boundary).
 
     :param input_files: list of input files
     :param output_file: output vector file.
@@ -274,27 +276,38 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                             the northern hemisphere UTM projections.
     :param s_utm_zone_vec: GPKG file with layer per zone (layer names: 01, 02, ... 59, 60) each projected in
                             the southern hemisphere UTM projections.
+    :param width_thres: The threshold (default 350 degrees) for the width of a polygon for which
+                        the polygons will be checked, looping through all the coordinates
 
     """
     import geopandas
     import pandas
-    import os
-    import rsgislib
+    import rsgislib.tools.utm
     import tqdm
+
+    if n_hemi_utm_file is None:
+        install_prefix = __file__[:__file__.find('lib')]
+        n_hemi_utm_file = os.path.join(install_prefix, "share", "rsgislib", "utm_zone_boundaries_lyrs_north.gpkg")
+        if n_hemi_utm_file is None:
+            raise Exception("An input is needed for n_hemi_utm_file. The RSGISLib installed version was not be found.")
+    if s_hemi_utm_file is None:
+        install_prefix = __file__[:__file__.find('lib')]
+        s_hemi_utm_file = os.path.join(install_prefix, "share", "rsgislib", "utm_zone_boundaries_lyrs_south.gpkg")
+        if s_hemi_utm_file is None:
+            raise Exception("An input is needed for s_hemi_utm_file. The RSGISLib installed version was not be found.")
 
     rsgis_utils = rsgislib.RSGISPyUtils()
     first = True
     for file in tqdm.tqdm(input_files):
-        print(file)
-        lyrs = rsgislib.vectorutils.getVecLyrsLst(file)
+        lyrs = getVecLyrsLst(file)
         for lyr in lyrs:
-            print("\t{}".format(lyr))
             bbox = rsgis_utils.getVecLayerExtent(file, layerName=lyr)
-            bbox_area = calc_bbox_area(bbox)
+            bbox_area = rsgis_utils.calc_bbox_area(bbox)
             if bbox_area > 0:
                 vec_epsg = rsgis_utils.getProjEPSGFromVec(file, vecLyr=lyr)
-                zone, hemi = utm_from_epsg(int(vec_epsg))
-                zone_str = zero_pad_num_str(zone, str_len=2, round_num=False, round_n_digts=0, integerise=True)
+                zone, hemi = rsgislib.tools.utm.utm_from_epsg(int(vec_epsg))
+                zone_str = rsgis_utils.zero_pad_num_str(zone, str_len=2, round_num=False, round_n_digts=0,
+                                                        integerise=True)
 
                 if hemi.upper() == 'S':
                     utm_zones_file = s_hemi_utm_file
@@ -323,8 +336,10 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                         data_gdf = data_gdf.to_crs("EPSG:4326")
 
                 if len(data_gdf) > 0:
-                    #data_tmp_gdf = data_gdf.explode()
-                    data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350)
+                    data_gdf_bounds = data_gdf.bounds
+                    widths = data_gdf_bounds['maxx'] - data_gdf_bounds['minx']
+                    if widths.max() > 350:
+                        data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres)
                     if first:
                         out_gdf = data_gdf
                         first = False
@@ -340,12 +355,42 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
             out_gdf.to_file(output_file, driver=out_format)
 
 
+def get_files_mtime(file_lst, dt_before=None, dt_after=None):
+    """
+    A function which subsets a list of files based on datetime of
+    last modification. The function also does a check as to whether
+    a file exists, files which don't exist will be ignored.
 
+    :param file_lst: The list of file path - represented as strings.
+    :param dt_before: a datetime object with a date/time where files before this will be returned
+    :param dt_after: a datetime object with a date/time where files after this will be returned
+
+    """
+    import os
+    import datetime
+    if (dt_before is None) and (dt_after is None):
+        raise Exception("You must define at least one of dt_before or dt_after")
+    out_file_lst = list()
+    for cfile in file_lst:
+        if os.path.exists(cfile):
+            mod_time_stamp = os.path.getmtime(cfile)
+            mod_time = datetime.datetime.fromtimestamp(mod_time_stamp)
+            if (dt_before is not None) and (mod_time < dt_before):
+                out_file_lst.append(cfile)
+            if (dt_after is not None) and (mod_time > dt_after):
+                out_file_lst.append(cfile)
+    return out_file_lst
+
+
+import datetime
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs/*.gpkg")
 #merge_vector_files(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg', 'granule_veg_msks', 'GPKG', out_epsg=4326)
 
+input_vecs_adds = get_files_mtime(input_vecs, dt_before=None, dt_after=datetime.datetime(year=2020, month=12, day=1))
 
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg', 'granule_veg_msks', out_format='GPKG',
+print(input_vecs_adds)
+
+merge_utm_vecs_wgs84(input_vecs_adds, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_additions.gpkg', 'granule_veg_msks', out_format='GPKG',
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
                      s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
