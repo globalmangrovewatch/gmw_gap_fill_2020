@@ -19,6 +19,7 @@ class GenGranuleTrainSamples(PBPTGenQProcessToolCmds):
             granule_out_vec_file = os.path.join(kwargs['granule_out_vec_path'], "{}_train_smpls.gpkg".format(granule))
             granule_veg_img_file = os.path.join(kwargs['granule_veg_msks_dir'], "{}_veg.kea".format(granule))
             if ((not os.path.exists(granule_out_mng_img_file)) or (not os.path.exists(granule_out_oth_img_file))) and os.path.exists(granule_veg_img_file):
+                print("\tAdd to calculate...")
                 c_dict = dict()
                 c_dict['granule'] = granule
                 c_dict['gmw_msk_vec'] = kwargs['gmw_msk_vec']
