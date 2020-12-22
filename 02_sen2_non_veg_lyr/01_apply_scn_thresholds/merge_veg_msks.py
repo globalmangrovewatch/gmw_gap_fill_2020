@@ -160,6 +160,9 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
     """
     from shapely.geometry import Polygon, LinearRing
 
+    # Explode multi-geometries features.
+    data_gdf = data_gdf.explode()
+
     polys = []
     for index, row in data_gdf.iterrows():
         n_east = 0
