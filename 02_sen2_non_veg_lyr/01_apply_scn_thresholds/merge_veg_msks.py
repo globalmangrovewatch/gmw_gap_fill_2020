@@ -160,9 +160,6 @@ def geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350):
     """
     from shapely.geometry import Polygon, LinearRing
 
-    # Explode multi-geometries features.
-    data_gdf = data_gdf.explode()
-
     polys = []
     for index, row in data_gdf.iterrows():
         n_east = 0
@@ -254,7 +251,6 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                 contained = vec_within_vec(utm_zones_file, zone_str, file, lyr)
                 if not contained:
                     data_gdf = geopandas.read_file(file, layer=lyr)
-                    data_gdf = data_gdf.explode()
                     utm_gdf = geopandas.read_file(utm_zones_file, layer=zone_str)
 
                     data_inter_gdf = geopandas.overlay(data_gdf, utm_gdf, how='intersection')
@@ -274,6 +270,7 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
                         data_gdf = data_gdf.to_crs("EPSG:4326")
 
                 if len(data_gdf) > 0:
+                    data_gdf = data_gdf.explode()
                     data_gdf = geopd_check_polys_wgs84bounds_geometry(data_gdf, width_thres=350)
                     if first:
                         out_gdf = data_gdf
