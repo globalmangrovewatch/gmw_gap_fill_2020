@@ -19,7 +19,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         scns = sen2_rcd_obj.get_processed_scns()
         err_scns = []
         for scn in scns:
-            print(scn.product_id)
+            #print(scn.product_id)
             scn_out_mng_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_mng_smpls.h5".format(scn.product_id))
             scn_out_oth_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_oth_smpls.h5".format(scn.product_id))
             if (not os.path.exists(scn_out_mng_file)) or (not os.path.exists(scn_out_oth_file)):
