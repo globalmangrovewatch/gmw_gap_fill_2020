@@ -19,7 +19,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         scns = sen2_rcd_obj.get_processed_scns()
         err_scns = []
         for scn in scns:
-            print(scn.product_id)
+            #print(scn.product_id)
 
             vld_img = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
             clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
@@ -27,7 +27,8 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
             if (vld_img is None) or (clrsky_img is None) or (sref_img is None):
                 clouds_img = self.find_first_file(scn.ard_path, "*clouds.kea", rtn_except=False)
                 if clouds_img is None:
-                    print("***ERROR***: {}".format(scn.ard_path))
+                    print(scn.product_id)
+                    print("\t***ERROR***: {}".format(scn.ard_path))
                     err_scns.append(scn.ard_path)
             else:
                 out_cls_msk_file = os.path.join(kwargs['out_cls_msk_dir'], "{}_cls_msk.kea".format(scn.product_id))
