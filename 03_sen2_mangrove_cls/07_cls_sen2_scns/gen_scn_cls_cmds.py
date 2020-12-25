@@ -44,7 +44,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                         cls_params_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
                         out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
                         if not os.path.exists(out_cls_file):
-                            print("{}".format(out_cls_file))
+                            #print("{}".format(out_cls_file))
                             c_dict = dict()
                             c_dict['scn_id'] = scn.product_id
                             c_dict['vld_img'] = vld_img
