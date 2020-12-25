@@ -19,7 +19,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
         scns = sen2_rcd_obj.get_processed_scns()
         err_scns = []
         for scn in scns:
-            print(scn.product_id)
+            #print(scn.product_id)
 
             vld_img = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
             clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
@@ -37,13 +37,14 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                 cls_msk_file = os.path.join(kwargs['cls_msks_dir'], "{}_cls_msk.kea".format(scn.product_id))
                 scn_mng_smps_file = os.path.join(kwargs['cls_scn_smps_dir'], "{}_mng_smpls.h5".format(scn.product_id))
                 scn_oth_smps_file = os.path.join(kwargs['cls_scn_smps_dir'], "{}_oth_smpls.h5".format(scn.product_id))
-                print(cls_msk_file)
+                #print(cls_msk_file)
                 if os.path.exists(cls_msk_file):
                     for i in range(kwargs['n_sample_sets']):
                         cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
                         cls_params_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
                         out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
                         if not os.path.exists(out_cls_file):
+                            print("{}".format(out_cls_file))
                             c_dict = dict()
                             c_dict['scn_id'] = scn.product_id
                             c_dict['vld_img'] = vld_img
