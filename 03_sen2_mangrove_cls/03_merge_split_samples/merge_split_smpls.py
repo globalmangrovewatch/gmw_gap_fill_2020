@@ -42,26 +42,46 @@ mng_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_all.h5'
 oth_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/oth_smpls_all.h5'
 wat_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_all.h5'
 
-rsgislib.imageutils.mergeExtractedHDF5Data(mng_files, mng_all_samples)
-rsgislib.imageutils.mergeExtractedHDF5Data(oth_files, oth_all_samples)
-rsgislib.imageutils.mergeExtractedHDF5Data(wat_files, wat_all_samples)
+#rsgislib.imageutils.mergeExtractedHDF5Data(mng_files, mng_all_samples)
+#rsgislib.imageutils.mergeExtractedHDF5Data(oth_files, oth_all_samples)
+#rsgislib.imageutils.mergeExtractedHDF5Data(wat_files, wat_all_samples)
 
 mng_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_all_mskd.h5'
 oth_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/oth_smpls_all_mskd.h5'
 wat_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_all_mskd.h5'
 
-msk_to_finite_values(mng_all_samples, mng_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
-msk_to_finite_values(oth_all_samples, oth_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
-msk_to_finite_values(wat_all_samples, wat_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
+#msk_to_finite_values(mng_all_samples, mng_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
+#msk_to_finite_values(oth_all_samples, oth_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
+#msk_to_finite_values(wat_all_samples, wat_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
 
-samples_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5'
+print(rsgislib.classification.get_num_samples(mng_all_mskd_samples))
+print(rsgislib.classification.get_num_samples(oth_all_mskd_samples))
+print(rsgislib.classification.get_num_samples(wat_all_mskd_samples))
+
+
+wat_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_train.h5'
+wat_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_test.h5'
+wat_valid_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_valid.h5'
+rsgislib.classification.split_sample_train_valid_test(wat_all_mskd_samples, wat_train_samples, wat_test_samples,
+                                                      wat_valid_samples, 50000, 20000, 100,
+                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
+
+mng_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_train.h5'
+mng_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_test.h5'
+mng_valid_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_valid.h5'
+rsgislib.classification.split_sample_train_valid_test(mng_all_mskd_samples, mng_train_samples, mng_test_samples,
+                                                      mng_valid_samples, 50000, 20000, 100,
+                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
+
+"""
+samples_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5_v2'
 n_samples = 200000
 n_test_smpls = 50000
 n_valid_smpls = 50000
 n_train_smpls = 100000
 n_sets = 100
 n_opt_smpl = 0.2 # 20% sample used for optimisation.
-"""
+
 for i in tqdm.tqdm(range(n_sets)):
     mng_smps_file = os.path.join(samples_dir, "mng_samples_{}.h5".format(i+1))
     rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_smps_file, n_samples, i)
@@ -92,13 +112,8 @@ for i in tqdm.tqdm(range(n_sets)):
 
     oth_train_smps_opt_file = os.path.join(samples_dir, "oth_train_samples_{}_opt.h5".format(i + 1))
     if n_opt_smpl < 1:
-        rsgislib.imageutils.randomSampleHDF5File(oth_train_smps_file, oth_train_smps_opt_file,
-                                                 int(n_train_smpls * n_opt_smpl), 42)
+        rsgislib.imageutils.randomSampleHDF5File(oth_train_smps_file, oth_train_smps_opt_file, int(n_train_smpls * n_opt_smpl), 42)
     else:
         shutil.copyfile(oth_train_smps_file, oth_train_smps_opt_file)
+
 """
-
-print(rsgislib.classification.get_num_samples(mng_all_mskd_samples))
-print(rsgislib.classification.get_num_samples(oth_all_mskd_samples))
-print(rsgislib.classification.get_num_samples(wat_all_mskd_samples))
-
