@@ -36,20 +36,23 @@ def msk_to_finite_values(input_h5, output_h5, datatype=None, lower_limit=None, u
 
 mng_files = glob.glob('/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples/*mng_smpls.h5')
 oth_files = glob.glob('/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples/*oth_smpls.h5')
+wat_files = glob.glob('/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples/*wat_smpls.h5')
 
 mng_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_all.h5'
 oth_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/oth_smpls_all.h5'
+wat_all_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_all.h5'
 
 rsgislib.imageutils.mergeExtractedHDF5Data(mng_files, mng_all_samples)
 rsgislib.imageutils.mergeExtractedHDF5Data(oth_files, oth_all_samples)
-
+rsgislib.imageutils.mergeExtractedHDF5Data(wat_files, wat_all_samples)
 
 mng_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_all_mskd.h5'
 oth_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/oth_smpls_all_mskd.h5'
+wat_all_mskd_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_all_mskd.h5'
 
 msk_to_finite_values(mng_all_samples, mng_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
 msk_to_finite_values(oth_all_samples, oth_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
-
+msk_to_finite_values(wat_all_samples, wat_all_mskd_samples, datatype=rsgislib.TYPE_16UINT, lower_limit=0, upper_limit=1000)
 
 samples_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5'
 n_samples = 200000
@@ -58,7 +61,7 @@ n_valid_smpls = 50000
 n_train_smpls = 100000
 n_sets = 100
 n_opt_smpl = 0.2 # 20% sample used for optimisation.
-
+"""
 for i in tqdm.tqdm(range(n_sets)):
     mng_smps_file = os.path.join(samples_dir, "mng_samples_{}.h5".format(i+1))
     rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_smps_file, n_samples, i)
@@ -93,3 +96,9 @@ for i in tqdm.tqdm(range(n_sets)):
                                                  int(n_train_smpls * n_opt_smpl), 42)
     else:
         shutil.copyfile(oth_train_smps_file, oth_train_smps_opt_file)
+"""
+
+print(rsgislib.classification.get_num_samples(mng_all_mskd_samples))
+print(rsgislib.classification.get_num_samples(oth_all_mskd_samples))
+print(rsgislib.classification.get_num_samples(wat_all_mskd_samples))
+
