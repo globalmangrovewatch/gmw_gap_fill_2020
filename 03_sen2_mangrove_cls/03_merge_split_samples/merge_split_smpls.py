@@ -62,15 +62,15 @@ print(rsgislib.classification.get_num_samples(wat_all_mskd_samples))
 wat_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_train.h5'
 wat_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_test.h5'
 wat_valid_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_valid.h5'
-rsgislib.classification.split_sample_train_valid_test(wat_all_mskd_samples, wat_train_samples, wat_test_samples,
-                                                      wat_valid_samples, 100, 20000, 50000,
-                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
+#rsgislib.classification.split_sample_train_valid_test(wat_all_mskd_samples, wat_train_samples, wat_test_samples,
+#                                                      wat_valid_samples, 100, 20000, 50000,
+#                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
 
 mng_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_train.h5'
 mng_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_test.h5'
 
-rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_train_samples, 50000, 42)
-rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_test_samples, 20000, 84)
+#rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_train_samples, 50000, 42)
+#rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_test_samples, 20000, 84)
 
 print(rsgislib.classification.get_num_samples(wat_train_samples))
 print(rsgislib.classification.get_num_samples(wat_test_samples))
@@ -78,7 +78,7 @@ print(rsgislib.classification.get_num_samples(wat_test_samples))
 print(rsgislib.classification.get_num_samples(mng_train_samples))
 print(rsgislib.classification.get_num_samples(mng_test_samples))
 
-"""
+
 samples_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5_v2'
 n_samples = 200000
 n_test_smpls = 50000
@@ -105,6 +105,12 @@ for i in tqdm.tqdm(range(n_sets)):
     else:
         shutil.copyfile(mng_train_smps_file, mng_train_smps_opt_file)
 
+    mng_train_smps_xtr_file = os.path.join(samples_dir, "mng_train_samples_xtr_{}.h5".format(i + 1))
+    rsgislib.imageutils.mergeExtractedHDF5Data([mng_train_smps_file, mng_train_samples], mng_train_smps_xtr_file)
+
+    mng_test_smps_xtr_file = os.path.join(samples_dir, "mng_test_samples_xtr_{}.h5".format(i + 1))
+    rsgislib.imageutils.mergeExtractedHDF5Data([mng_test_smps_file, mng_test_samples], mng_test_smps_xtr_file)
+
     oth_smps_file = os.path.join(samples_dir, "oth_samples_{}.h5".format(i + 1))
     rsgislib.imageutils.randomSampleHDF5File(oth_all_mskd_samples, oth_smps_file, n_samples, i)
 
@@ -121,4 +127,9 @@ for i in tqdm.tqdm(range(n_sets)):
     else:
         shutil.copyfile(oth_train_smps_file, oth_train_smps_opt_file)
 
-"""
+    oth_train_smps_xtr_file = os.path.join(samples_dir, "oth_train_samples_xtr_{}.h5".format(i + 1))
+    rsgislib.imageutils.mergeExtractedHDF5Data([oth_train_smps_file, wat_train_samples], oth_train_smps_xtr_file)
+
+    oth_test_smps_xtr_file = os.path.join(samples_dir, "oth_test_samples_xtr_{}.h5".format(i + 1))
+    rsgislib.imageutils.mergeExtractedHDF5Data([oth_test_smps_file, wat_test_samples], oth_test_smps_xtr_file)
+
