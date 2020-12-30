@@ -33,7 +33,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
             self.params.append(c_dict)
 
     def run_gen_commands(self):
-        self.gen_command_info(samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5',
+        self.gen_command_info(samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5_v2',
                               n_sample_sets=100,
                               cls_params_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
                               out_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files')
