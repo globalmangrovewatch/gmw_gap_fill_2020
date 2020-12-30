@@ -40,11 +40,10 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                 #print(cls_msk_file)
                 if os.path.exists(cls_msk_file):
                     for i in range(kwargs['n_sample_sets']):
-                        cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
+                        cls_mdl_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_trained_xtr_{}.mdl'.format(i + 1))
                         cls_params_file = os.path.join(kwargs['cls_files_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
                         out_cls_file = os.path.join(out_scn_dir, "sen2_cls_{}.kea".format(i + 1))
                         if not os.path.exists(out_cls_file):
-                            #print("{}".format(out_cls_file))
                             c_dict = dict()
                             c_dict['scn_id'] = scn.product_id
                             c_dict['vld_img'] = vld_img
@@ -63,12 +62,12 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
-                              samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5',
+                              samples_dir='/scratch/a.pfb/gmw_v2_gapfill/data/set_samples_h5_v2',
                               n_sample_sets=100,
                               cls_msks_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_msk_imgs',
                               cls_files_dir='/scratch/a.pfb/gmw_v2_gapfill/data/opt_cls_files',
                               cls_scn_smps_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples',
-                              out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
+                              out_cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files_v2',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
         self.create_slurm_sub_sh("apply_xgb_cls", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',

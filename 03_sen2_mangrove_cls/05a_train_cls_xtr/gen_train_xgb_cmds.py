@@ -9,16 +9,16 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
     def gen_command_info(self, **kwargs):
         for i in range(kwargs['n_sample_sets']):
             mng_train_smps_file = os.path.join(kwargs['samples_dir'], "mng_train_samples_xtr_{}.h5".format(i + 1))
-            mng_valid_smps_file = os.path.join(kwargs['samples_dir'], "mng_valid_samples_{}.h5".format(i + 1))
-            mng_test_smps_file = os.path.join(kwargs['samples_dir'], "mng_test_samples_xtr_{}.h5".format(i + 1))
+            mng_valid_smps_file = os.path.join(kwargs['samples_dir'], "mng_valid_samples_xtr_{}.h5".format(i + 1))
+            mng_test_smps_file = os.path.join(kwargs['samples_dir'], "mng_test_samples_{}.h5".format(i + 1))
 
             oth_train_smps_file = os.path.join(kwargs['samples_dir'], "oth_train_samples_xtr_{}.h5".format(i + 1))
-            oth_valid_smps_file = os.path.join(kwargs['samples_dir'], "oth_valid_samples_{}.h5".format(i + 1))
-            oth_test_smps_file = os.path.join(kwargs['samples_dir'], "oth_test_samples_xtr_{}.h5".format(i + 1))
+            oth_valid_smps_file = os.path.join(kwargs['samples_dir'], "oth_valid_samples_xtr_{}.h5".format(i + 1))
+            oth_test_smps_file = os.path.join(kwargs['samples_dir'], "oth_test_samples_{}.h5".format(i + 1))
 
             cls_params_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
             cls_mdl_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
-            out_cls_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained_xtr{}.mdl'.format(i + 1))
+            out_cls_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained_xtr_{}.mdl'.format(i + 1))
 
             c_dict = dict()
             c_dict['mng_train_smps_file'] = mng_train_smps_file

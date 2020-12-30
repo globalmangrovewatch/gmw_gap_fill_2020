@@ -208,7 +208,15 @@ class ApplyXGBClass(PBPTQProcessTool):
                 n_oth_smpls = rsgislib.classification.get_num_samples(oth_mskd_samples)
 
                 refine_cls = True
-                if (n_mng_smpls > 2000) and (n_oth_smpls > 2000):
+                if (n_mng_smpls > 50000) and (n_oth_smpls > 50000):
+                    n_train_smpls = 25000
+                    n_test_smpls = 2000
+                    n_valid_smpls = 10000
+                elif (n_mng_smpls > 10000) and (n_oth_smpls > 10000):
+                    n_train_smpls = 12500
+                    n_test_smpls = 1000
+                    n_valid_smpls = 5000
+                elif (n_mng_smpls > 2000) and (n_oth_smpls > 2000):
                     n_train_smpls = 1250
                     n_test_smpls = 100
                     n_valid_smpls = 500
