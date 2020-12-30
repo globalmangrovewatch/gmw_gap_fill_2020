@@ -51,7 +51,7 @@ class ExtractSceneTrainSamples(PBPTQProcessTool):
                                              thematic=True, nodata=0)
 
         train_water_smpls_img = os.path.join(self.params['tmp_dir'], "{}_water_smpls.kea".format(self.params['scn_id']))
-        rsgislib.vectorutils.rasteriseVecLyr(self.params['samples_vec_edits'], self.params['water_smpls_vec_lyr'],
+        rsgislib.vectorutils.rasteriseVecLyr(self.params['water_smpls_vec_file'], self.params['water_smpls_vec_lyr'],
                                              self.params['vld_img'], train_water_smpls_img, gdalformat="KEA",
                                              burnVal=1, datatype=rsgislib.TYPE_8UINT, vecAtt=None, vecExt=False,
                                              thematic=True, nodata=0)
