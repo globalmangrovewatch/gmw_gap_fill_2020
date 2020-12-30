@@ -22,7 +22,9 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
             #print(scn.product_id)
             scn_out_mng_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_mng_smpls.h5".format(scn.product_id))
             scn_out_oth_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_oth_smpls.h5".format(scn.product_id))
-            if (not os.path.exists(scn_out_mng_file)) or (not os.path.exists(scn_out_oth_file)):
+            scn_out_wat_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_wat_smpls.h5".format(scn.product_id))
+            scn_out_cpl_file = os.path.join(kwargs['granule_out_h5_samples_path'], "{}_cmplt.txt".format(scn.product_id))
+            if (not os.path.exists(scn_out_cpl_file)):
                 vld_img = self.find_first_file(scn.ard_path, "*valid.kea", rtn_except=False)
                 clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
                 sref_img = self.find_first_file(scn.ard_path, "*vmsk_rad_srefdem_stdsref.kea", rtn_except=False)
@@ -44,8 +46,12 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     c_dict['other_samp_lyrs'] = kwargs['other_samp_lyrs']
                     c_dict['not_mng_regions'] = kwargs['not_mng_regions']
                     c_dict['not_oth_regions'] = kwargs['not_oth_regions']
+                    c_dict['water_smpls_vec_file'] = kwargs['water_smpls_vec_file']
+                    c_dict['water_smpls_vec_lyr'] = kwargs['water_smpls_vec_lyr']
                     c_dict['scn_out_mng_file'] = scn_out_mng_file
                     c_dict['scn_out_oth_file'] = scn_out_oth_file
+                    c_dict['scn_out_wat_file'] = scn_out_wat_file
+                    c_dict['scn_out_cpl_file'] = scn_out_cpl_file
                     c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_extract_smpls".format(scn.product_id))
                     if not os.path.exists(c_dict['tmp_dir']):
                         os.mkdir(c_dict['tmp_dir'])
@@ -63,6 +69,8 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                               other_samp_lyrs='other_pts',
                               not_mng_regions='not_mangroves_regions',
                               not_oth_regions='not_other_regions',
+                              water_smpls_vec_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/03_sen2_mangrove_cls/01_define_training/gmw_water_train_smps.gpkg',
+                              water_smpls_vec_lyr='water_smps',
                               granule_out_h5_samples_path='/scratch/a.pfb/gmw_v2_gapfill/data/scn_h5_samples',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
