@@ -95,7 +95,7 @@ class ExtractSceneTrainSamples(PBPTQProcessTool):
 
         n_wat_smpls = rsgislib.imagecalc.countPxlsOfVal(training_water_smpls_mskd_img, vals=[1])
         print(n_wat_smpls)
-        if n_wat_smpls[1] > 0:
+        if n_wat_smpls[0] > 0:
             rsgislib.imageutils.extractZoneImageBandValues2HDF(fileInfo, training_water_smpls_mskd_img, self.params['scn_out_wat_file'], 1.0)
 
         pathlib.Path(self.params['scn_out_cpl_file']).touch()
