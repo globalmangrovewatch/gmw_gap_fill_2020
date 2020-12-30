@@ -113,6 +113,7 @@ class ExtractSceneTrainSamples(PBPTQProcessTool):
         files_dict = dict()
         files_dict[self.params['scn_out_mng_file']] = 'hdf5'
         files_dict[self.params['scn_out_oth_file']] = 'hdf5'
+        files_dict[self.params['scn_out_wat_file']] = 'hdf5'
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):
@@ -126,6 +127,10 @@ class ExtractSceneTrainSamples(PBPTQProcessTool):
             os.remove(self.params['scn_out_mng_file'])
         if os.path.exists(self.params['scn_out_oth_file']):
             os.remove(self.params['scn_out_oth_file'])
+        if os.path.exists(self.params['scn_out_wat_file']):
+            os.remove(self.params['scn_out_wat_file'])
+        if os.path.exists(self.params['scn_out_cpl_file']):
+            os.remove(self.params['scn_out_cpl_file'])
 
 if __name__ == "__main__":
     ExtractSceneTrainSamples().std_run()
