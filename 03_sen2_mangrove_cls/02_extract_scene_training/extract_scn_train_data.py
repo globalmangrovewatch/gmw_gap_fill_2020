@@ -45,7 +45,7 @@ class ExtractSceneTrainSamples(PBPTQProcessTool):
                                              thematic=True, nodata=0)
 
         train_edit_not_oth_img = os.path.join(self.params['tmp_dir'], "{}_edit_not_oth.kea".format(self.params['scn_id']))
-        rsgislib.vectorutils.rasteriseVecLyr(self.params['water_smpls_vec_file'], self.params['not_oth_regions'],
+        rsgislib.vectorutils.rasteriseVecLyr(self.params['samples_vec_edits'], self.params['not_oth_regions'],
                                              self.params['vld_img'], train_edit_not_oth_img, gdalformat="KEA",
                                              burnVal=1, datatype=rsgislib.TYPE_8UINT, vecAtt=None, vecExt=False,
                                              thematic=True, nodata=0)
