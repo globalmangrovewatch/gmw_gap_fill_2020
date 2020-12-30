@@ -62,16 +62,15 @@ print(rsgislib.classification.get_num_samples(wat_all_mskd_samples))
 wat_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_train.h5'
 wat_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_test.h5'
 wat_valid_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/wat_smpls_valid.h5'
-#rsgislib.classification.split_sample_train_valid_test(wat_all_mskd_samples, wat_train_samples, wat_test_samples,
-#                                                      wat_valid_samples, 50000, 20000, 100,
-#                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
+rsgislib.classification.split_sample_train_valid_test(wat_all_mskd_samples, wat_train_samples, wat_test_samples,
+                                                      wat_valid_samples, 100, 20000, 50000,
+                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
 
 mng_train_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_train.h5'
 mng_test_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_test.h5'
-mng_valid_samples = '/scratch/a.pfb/gmw_v2_gapfill/data/mng_smpls_valid.h5'
-#rsgislib.classification.split_sample_train_valid_test(mng_all_mskd_samples, mng_train_samples, mng_test_samples,
-#                                                      mng_valid_samples, 50000, 20000, 100,
-#                                                      rand_seed=42, datatype=rsgislib.TYPE_16UINT)
+
+rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_train_samples, 50000, 42)
+rsgislib.imageutils.randomSampleHDF5File(mng_all_mskd_samples, mng_test_samples, 20000, 84)
 
 print(rsgislib.classification.get_num_samples(wat_train_samples))
 print(rsgislib.classification.get_num_samples(wat_test_samples))
