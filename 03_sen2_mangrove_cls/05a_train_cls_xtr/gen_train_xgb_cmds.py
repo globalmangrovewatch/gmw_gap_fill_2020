@@ -18,7 +18,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
             cls_params_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_{}.json'.format(i + 1))
             cls_mdl_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained_{}.mdl'.format(i + 1))
-            out_cls_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained__xtr{}.mdl'.format(i + 1))
+            out_cls_file = os.path.join(kwargs['out_cls_dir'], 'sen2_gfill_opt_xgb_cls_trained_xtr{}.mdl'.format(i + 1))
 
             c_dict = dict()
             c_dict['mng_train_smps_file'] = mng_train_smps_file
