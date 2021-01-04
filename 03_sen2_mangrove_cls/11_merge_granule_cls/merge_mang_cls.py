@@ -286,43 +286,9 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
             out_gdf.to_file(output_file, driver=out_format)
 
 
-#### cls_25
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_25.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_25_mangrove_cls.gpkg', 'cls_25_cls_25', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_50.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_50_mangrove_cls.gpkg', 'cls_25_cls_50', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_75.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_75_mangrove_cls.gpkg', 'cls_25_cls_75', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-
-#### cls_50
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_25.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_25_mangrove_cls.gpkg', 'cls_50_cls_25', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_50.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_50_mangrove_cls.gpkg', 'cls_50_cls_50', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_75.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_75_mangrove_cls.gpkg', 'cls_50_cls_75', out_format='GPKG',
-                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
-
-
 #### cls_75
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_75_cls_25.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_75_cls_25_mangrove_cls.gpkg', 'cls_75_cls_25', out_format='GPKG',
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_75_cls_75.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_75_cls_75_mangrove_cls.gpkg', 'cls_75_cls_75', out_format='GPKG',
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
                      s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
@@ -331,9 +297,59 @@ merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_75_cls_
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
                      s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
-input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_75_cls_75.gpkg")
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_75_cls_75_mangrove_cls.gpkg', 'cls_75_cls_75', out_format='GPKG',
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_75_cls_25.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_75_cls_25_mangrove_cls.gpkg', 'cls_75_cls_25', out_format='GPKG',
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
                      s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+
+
+
+
+#### cls_50
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_75.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_75_mangrove_cls.gpkg', 'cls_50_cls_75', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_50.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_50_mangrove_cls.gpkg', 'cls_50_cls_50', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50_cls_25.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_cls_25_mangrove_cls.gpkg', 'cls_50_cls_25', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+
+
+
+
+#### cls_25
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_75.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_75_mangrove_cls.gpkg', 'cls_25_cls_75', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_50.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_50_mangrove_cls.gpkg', 'cls_25_cls_50', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_25_cls_25.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_25_mangrove_cls.gpkg', 'cls_25_cls_25', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+
+
+
+
+
+
+
+
+
+
 
 
