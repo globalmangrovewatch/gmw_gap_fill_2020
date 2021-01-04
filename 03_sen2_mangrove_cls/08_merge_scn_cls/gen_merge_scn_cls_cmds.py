@@ -40,7 +40,7 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
-                              cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files',
+                              cls_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/scn_cls_files_v2',
                               out_scn_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_cls_files')
         self.pop_params_db()
         self.create_slurm_sub_sh("merge_scn_cls", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
