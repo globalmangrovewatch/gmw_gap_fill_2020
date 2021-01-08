@@ -33,8 +33,6 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
             else:
                 out_cls_msk_file = os.path.join(kwargs['out_cls_msk_dir'], "{}_cls_msk.kea".format(scn.product_id))
                 out_cmp_file = os.path.join(kwargs['out_cls_msk_dir'], "{}_cmp.txt".format(scn.product_id))
-                pathlib.Path(out_cmp_file).touch()
-                """
                 if not os.path.exists(out_cmp_file):
                     c_dict = dict()
                     c_dict['scn_id'] = scn.product_id
@@ -54,7 +52,6 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     if not os.path.exists(c_dict['tmp_dir']):
                         os.mkdir(c_dict['tmp_dir'])
                     self.params.append(c_dict)
-                """
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
