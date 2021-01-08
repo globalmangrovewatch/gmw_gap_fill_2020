@@ -2,7 +2,7 @@ from pbprocesstools.pbpt_q_process import PBPTGenQProcessToolCmds
 import logging
 import os
 import sys
-import random
+import pathlib
 
 sys.path.insert(0, "../../01_sen2_ard/03_find_dwnld_scns")
 from sen2scnprocess import RecordSen2Process
@@ -32,7 +32,10 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     err_scns.append(scn.ard_path)
             else:
                 out_cls_msk_file = os.path.join(kwargs['out_cls_msk_dir'], "{}_cls_msk.kea".format(scn.product_id))
-                if not os.path.exists(out_cls_msk_file):
+                out_cmp_file = os.path.join(kwargs['out_cls_msk_dir'], "{}_cmp.txt".format(scn.product_id))
+                pathlib.Path(out_cmp_file).touch()
+                """
+                if not os.path.exists(out_cmp_file):
                     c_dict = dict()
                     c_dict['scn_id'] = scn.product_id
                     c_dict['vld_img'] = vld_img
@@ -46,10 +49,12 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
                     c_dict['gmw_hab_msk_mng_rm_vec'] = kwargs['gmw_hab_msk_mng_rm_vec']
                     c_dict['gmw_hab_msk_mng_rm_lyr'] = kwargs['gmw_hab_msk_mng_rm_lyr']
                     c_dict['out_cls_msk_file'] = out_cls_msk_file
+                    c_dict['out_cmp_file'] = out_cmp_file
                     c_dict['tmp_dir'] = os.path.join(kwargs['tmp_dir'], "{}_cls_msk".format(scn.product_id))
                     if not os.path.exists(c_dict['tmp_dir']):
                         os.mkdir(c_dict['tmp_dir'])
                     self.params.append(c_dict)
+                """
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',

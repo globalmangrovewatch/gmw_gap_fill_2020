@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import time
+import pathlib
 import rsgislib
 import rsgislib.vectorutils
 import rsgislib.imagecalc
@@ -67,10 +68,12 @@ class CreateScnClsMsk(PBPTQProcessTool):
         if os.path.exists(self.params['tmp_dir']):
             shutil.rmtree(self.params['tmp_dir'])
 
+        pathlib.Path(self.params['out_cmp_file']).touch()
+
     def required_fields(self, **kwargs):
         return ["scn_id", "vld_img", "clrsky_img", "gmw_veg_msk_vec", "gmw_veg_msk_lyr",
                 "gmw_hab_msk_vec", "gmw_hab_msk_lyr", "gmw_hab_msk_mng_add_vec", "gmw_hab_msk_mng_add_lyr",
-                "gmw_hab_msk_mng_rm_vec", "gmw_hab_msk_mng_rm_lyr", "out_cls_msk_file", "tmp_dir"]
+                "gmw_hab_msk_mng_rm_vec", "gmw_hab_msk_mng_rm_lyr", "out_cls_msk_file", "out_cmp_file", "tmp_dir"]
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
