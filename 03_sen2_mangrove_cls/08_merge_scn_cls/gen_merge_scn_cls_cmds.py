@@ -21,7 +21,7 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
 
         scns = sen2_rcd_obj.get_processed_scns()
         for scn in scns:
-            print(scn.product_id)
+            #print(scn.product_id)
             cls_scn_dir = os.path.join(kwargs['cls_scn_dir'], scn.product_id)
             if os.path.exists(cls_scn_dir):
                 cls_files = glob.glob(os.path.join(cls_scn_dir, "*.kea"))
