@@ -15,19 +15,18 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
 
         for granule in granule_lst:
             print(granule)
-            for thres in ['cls_25', 'cls_50', 'cls_75']:
-                cls_files = glob.glob(os.path.join(kwargs['cls_scn_dir'], "*{}*{}*.kea".format(granule, thres)))
-                if len(cls_files) > 0:
-                    print("\t n scene classes: {}".format(len(cls_files)))
-                    c_dict = dict()
-                    c_dict['granule'] = granule
-                    c_dict['cls_files'] = cls_files
-                    c_dict['out_sum_cls_file'] = os.path.join(kwargs['out_granule_dir'], "{}_{}_sum_cls.kea".format(granule, thres))
-                    c_dict['out_cls_25_file'] = os.path.join(kwargs['out_granule_dir'], "{}_{}_cls_25.kea".format(granule, thres))
-                    c_dict['out_cls_50_file'] = os.path.join(kwargs['out_granule_dir'], "{}_{}_cls_50.kea".format(granule, thres))
-                    c_dict['out_cls_75_file'] = os.path.join(kwargs['out_granule_dir'], "{}_{}_cls_75.kea".format(granule, thres))
-                    if not (os.path.exists(c_dict['out_sum_cls_file']) and os.path.exists(c_dict['out_cls_25_file']) and os.path.exists(c_dict['out_cls_50_file']) and os.path.exists(c_dict['out_cls_75_file'])):
-                        self.params.append(c_dict)
+            cls_files = glob.glob(os.path.join(kwargs['cls_scn_dir'], "*{}*sum_cls.kea".format(granule)))
+            if len(cls_files) > 0:
+                print("\t n scene classes: {}".format(len(cls_files)))
+                c_dict = dict()
+                c_dict['granule'] = granule
+                c_dict['cls_files'] = cls_files
+                c_dict['out_sum_cls_file'] = os.path.join(kwargs['out_granule_dir'], "{}_sum_cls.kea".format(granule))
+                c_dict['out_cls_50_file'] = os.path.join(kwargs['out_granule_dir'], "{}_cls_50.kea".format(granule))
+                c_dict['out_cls_75_file'] = os.path.join(kwargs['out_granule_dir'], "{}_cls_75.kea".format(granule))
+                c_dict['out_cls_85_file'] = os.path.join(kwargs['out_granule_dir'], "{}_cls_85.kea".format(granule))
+                if not (os.path.exists(c_dict['out_sum_cls_file']) and os.path.exists(c_dict['out_cls_50_file']) and os.path.exists(c_dict['out_cls_75_file']) and os.path.exists(c_dict['out_cls_85_file'])):
+                    self.params.append(c_dict)
 
     def run_gen_commands(self):
         self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',

@@ -36,7 +36,7 @@ class MergeGranuleCls(PBPTQProcessTool):
 
         try:
             rsgislib.imagecalc.calcMultiImgBandStats(cls_files, self.params['out_sum_cls_file'],
-                                                     rsgislib.SUMTYPE_MEAN, 'KEA', rsgislib.TYPE_32FLOAT, 255, True)
+                                                     rsgislib.SUMTYPE_MEAN, 'KEA', rsgislib.TYPE_32FLOAT, 0, True)
         except Exception as e:
             for img in cls_files:
                 print(img)
@@ -48,29 +48,29 @@ class MergeGranuleCls(PBPTQProcessTool):
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
-        rsgislib.imagecalc.bandMath(self.params['out_cls_25_file'], "scr>0.3?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
-        rsgislib.rastergis.populateStats(self.params['out_cls_25_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
-
-        band_defns = list()
-        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
         rsgislib.imagecalc.bandMath(self.params['out_cls_50_file'], "scr>0.5?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
         rsgislib.rastergis.populateStats(self.params['out_cls_50_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
 
         band_defns = list()
         band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
-        rsgislib.imagecalc.bandMath(self.params['out_cls_75_file'], "scr>0.8?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
+        rsgislib.imagecalc.bandMath(self.params['out_cls_75_file'], "scr>0.75?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
         rsgislib.rastergis.populateStats(self.params['out_cls_75_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
+
+        band_defns = list()
+        band_defns.append(rsgislib.imagecalc.BandDefn('scr', self.params['out_sum_cls_file'], 1))
+        rsgislib.imagecalc.bandMath(self.params['out_cls_85_file'], "scr>0.85?1:0", 'KEA', rsgislib.TYPE_8UINT, band_defns)
+        rsgislib.rastergis.populateStats(self.params['out_cls_85_file'], addclrtab=True, calcpyramids=True, ignorezero=False)
 
 
     def required_fields(self, **kwargs):
-        return ["granule", "cls_files", "out_sum_cls_file", "out_cls_25_file", "out_cls_50_file", "out_cls_75_file"]
+        return ["granule", "cls_files", "out_sum_cls_file", "out_cls_50_file", "out_cls_75_file", "out_cls_85_file"]
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
         files_dict[self.params['out_sum_cls_file']] = 'gdal_img'
-        files_dict[self.params['out_cls_25_file']] = 'gdal_img'
         files_dict[self.params['out_cls_50_file']] = 'gdal_img'
         files_dict[self.params['out_cls_75_file']] = 'gdal_img'
+        files_dict[self.params['out_cls_85_file']] = 'gdal_img'
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):
@@ -78,14 +78,14 @@ class MergeGranuleCls(PBPTQProcessTool):
         if os.path.exists(self.params['out_sum_cls_file']):
             os.remove(self.params['out_sum_cls_file'])
 
-        if os.path.exists(self.params['out_cls_25_file']):
-            os.remove(self.params['out_cls_25_file'])
-
         if os.path.exists(self.params['out_cls_50_file']):
             os.remove(self.params['out_cls_50_file'])
 
         if os.path.exists(self.params['out_cls_75_file']):
             os.remove(self.params['out_cls_75_file'])
+
+        if os.path.exists(self.params['out_cls_85_file']):
+            os.remove(self.params['out_cls_85_file'])
 
 if __name__ == "__main__":
     MergeGranuleCls().std_run()
