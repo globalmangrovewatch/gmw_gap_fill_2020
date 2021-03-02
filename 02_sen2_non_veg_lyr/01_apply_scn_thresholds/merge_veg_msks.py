@@ -386,17 +386,17 @@ import datetime
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs/*.gpkg")
 #merge_vector_files(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg', 'granule_veg_msks', 'GPKG', out_epsg=4326)
 
-input_vecs_adds = get_files_mtime(input_vecs, dt_before=None, dt_after=datetime.datetime(year=2020, month=12, day=1))
+input_vecs_adds = get_files_mtime(input_vecs, dt_before=None, dt_after=datetime.datetime(year=2021, month=2, day=1))
 
 print(input_vecs_adds)
 
-#merge_utm_vecs_wgs84(input_vecs_adds, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_additions.gpkg', 'granule_veg_msks', out_format='GPKG',
-#                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
-#                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+merge_utm_vecs_wgs84(input_vecs_adds, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_additions.gpkg', 'granule_veg_msks', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
 
 rsgislib.vectorutils.mergeVectors2GPKG(['/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_additions.gpkg',
-                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_bkup_20200714.gpkg'],
+                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_bkup_20201222.gpkg'],
                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg',
                                        'granule_veg_msks', False)
 
