@@ -24,7 +24,7 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
             print(granule)
             granule_out_img_file = os.path.join(kwargs['granule_out_img_path'], "{}_veg.kea".format(granule))
             granule_out_vec_file = os.path.join(kwargs['granule_out_vec_path'], "{}_veg.gpkg".format(granule))
-            if not os.path.exists(granule_out_img_file):
+            if (not os.path.exists(granule_out_img_file)) or (not os.path.exists(granule_out_vec_file)):
                 scns = sen2_rcd_obj.granule_scns(granule)
                 vld_imgs = list()
                 clrsky_imgs = list()

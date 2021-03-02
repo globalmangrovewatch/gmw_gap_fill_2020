@@ -206,7 +206,7 @@ class CreateGranuleVegMsk(PBPTQProcessTool):
             for i in range(n_feats):
                 granule_names.append(self.params['granule'])
             rsgislib.vectorutils.writeVecColumn(self.params['granule_out_vec_file'], self.params['granule_out_lyr'], 'Granule', ogr.OFTString, granule_names)
-
+        
         if os.path.exists(self.params['tmp_dir']):
             shutil.rmtree(self.params['tmp_dir'])
 

@@ -23,8 +23,10 @@ class GenMergeScnClsCmds(PBPTGenQProcessToolCmds):
         for scn in scns:
             #print(scn.product_id)
             cls_scn_dir = os.path.join(kwargs['cls_scn_dir'], scn.product_id)
+            #print("\t{}".format(cls_scn_dir))
             if os.path.exists(cls_scn_dir):
                 cls_files = glob.glob(os.path.join(cls_scn_dir, "*.kea"))
+                #print("\t\t{}".format(len(cls_files)))
                 if len(cls_files) > 0:
                     clrsky_img = self.find_first_file(scn.ard_path, "*clearsky_refine.kea", rtn_except=False)
                     c_dict = dict()
