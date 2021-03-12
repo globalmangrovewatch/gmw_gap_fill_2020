@@ -76,10 +76,10 @@ class GenVegGranuleMsk(PBPTGenQProcessToolCmds):
 
 
 if __name__ == "__main__":
-    py_script = os.path.abspath("create_granule_veg_msk.py")
+    py_script = os.path.abspath("create_granule_veg_msk_simplified.py")
     script_cmd = "singularity exec --bind /scratch/a.pfb:/scratch/a.pfb --bind /home/a.pfb:/home/a.pfb /scratch/a.pfb/sw_imgs/au-eoed-dev.sif python {}".format(py_script)
 
-    process_tools_mod = 'create_granule_veg_msk'
+    process_tools_mod = 'create_granule_veg_msk_simplified'
     process_tools_cls = 'CreateGranuleVegMsk'
 
     create_tools = GenVegGranuleMsk(cmd=script_cmd, db_conn_file="/home/a.pfb/gmw_gap_fill_db/pbpt_db_conn.txt",
