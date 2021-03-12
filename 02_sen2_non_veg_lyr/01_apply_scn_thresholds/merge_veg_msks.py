@@ -386,7 +386,7 @@ import datetime
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vegmsks_vecs/*.gpkg")
 #merge_vector_files(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg', 'granule_veg_msks', 'GPKG', out_epsg=4326)
 
-input_vecs_adds = get_files_mtime(input_vecs, dt_before=None, dt_after=datetime.datetime(year=2021, month=2, day=1))
+input_vecs_adds = get_files_mtime(input_vecs, dt_before=None, dt_after=datetime.datetime(year=2021, month=3, day=10))
 
 print(input_vecs_adds)
 
@@ -396,8 +396,8 @@ merge_utm_vecs_wgs84(input_vecs_adds, '/scratch/a.pfb/gmw_v2_gapfill/data/granul
 
 
 rsgislib.vectorutils.mergeVectors2GPKG(['/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_additions.gpkg',
-                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_bkup_20201222.gpkg'],
-                                       '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg',
-                                       'granule_veg_msks', False)
+                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_bkup_20210302.gpkg'],
+                                        '/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg',
+                                        'granule_veg_msks', False)
 
 
