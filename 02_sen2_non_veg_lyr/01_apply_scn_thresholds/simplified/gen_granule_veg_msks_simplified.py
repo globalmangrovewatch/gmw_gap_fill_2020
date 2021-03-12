@@ -4,7 +4,7 @@ import logging
 import os
 import sys
 
-sys.path.insert(0, "../../01_sen2_ard/03_find_dwnld_scns")
+sys.path.insert(0, "../../../01_sen2_ard/03_find_dwnld_scns")
 from sen2scnprocess import RecordSen2Process
 
 logger = logging.getLogger(__name__)
