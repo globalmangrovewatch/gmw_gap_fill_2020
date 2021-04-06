@@ -55,7 +55,7 @@ class GenExtractSamplesCmds(PBPTGenQProcessToolCmds):
 
     def run_gen_commands(self):
         self.gen_command_info(scn_db_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/03_find_dwnld_scns/sen2_scn.db',
-                              gmw_veg_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks.gpkg',
+                              gmw_veg_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/granule_veg_msks_prj.gpkg',
                               gmw_veg_msk_lyr='granule_veg_msks',
                               gmw_hab_msk_vec='/scratch/a.pfb/gmw_v2_gapfill/data/GMW_Mangrove_Habitat_v6.gpkg',
                               gmw_hab_msk_lyr='gmw_hab_v6',
