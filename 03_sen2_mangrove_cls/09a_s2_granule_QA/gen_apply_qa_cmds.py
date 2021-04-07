@@ -17,7 +17,7 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
             print(granule)
             cls_img_85_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_85.kea".format(granule))
 
-            cls_qa_img_85_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_85_qa.kea".format(granule))
+            cls_qa_img_85_file = os.path.join(kwargs['out_img_cls_dir'], "{}_cls_85_qa.kea".format(granule))
 
             if os.path.exists(cls_img_85_file) and (not os.path.exists(cls_qa_img_85_file)):
                 c_dict = dict()
@@ -41,7 +41,7 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
                               mng_qa_edits_lyr='mangroves_qa',
                               notmng_qa_edits_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/03_sen2_mangrove_cls/09a_s2_granule_QA/not_mangroves_qa.gpkg',
                               notmng_qa_edits_lyr='not_mangroves_qa',
-                              out_vec_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_qa_files',
+                              out_img_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_qa_files',
                               tmp_dir='/scratch/a.pfb/gmw_v2_gapfill/tmp')
         self.pop_params_db()
         self.create_slurm_sub_sh("qa_granule_cls", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
