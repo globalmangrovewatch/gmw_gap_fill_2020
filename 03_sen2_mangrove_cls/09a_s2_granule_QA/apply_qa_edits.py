@@ -44,6 +44,7 @@ class ApplyQAEdits(PBPTQProcessTool):
 
         cls_qa_clumps_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_clumps.kea".format(self.params['granule']))
         rsgislib.segmentation.clump(cls_qa_apply_img, cls_qa_clumps_img, 'KEA', False, 0, False)
+        rsgislib.rastergis.populateStats(cls_qa_clumps_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
         cls_qa_clumps_rmsml_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_clumps_rmsml.kea".format(self.params['granule']))
         rsgislib.segmentation.rmSmallClumps(cls_qa_clumps_img, cls_qa_clumps_rmsml_img, 3, 'KEA')
