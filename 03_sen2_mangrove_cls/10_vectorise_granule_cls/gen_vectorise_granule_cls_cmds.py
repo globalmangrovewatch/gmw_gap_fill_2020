@@ -18,7 +18,8 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
 
             #cls_img_50_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_50.kea".format(granule))
             #cls_img_75_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_75.kea".format(granule))
-            cls_img_85_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_85.kea".format(granule))
+            #cls_img_85_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_85.kea".format(granule))
+            cls_img_85_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_85_qa.kea".format(granule))
 
             #cls_vec_50_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_50.gpkg".format(granule))
             #cls_vec_75_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_75.gpkg".format(granule))
