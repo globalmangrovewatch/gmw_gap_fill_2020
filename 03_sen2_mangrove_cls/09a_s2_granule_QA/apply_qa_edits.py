@@ -2,6 +2,7 @@ from pbprocesstools.pbpt_q_process import PBPTQProcessTool
 import logging
 import os
 import shutil
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,10 @@ class ApplyQAEdits(PBPTQProcessTool):
         import rsgislib.segmentation
         import rsgislib.imagecalc
         import rsgislib.rastergis
+
+        if not os.path.exists(self.params['tmp_dir']):
+            os.mkdir(self.params['tmp_dir'])
+            time.sleep(1)
 
         mng_qa_img = os.path.join(self.params['tmp_dir'], "{}_mng_qa_msk.kea".format(self.params['granule']))
         rsgislib.vectorutils.rasteriseVecLyr(self.params['mng_qa_edits_file'], self.params['mng_qa_edits_lyr'],
@@ -35,13 +40,14 @@ class ApplyQAEdits(PBPTQProcessTool):
         bandDefns.append(rsgislib.imagecalc.BandDefn('mng', mng_qa_img, 1))
         bandDefns.append(rsgislib.imagecalc.BandDefn('nmng', notmng_qa_img, 1))
         rsgislib.imagecalc.bandMath(cls_qa_apply_img, '(nmng==1)?0:(mng==1)?1:cls', 'KEA', rsgislib.TYPE_8UINT, bandDefns)
-        rsgislib.rastergis.populateStats(cls_qa_apply_img, addclrtab=True, calcpyramids=True, ignorezero=True)
+        rsgislib.rastergis.populateStats(cls_qa_apply_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
         cls_qa_clumps_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_clumps.kea".format(self.params['granule']))
         rsgislib.segmentation.clump(cls_qa_apply_img, cls_qa_clumps_img, 'KEA', False, 0, False)
 
         cls_qa_clumps_rmsml_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_clumps_rmsml.kea".format(self.params['granule']))
         rsgislib.segmentation.rmSmallClumps(cls_qa_clumps_img, cls_qa_clumps_rmsml_img, 3, 'KEA')
+        rsgislib.rastergis.populateStats(cls_qa_clumps_rmsml_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
         rsgislib.imagecalc.imageMath(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'b1>0>1:0', 'KEA', rsgislib.TYPE_8UINT)
         rsgislib.rastergis.populateStats(self.params['cls_out_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
@@ -63,6 +69,11 @@ class ApplyQAEdits(PBPTQProcessTool):
         # Remove the output files.
         if os.path.exists(self.params['cls_out_file']):
             os.remove(self.params['cls_out_file'])
+
+        # Reset the tmp dir
+        if os.path.exists(self.params['tmp_dir']):
+            shutil.rmtree(self.params['tmp_dir'])
+        os.mkdir(self.params['tmp_dir'])
 
 if __name__ == "__main__":
     ApplyQAEdits().std_run()
