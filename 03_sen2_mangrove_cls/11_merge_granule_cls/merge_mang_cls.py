@@ -234,8 +234,10 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
     rsgis_utils = rsgislib.RSGISPyUtils()
     first = True
     for file in tqdm.tqdm(input_files):
+        print(file)
         lyrs = rsgislib.vectorutils.getVecLyrsLst(file)
         for lyr in lyrs:
+            print("\t{}".format(lyr))
             bbox = rsgis_utils.getVecLayerExtent(file, layerName=lyr)
             bbox_area = calc_bbox_area(bbox)
             if bbox_area > 0:
