@@ -50,7 +50,7 @@ class ApplyQAEdits(PBPTQProcessTool):
         rsgislib.segmentation.rmSmallClumps(cls_qa_clumps_img, cls_qa_clumps_rmsml_img, 3, 'KEA')
         rsgislib.rastergis.populateStats(cls_qa_clumps_rmsml_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
-        rsgislib.imagecalc.imageMath(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'b1>0>1:0', 'KEA', rsgislib.TYPE_8UINT)
+        rsgislib.imagecalc.imageMath(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'b1>0?1:0', 'KEA', rsgislib.TYPE_8UINT)
         rsgislib.rastergis.populateStats(self.params['cls_out_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
 
         if os.path.exists(self.params['tmp_dir']):
