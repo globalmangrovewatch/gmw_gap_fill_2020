@@ -16,14 +16,15 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
         for granule in granule_lst:
             print(granule)
 
-            cls_img_50_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_50.kea".format(granule))
-            cls_img_75_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_75.kea".format(granule))
+            #cls_img_50_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_50.kea".format(granule))
+            #cls_img_75_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_75.kea".format(granule))
             cls_img_85_file = os.path.join(kwargs['granule_cls_dir'], "{}_cls_85.kea".format(granule))
 
-            cls_vec_50_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_50.gpkg".format(granule))
-            cls_vec_75_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_75.gpkg".format(granule))
+            #cls_vec_50_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_50.gpkg".format(granule))
+            #cls_vec_75_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_75.gpkg".format(granule))
             cls_vec_85_file = os.path.join(kwargs['out_vec_cls_dir'], "{}_cls_85.gpkg".format(granule))
 
+            """
             if os.path.exists(cls_img_50_file) and (not os.path.exists(cls_vec_50_file)):
                 c_dict = dict()
                 c_dict['granule'] = granule
@@ -37,6 +38,7 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
                 c_dict['cls_img_file'] = cls_img_75_file
                 c_dict['cls_vec_file'] = cls_vec_75_file
                 self.params.append(c_dict)
+            """
 
             if os.path.exists(cls_img_85_file) and (not os.path.exists(cls_vec_85_file)):
                 c_dict = dict()
@@ -48,8 +50,8 @@ class GenMergeGranuleClsCmds(PBPTGenQProcessToolCmds):
 
     def run_gen_commands(self):
         self.gen_command_info(granule_lst='/scratch/a.pfb/gmw_v2_gapfill/scripts/01_sen2_ard/sen2_roi_granule_lst.txt',
-                              granule_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_files',
-                              out_vec_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs')
+                              granule_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_qa_files',
+                              out_vec_cls_dir='/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_qa_vecs')
         self.pop_params_db()
         self.create_slurm_sub_sh("merge_granule_cls", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",

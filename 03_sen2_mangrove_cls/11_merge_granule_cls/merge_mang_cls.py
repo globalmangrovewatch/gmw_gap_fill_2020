@@ -344,7 +344,7 @@ merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_25_cls_
 
 """
 
-
+"""
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_vecs/*cls_50.gpkg")
 merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_50_mangrove_cls.gpkg', 'cls_50', out_format='GPKG',
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
@@ -360,9 +360,12 @@ merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_85_mang
                      n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
                      s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
+"""
 
-
-
+input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/sum_scn_granule_qa_vecs/*cls_85.gpkg")
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/cls_85_mangrove_cls_qa.gpkg', 'cls_85_qa', out_format='GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
 
 
