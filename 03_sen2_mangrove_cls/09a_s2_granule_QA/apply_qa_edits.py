@@ -17,6 +17,9 @@ class ApplyQAEdits(PBPTQProcessTool):
         import rsgislib.segmentation
         import rsgislib.imagecalc
         import rsgislib.rastergis
+        import rsgislib.imagemorphology
+        from rios import rat
+        import numpy
 
         if not os.path.exists(self.params['tmp_dir']):
             os.mkdir(self.params['tmp_dir'])
@@ -46,11 +49,34 @@ class ApplyQAEdits(PBPTQProcessTool):
         rsgislib.segmentation.clump(cls_qa_apply_img, cls_qa_clumps_img, 'KEA', False, 0, False)
         rsgislib.rastergis.populateStats(cls_qa_clumps_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
-        cls_qa_clumps_rmsml_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_clumps_rmsml.kea".format(self.params['granule']))
+        morph_op_file = os.path.join(self.params['tmp_dir'], "{}_morphop.gmtxt".format(self.params['granule']))
+        rsgislib.imagemorphology.createCircularOp(morph_op_file, opSize=3)
+
+        cls_qa_erode_img = os.path.join(self.params['tmp_dir'], "{}_cls_85_qa_erode.kea".format(self.params['granule']))
+        rsgislib.imagemorphology.imageErode(cls_qa_apply_img, cls_qa_erode_img, morph_op_file,
+                                            useOpFile=True, opSize=3, gdalformat='KEA', datatype=rsgislib.TYPE_8UINT)
+
+        cls_qa_clumps_rmsml_img = os.path.join(self.params['tmp_dir'],
+                                               "{}_cls_85_qa_clumps_rmsml.kea".format(self.params['granule']))
         rsgislib.segmentation.rmSmallClumps(cls_qa_clumps_img, cls_qa_clumps_rmsml_img, 3, 'KEA')
         rsgislib.rastergis.populateStats(cls_qa_clumps_rmsml_img, addclrtab=True, calcpyramids=False, ignorezero=True)
 
-        rsgislib.imagecalc.imageMath(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'b1>0?1:0', 'KEA', rsgislib.TYPE_8UINT)
+        # Populate with eroded mask
+        rsgislib.rastergis.populateRATWithStats(cls_qa_erode_img, cls_qa_clumps_rmsml_img,
+                                                [rsgislib.rastergis.BandAttStats(band=1, minField='ErodeMin',
+                                                                                 maxField='ErodeMax',
+                                                                                 sumField='ErodeSum')])
+
+        Histogram = rat.readColumn(cls_qa_clumps_rmsml_img, 'Histogram')
+        ErodeSum = rat.readColumn(cls_qa_clumps_rmsml_img, 'ErodeSum')
+
+        FeatsKeep = numpy.where((Histogram > 5) | (ErodeSum > 1), 1, 0)
+        rat.writeColumn(cls_qa_clumps_rmsml_img, 'FeatsKeep', FeatsKeep)
+
+        rsgislib.rastergis.exportCol2GDALImage(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'KEA',
+                                               rsgislib.TYPE_8UINT, 'FeatsKeep', ratband=1)
+
+        #rsgislib.imagecalc.imageMath(cls_qa_clumps_rmsml_img, self.params['cls_out_file'], 'b1>0?1:0', 'KEA', rsgislib.TYPE_8UINT)
         rsgislib.rastergis.populateStats(self.params['cls_out_file'], addclrtab=True, calcpyramids=True, ignorezero=True)
 
         if os.path.exists(self.params['tmp_dir']):
