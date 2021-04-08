@@ -16,7 +16,7 @@ class VectoriseGMWLyr(PBPTQProcessTool):
         import rsgislib.imagecalc
 
         pxl_count = rsgislib.imagecalc.countPxlsOfVal(self.params['gmw_v3_img'], vals=[1])
-
+        print("N GMW Pixels: ", pxl_count[0])
         if pxl_count[0] > 0:
             rsgislib.vectorutils.polygoniseRaster2VecLyr(self.params['out_file'], "gmw_v3_init", 'GPKG',
                                                          self.params['gmw_v3_img'], imgBandNo=1,
@@ -39,6 +39,9 @@ class VectoriseGMWLyr(PBPTQProcessTool):
         # Remove the output file.
         if os.path.exists(self.params['out_file']):
             os.remove(self.params['out_file'])
+
+        if os.path.exists(self.params['out_cmp_file']):
+            os.remove(self.params['out_cmp_file'])
 
 
 if __name__ == "__main__":
