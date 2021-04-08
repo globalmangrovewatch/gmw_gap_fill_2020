@@ -17,7 +17,7 @@ class RasteriseQAExtras(PBPTQProcessTool):
     def do_processing(self, **kwargs):
 
         gapfill_qa_img = os.path.join(self.params['tmp_dir'], 'gapfill_qa.kea')
-        rsgislib.vectorutils.rasteriseVecLyr(self.params['gapfill_vec'], self.params['gapfill_lyr'],
+        rsgislib.vectorutils.rasteriseVecLyr(self.params['gapfill_qa_vec'], self.params['gapfill_qa_lyr'],
                                              self.params['tile_img'], gapfill_qa_img, gdalformat="KEA",
                                              burnVal=1, datatype=rsgislib.TYPE_8UINT, vecAtt=None, vecExt=False,
                                              thematic=True, nodata=0)
