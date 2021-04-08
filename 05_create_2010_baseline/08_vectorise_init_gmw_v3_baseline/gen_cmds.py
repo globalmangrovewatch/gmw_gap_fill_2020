@@ -16,12 +16,14 @@ class GenCmds(PBPTGenQProcessToolCmds):
             gmw_v3_img = os.path.join(kwargs['gmw_v3_dir'], '{}_gmw_v3_init.kea'.format(tile_basename))
 
             out_file = os.path.join(kwargs['out_dir'], '{}_gmw_v3_init.gpkg'.format(tile_basename))
+            out_cmp_file = os.path.join(kwargs['out_dir'], "{}_gmw_v3_init.txt".format(tile_basename))
 
-            if (not os.path.exists(out_file)):
+            if (not os.path.exists(out_cmp_file)):
                 c_dict = dict()
                 c_dict['tile_img'] = tile
                 c_dict['gmw_v3_img'] = gmw_v3_img
                 c_dict['out_file'] = out_file
+                c_dict['out_cmp_file'] = out_cmp_file
                 self.params.append(c_dict)
 
 
