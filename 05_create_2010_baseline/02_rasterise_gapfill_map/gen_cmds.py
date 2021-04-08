@@ -19,7 +19,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
                 c_dict['tile_img'] = tile
                 c_dict['gapfill_vec'] = kwargs['gapfill_vec']
                 c_dict['gapfill_lyr'] = kwargs['gapfill_lyr']
-                c_dict['out_file'] = kwargs['out_file']
+                c_dict['out_file'] = out_file
                 self.params.append(c_dict)
 
 
