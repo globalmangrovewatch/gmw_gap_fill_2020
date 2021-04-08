@@ -19,7 +19,8 @@ out_img_height = 4500
 
 out_dir = '/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_ref_tiles'
 
-for i in tqdm.tqdm(range(tiles_gpdf.shape[0])):
+n_imgs = tiles_gpdf.shape[0]
+for i in range(n_imgs):
     x_min_val = tiles_gpdf.loc[i]['MinX']
     x_max_val = tiles_gpdf.loc[i]['MaxX']
     y_min_val = tiles_gpdf.loc[i]['MinY']
@@ -28,7 +29,7 @@ for i in tqdm.tqdm(range(tiles_gpdf.shape[0])):
 
     out_file = os.path.join(out_dir, '{}_tile.kea'.format(gmw_tile_name))
 
-    print(out_file)
+    print("{} of {}: {}".format(i, n_imgs, out_file))
 
     rsgislib.imageutils.createBlankImage(out_file, 1, out_img_width, out_img_height, x_min_val, y_max_val, out_img_res, 0, '', wkt_str, 'KEA', rsgislib.TYPE_8UINT)
 
