@@ -286,7 +286,9 @@ def merge_utm_vecs_wgs84(input_files, output_file, output_lyr=None, out_format='
 import glob
 input_vecs = glob.glob("/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks/*.gpkg")
 
-merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks.gpkg', 'granule_vld_msks', 'GPKG', n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg', s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
+merge_utm_vecs_wgs84(input_vecs, '/scratch/a.pfb/gmw_v2_gapfill/data/granule_vld_msks.gpkg', 'granule_vld_msks', 'GPKG',
+                     n_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_north.gpkg',
+                     s_hemi_utm_file='/scratch/a.pfb/gmw_v2_gapfill/data/meta_data/UTM_Zone_Boundaries_lyrs_south.gpkg')
 
 
 
