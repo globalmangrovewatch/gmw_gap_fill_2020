@@ -19,7 +19,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
             out_add_file = os.path.join(kwargs['out_dir'], '{}_gmw_add_v2_v3.kea'.format(tile_basename))
             out_rmv_file = os.path.join(kwargs['out_dir'], '{}_gmw_rmv_v2_v3.kea'.format(tile_basename))
 
-            if (not os.path.exists(out_add_file)) or (not os.path.exists(out_add_file)):
+            if (not os.path.exists(out_add_file)) or (not os.path.exists(out_rmv_file)):
                 c_dict = dict()
                 c_dict['tile_img'] = tile
                 c_dict['gmw_v2_img'] = gmw_v2_img

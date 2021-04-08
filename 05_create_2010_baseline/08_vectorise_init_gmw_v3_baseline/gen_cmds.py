@@ -19,6 +19,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
             out_cmp_file = os.path.join(kwargs['out_dir'], "{}_gmw_v3_init.txt".format(tile_basename))
 
             if (not os.path.exists(out_cmp_file)):
+                print('rm ', gmw_v3_img)
                 c_dict = dict()
                 c_dict['tile_img'] = tile
                 c_dict['gmw_v3_img'] = gmw_v3_img
