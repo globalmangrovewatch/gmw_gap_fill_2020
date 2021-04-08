@@ -34,8 +34,8 @@ class CalcGMWDiff(PBPTQProcessTool):
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
-        files_dict[self.params['out_add_file']] = 'gdalimg'
-        files_dict[self.params['out_rmv_file']] = 'gdalimg'
+        files_dict[self.params['out_add_file']] = 'gdal_image'
+        files_dict[self.params['out_rmv_file']] = 'gdal_image'
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):

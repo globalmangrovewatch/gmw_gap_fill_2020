@@ -28,7 +28,7 @@ class MergeGMWEdits(PBPTQProcessTool):
 
     def outputs_present(self, **kwargs):
         files_dict = dict()
-        files_dict[self.params['out_file']] = 'gdalimg'
+        files_dict[self.params['out_file']] = 'gdal_image'
         return self.check_files(files_dict)
 
     def remove_outputs(self, **kwargs):
