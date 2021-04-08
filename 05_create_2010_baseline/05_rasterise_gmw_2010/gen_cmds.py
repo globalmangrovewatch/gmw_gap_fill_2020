@@ -13,7 +13,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
         for tile in tiles:
             tile_basename = self.get_file_basename(tile)
 
-            out_file = os.path.join(kwargs['out_dir'], '{}_GFBase.kea'.format(tile_basename))
+            out_file = os.path.join(kwargs['out_dir'], '{}_GMW2010_v2.kea'.format(tile_basename))
             if not os.path.exists(out_file):
                 c_dict = dict()
                 c_dict['tile_img'] = tile
@@ -27,7 +27,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
         self.gen_command_info(ref_tiles_path='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_ref_tiles/*.kea',
                               gmw_vec='/scratch/a.pfb/gmw_v2_gapfill/data/GMW_MangroveExtent_WGS84_v2.0.gpkg',
                               gmw2010_lyr='gmw2010v2.0',
-                              out_dir='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_gapfill_base')
+                              out_dir='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_2010_base')
         self.pop_params_db()
         self.create_slurm_sub_sh("rasterise_gapfill", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
                                  run_script='run_exe_analysis.sh', job_dir="job_scripts",
