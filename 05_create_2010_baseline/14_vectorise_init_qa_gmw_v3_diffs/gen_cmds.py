@@ -23,6 +23,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
             out_rmv_cmp_file = os.path.join(kwargs['out_dir'], "{}_gmw_rmv_v2_v3.txt".format(tile_basename))
 
             if (not os.path.exists(out_add_cmp_file)):
+                print('rm ', gmw_add_file)
                 c_dict = dict()
                 c_dict['tile_img'] = tile
                 c_dict['gmw_v3_img'] = gmw_add_file
@@ -31,6 +32,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
                 self.params.append(c_dict)
 
             if (not os.path.exists(out_rmv_cmp_file)):
+                print('rm ', gmw_rmv_file)
                 c_dict = dict()
                 c_dict['tile_img'] = tile
                 c_dict['gmw_v3_img'] = gmw_rmv_file
