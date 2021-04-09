@@ -31,7 +31,7 @@ class ApplyGMWQAEdits(PBPTQProcessTool):
         bandDefns.append(rsgislib.imagecalc.BandDefn('restore', self.params['restore_img'], 1))
         bandDefns.append(rsgislib.imagecalc.BandDefn('removed', self.params['gmw_rmv_diff_img'], 1))
         bandDefns.append(rsgislib.imagecalc.BandDefn('addmng', self.params['addmng_img'], 1))
-        rsgislib.imagecalc.bandMath(add_pxls_img, '(addmng==1)?1:(rmadd==1)&&(added==1)?1:0', 'KEA', rsgislib.TYPE_8UINT, bandDefns)
+        rsgislib.imagecalc.bandMath(add_pxls_img, '(addmng==1)?1:(restore==1)&&(removed==1)?1:0', 'KEA', rsgislib.TYPE_8UINT, bandDefns)
         rsgislib.rastergis.populateStats(add_pxls_img, addclrtab=True, calcpyramids=True, ignorezero=True)
 
 
