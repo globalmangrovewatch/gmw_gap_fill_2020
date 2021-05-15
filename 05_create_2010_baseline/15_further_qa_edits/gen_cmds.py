@@ -59,7 +59,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
                               restore_qa_vec='/scratch/a.pfb/gmw_v2_gapfill/scripts/05_create_2010_baseline/15_further_qa_edits/gmw_restore_v2_mangroves.gpkg',
                               restore_qa_lyr='gmw_restore_v2_mangroves',
                               rmadd_qa_vec='/scratch/a.pfb/gmw_v2_gapfill/scripts/05_create_2010_baseline/15_further_qa_edits/gmw_rmaddv3_mangroves.gpkg',
-                              rmadd_qa_lyr='gmw_rmaddv3_mangroves',
+                              rmadd_qa_lyr='gmw_v3_rmadd_mangroves',
                               out_dir='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_v3_further_qa_edits')
         self.pop_params_db()
         self.create_slurm_sub_sh("rasterise_qa_edits", 16448, '/scratch/a.pfb/gmw_v2_gapfill/logs',
