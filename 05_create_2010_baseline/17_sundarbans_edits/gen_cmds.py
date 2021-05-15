@@ -35,7 +35,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
 
     def run_gen_commands(self):
         self.gen_command_info(ref_tiles_path='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_ref_tiles/*.kea',
-                              qa_edits_dir='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_init_v3_further_qa',
+                              gmw_v3_dir='/scratch/a.pfb/gmw_v2_gapfill/data/gmw_tiles/gmw_init_v3_further_qa',
                               sundarbans_vec_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/05_create_2010_baseline/17_sundarbans_edits/sundarbans_2010_wgs84.gpkg',
                               sundarbans_vec_lyr='sundarbans_2010_wgs84',
                               sundarbans_roi_vec_file='/scratch/a.pfb/gmw_v2_gapfill/scripts/05_create_2010_baseline/17_sundarbans_edits/edits_roi.gpkg',
