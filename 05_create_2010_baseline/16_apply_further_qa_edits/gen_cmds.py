@@ -13,7 +13,7 @@ class GenCmds(PBPTGenQProcessToolCmds):
         for tile in tiles:
             tile_basename = self.get_file_basename(tile)
 
-            gmw_v3_img = os.path.join(kwargs['gmw_v3_dir'], '{}_gmw_v3_init.kea'.format(tile_basename))
+            gmw_v3_img = os.path.join(kwargs['gmw_v3_dir'], '{}_gmw_v3_init_qad.kea'.format(tile_basename))
 
             gmw_add_diff_img = os.path.join(kwargs['gmw_v3_diff_dir'], '{}_gmw_add_v2_v3.kea'.format(tile_basename))
             gmw_rmv_diff_img = os.path.join(kwargs['gmw_v3_diff_dir'], '{}_gmw_rmv_v2_v3.kea'.format(tile_basename))
