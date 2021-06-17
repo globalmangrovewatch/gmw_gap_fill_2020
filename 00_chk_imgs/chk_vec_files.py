@@ -122,10 +122,10 @@ def _run_vecfile_chk(img_params):
     vec_file = img_params[0]
     rmerr = img_params[1]
     printnames = img_params[2]
-    printerrs = img_params[2]
-    multi_file = img_params[3]
-    chkproj = img_params[4]
-    epsg_prj = img_params[5]
+    printerrs = img_params[3]
+    multi_file = img_params[4]
+    chkproj = img_params[5]
+    epsg_prj = img_params[6]
 
     if printnames:
         print(vec_file)
