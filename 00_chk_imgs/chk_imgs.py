@@ -211,7 +211,9 @@ def _run_img_chk(img_params):
                 print("Removed {}".format(img))
             else:
                 print("rm {}".format(img))
-    except:
+    except Exception as e:
+        if printerrs:
+            print("Error: '{}'".format(e))
         if rmerr:
             os.remove(img)
             print("Removed {}".format(img))
