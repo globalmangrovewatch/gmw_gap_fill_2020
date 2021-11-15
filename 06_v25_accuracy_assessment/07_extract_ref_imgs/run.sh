@@ -1,0 +1,1 @@
+singularity exec --bind /mangroves_server:/mangroves_server --bind /bigdata:/bigdata /bigdata/gmw_v25_acc_ass/sw_imgs/au-eoed-beta-dev.sif python create_fnl_outs.py
