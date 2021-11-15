@@ -40,7 +40,7 @@ def subset_to_geoms_bbox(
     import rsgislib.tools.geometrytools
 
     if datatype is None:
-        datatype = get_rsgislib_datatype_from_img(input_img)
+        datatype = rsgislib.imageutils.get_rsgislib_datatype_from_img(input_img)
 
     bboxs = rsgislib.vectorgeoms.get_geoms_as_bboxs(vec_file, vec_lyr)
     print(bboxs)
