@@ -16,5 +16,5 @@ for vec_file in vec_files:
         os.mkdir(out_dir)
     
     out_vec_file_base = os.path.join(out_dir, "{}_".format(basename))
-    rsgislib.vectorutils.create_acc_pt_sets(vec_file, vec_lyr, out_vec_file_base, out_vec_lyr, "gmw_v25_cls", 20, sets_col="set_id", out_format='GPKG', out_ext='gpkg', rnd_seed=42)
+    rsgislib.vectorutils.create_acc_pt_sets(vec_file, vec_lyr, out_vec_file_base, out_vec_lyr, "gmw_v25_cls", 20, sets_col="set_id", out_format='GeoJSON', out_ext='geojson', rnd_seed=42)
     
