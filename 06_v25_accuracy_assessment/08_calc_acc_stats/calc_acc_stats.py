@@ -55,13 +55,14 @@ print("f1_scores: {}".format(f1_scores))
 print("f1_scr_intervals_rgn: {}".format(f1_scr_intervals_rgn))
 """
 
-vec_files = ["/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_1.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_2.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_3.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_4.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_5.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_6.geojson",
-             "/Users/pete/Temp/gmw_v25_extent/roi_cls_acc_pts_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_7.geojson"]
+vec_files = ["/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_1.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_2.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_3.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_4.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_5.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_6.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_7.geojson",
+             "/Users/pete/Development/globalmangrovewatch/gmw_gap_fill_2020/06_v25_accuracy_assessment/00_acc_pt_sets/gmw_acc_roi_1_cls_acc_pts/gmw_acc_roi_1_cls_acc_pts_8.geojson"]
              
 vec_lyrs = list()
 for vec_file in vec_files:
