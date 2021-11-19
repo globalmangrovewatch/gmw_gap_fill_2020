@@ -9,7 +9,11 @@ vec_files = [os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_1.geojson"),
              os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_2.geojson"),
              os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_3.geojson"),
              os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_4.geojson"),
-             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_5.geojson")]
+             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_5.geojson"),
+             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_6.geojson"),
+             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_7.geojson"),
+             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_8.geojson"),
+             os.path.join(acc_pts_dir, "gmw_acc_roi_2_cls_acc_pts_9.geojson")]
 
 vec_lyrs = list()
 for vec_file in vec_files:
