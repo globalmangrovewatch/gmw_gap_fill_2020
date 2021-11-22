@@ -20,7 +20,7 @@ cls_col = "gmw_v25_cls"
 tmp_dir = "/Users/pete/Temp/gmw_v25_extent/tmp"
 out_plot_file = "../99_acc_roi_plots/gmw_acc_roi_5_cls_acc_pts_intervals.png"
 
-conf_thres_met, conf_thres_met_idx, f1_scores, f1_scr_intervals_rgn = rsgislib.classification.classaccuracymetrics.calc_acc_ptonly_metrics_vecsamples_f1_conf_inter_sets(vec_files, vec_lyrs, ref_col, cls_col, tmp_dir, conf_inter=95, conf_thres=0.05, out_plot_file=out_plot_file, sample_frac = 0.2, bootstrap_n = 2000)
+conf_thres_met, conf_thres_met_idx, f1_scores, f1_scr_intervals_rgn = rsgislib.classification.classaccuracymetrics.calc_acc_ptonly_metrics_vecsamples_f1_conf_inter_sets(vec_files, vec_lyrs, ref_col, cls_col, tmp_dir, conf_inter=95, conf_thres=0.05, out_plot_file=out_plot_file, sample_frac = 0.5, sample_n_smps=500, bootstrap_n = 2000)
 
 
 print("conf_thres_met: {}".format(conf_thres_met))
