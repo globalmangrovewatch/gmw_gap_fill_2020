@@ -5,7 +5,8 @@ export PYTHONPATH=$PYTHONPATH:/Users/pete/Temp/rsgislib_lcl/lib/python3.9/site-p
 #export PYTHONPATH=$PYTHONPATH:/Users/pete/Temp/rsgislib_v5_dev_install/lib/python3.9/site-packages
 
 #python calc_acc_stats_01.py
-python calc_acc_stats_02.py
+#python calc_acc_stats_02.py
+python calc_acc_stats_03.py
 
 
 
