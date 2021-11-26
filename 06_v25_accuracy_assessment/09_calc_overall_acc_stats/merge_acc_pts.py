@@ -1,12 +1,15 @@
 import os
 import glob
+import pprint
 import rsgislib.vectorutils
 import rsgislib.vectorattrs
 
 vec_files = []
 acc_pts_base_dir = "../00_acc_pt_sets"
 vecs_dict = list()
+chk_sets = dict()
 for i in range(60):
+    chk_sets[i+1] = False
     acc_pts_dir = os.path.join(acc_pts_base_dir, "gmw_acc_roi_{}_cls_acc_pts".format(i+1))
     acc_pt_files = glob.glob(os.path.join(acc_pts_dir, "*.geojson"))
     for acc_pt_file in acc_pt_files:
@@ -15,7 +18,8 @@ for i in range(60):
         #print(processed_vals)
         if 1 in processed_vals:
             vecs_dict.append({"file": acc_pt_file, "layer": vec_lyr})
+            chk_sets[i+1] = True
         
     
-#print(vecs_dict)
+pprint.pprint(chk_sets)
 rsgislib.vectorutils.merge_vector_layers(vecs_dict, out_vec_file="gmw_v25_acc_pts.geojson", out_vec_lyr="gmw_v25_acc_pts", out_format="GeoJSON")

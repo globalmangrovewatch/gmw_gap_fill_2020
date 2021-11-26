@@ -1,5 +1,6 @@
 import os
 import glob
+import pprint
 
 import rsgislib.vectorutils
 import rsgislib.vectorattrs
@@ -10,7 +11,9 @@ ref_col = "ref_cls"
 cls_col = "gmw_v25_cls"
 
 acc_pts_base_dir = "../00_acc_pt_sets"
+chk_sets = dict()
 for i in range(60):
+    chk_sets[i+1] = False
     acc_pts_dir = os.path.join(acc_pts_base_dir, "gmw_acc_roi_{}_cls_acc_pts".format(i+1))
     acc_pt_files = glob.glob(os.path.join(acc_pts_dir, "*.geojson"))
     vecs_dict = list()
@@ -34,4 +37,6 @@ for i in range(60):
         rsgislib.classification.classaccuracymetrics.calc_acc_ptonly_metrics_vecsamples_bootstrap_conf_interval(vec_acc_pts_file, vec_acc_pts_lyr, ref_col, cls_col, out_json_file=acc_conf_stats_json_file, sample_n_smps=1000, bootstrap_n=2000)
         
         os.remove(vec_acc_pts_file)
+        chk_sets[i+1] = True
     
+pprint.pprint(chk_sets)
