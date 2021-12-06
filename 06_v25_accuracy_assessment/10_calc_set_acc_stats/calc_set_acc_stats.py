@@ -25,8 +25,8 @@ for i in range(60):
             vecs_dict.append({"file": acc_pt_file, "layer": vec_lyr})
             
     if len(vecs_dict) > 0:
-        vec_acc_pts_file = "gmw_v25_tmp_set_acc_pts.geojson"
-        vec_acc_pts_lyr = "gmw_v25_tmp_set_acc_pts"
+        vec_acc_pts_file = os.path.join(out_dir, "gmw_v25_set_{}_acc_pts.geojson".format(i+1))
+        vec_acc_pts_lyr = "gmw_v25_set_{}_acc_pts".format(i+1)
         rsgislib.vectorutils.merge_vector_layers(vecs_dict, out_vec_file=vec_acc_pts_file, out_vec_lyr=vec_acc_pts_lyr, out_format="GeoJSON")
         
         acc_stats_json_file = os.path.join(out_dir, "gmw_v25_set_{}_acc_stats.json".format(i+1))
@@ -36,7 +36,6 @@ for i in range(60):
         rsgislib.classification.classaccuracymetrics.calc_acc_ptonly_metrics_vecsamples(vec_acc_pts_file, vec_acc_pts_lyr, ref_col, cls_col, out_json_file=acc_stats_json_file, out_csv_file=acc_stats_csv_file)
         rsgislib.classification.classaccuracymetrics.calc_acc_ptonly_metrics_vecsamples_bootstrap_conf_interval(vec_acc_pts_file, vec_acc_pts_lyr, ref_col, cls_col, out_json_file=acc_conf_stats_json_file, sample_n_smps=1000, bootstrap_n=2000)
         
-        os.remove(vec_acc_pts_file)
         chk_sets[i+1] = True
     
 pprint.pprint(chk_sets)
