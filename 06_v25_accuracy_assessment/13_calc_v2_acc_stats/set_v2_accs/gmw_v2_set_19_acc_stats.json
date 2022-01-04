@@ -1,0 +1,66 @@
+{
+    "Mangrove": {
+        "f1-score": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 480
+    },
+    "Other": {
+        "f1-score": 0.6842105263157895,
+        "precision": 0.52,
+        "recall": 1.0,
+        "support": 520
+    },
+    "accuracy": 0.52,
+    "accuracy_conf_interval": [
+        0.025909923967468527,
+        0.030965518887950193,
+        0.03681105051475712,
+        0.04076073404638342
+    ],
+    "cls_confidence_intervals": {
+        "Mangrove": [
+            NaN,
+            NaN,
+            NaN,
+            NaN
+        ],
+        "Other": [
+            0.025909923967468527,
+            0.030965518887950193,
+            0.03681105051475712,
+            0.04076073404638342
+        ]
+    },
+    "cohen_kappa": 0.0,
+    "confusion_matrix": [
+        [
+            0,
+            480
+        ],
+        [
+            0,
+            520
+        ]
+    ],
+    "macro avg": {
+        "f1-score": 0.34210526315789475,
+        "precision": 0.26,
+        "recall": 0.5,
+        "support": 1000
+    },
+    "producer_accuracy": [
+        NaN,
+        52.0
+    ],
+    "user_accuracy": [
+        0.0,
+        100.0
+    ],
+    "weighted avg": {
+        "f1-score": 0.35578947368421054,
+        "precision": 0.27040000000000003,
+        "recall": 0.52,
+        "support": 1000
+    }
+}

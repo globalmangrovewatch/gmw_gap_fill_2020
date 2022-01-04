@@ -38,7 +38,7 @@ for i in range(60):
         all_sites.append({"file": vec_file, "layer": vec_lyr})
         all_sites_json.append(acc_stats_json_file)
         
-        #calc_acc_stats(vec_file, vec_lyr, ref_col, cls_col, acc_stats_json_file, acc_stats_csv_file, acc_conf_stats_json_file)
+        calc_acc_stats(vec_file, vec_lyr, ref_col, cls_col, acc_stats_json_file, acc_stats_csv_file, acc_conf_stats_json_file)
 
 
 vec_acc_pts_file = "gmw_v25_all_acc_pts.geojson"

@@ -1,0 +1,23 @@
+overall accuracy,0.52
+cohen kappa,0.0
+""
+Confidence Interval,90%,95%,98%,99%
+Overall Accuracy,0.025909923967468527,0.030965518887950193,0.03681105051475712,0.04076073404638342
+""
+class,f1-score,precision,recall,support
+Mangrove,0.0,0.0,0.0,480
+Other,0.6842105263157895,0.52,1.0,520
+""
+macro avg,0.34210526315789475,0.26,0.5,1000
+weighted (pixel) avg,0.35578947368421054,0.27040000000000003,0.52,1000
+""
+Confidence Interval,90%,95%,98%,99%
+Mangrove,nan,nan,nan,nan
+Other,0.025909923967468527,0.030965518887950193,0.03681105051475712,0.04076073404638342
+""
+Point Count Confusion Matrix
+,Mangrove,Other,User Acc
+Mangrove,0,480,0.0
+Other,0,520,100.0
+Producer,nan,52.0
+""

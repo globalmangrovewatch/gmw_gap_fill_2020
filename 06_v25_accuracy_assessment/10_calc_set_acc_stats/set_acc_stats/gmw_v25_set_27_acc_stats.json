@@ -1,0 +1,66 @@
+{
+    "Mangrove": {
+        "f1-score": 0.982,
+        "precision": 0.982,
+        "recall": 0.982,
+        "support": 500
+    },
+    "Other": {
+        "f1-score": 0.982,
+        "precision": 0.982,
+        "recall": 0.982,
+        "support": 500
+    },
+    "accuracy": 0.982,
+    "accuracy_conf_interval": [
+        0.006895024989077272,
+        0.008240395718653325,
+        0.009795980624725637,
+        0.010847051507206927
+    ],
+    "cls_confidence_intervals": {
+        "Mangrove": [
+            0.009751037852454479,
+            0.01165367938464072,
+            0.01385360865623106,
+            0.01534004735325156
+        ],
+        "Other": [
+            0.009751037852454479,
+            0.01165367938464072,
+            0.01385360865623106,
+            0.01534004735325156
+        ]
+    },
+    "cohen_kappa": 0.964,
+    "confusion_matrix": [
+        [
+            491,
+            9
+        ],
+        [
+            9,
+            491
+        ]
+    ],
+    "macro avg": {
+        "f1-score": 0.982,
+        "precision": 0.982,
+        "recall": 0.982,
+        "support": 1000
+    },
+    "producer_accuracy": [
+        98.2,
+        98.2
+    ],
+    "user_accuracy": [
+        98.2,
+        98.2
+    ],
+    "weighted avg": {
+        "f1-score": 0.982,
+        "precision": 0.982,
+        "recall": 0.982,
+        "support": 1000
+    }
+}
