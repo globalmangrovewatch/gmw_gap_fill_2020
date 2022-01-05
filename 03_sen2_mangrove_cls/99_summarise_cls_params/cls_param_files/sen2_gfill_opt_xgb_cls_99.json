@@ -1,0 +1,12 @@
+{
+    "eta": 0.2970064730727892,
+    "eval_metric": "auc",
+    "gamma": 1,
+    "max_delta_step": 7,
+    "max_depth": 9,
+    "min_child_weight": 6,
+    "nthread": 1,
+    "num_boost_round": 89,
+    "objective": "binary:logistic",
+    "subsample": 0.7804382123260948
+}
